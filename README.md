@@ -18,6 +18,8 @@ amazon review data에서 keyword 추출("fit", "greatly", "terrible", "bad", "un
 
 (아직 미정)
 
+![process](https://cdn.discordapp.com/attachments/841894280904572938/842292326986022912/7d4065285728dd96.png)
+
 ## 3. 프로젝트 구성
 1. 필요한 데이터셋
     - 주제를 웹 서비스로 구현하기 위해 필요한 데이터셋을 수집합니다.
