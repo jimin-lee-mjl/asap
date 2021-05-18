@@ -1,9 +1,14 @@
-function App() {
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './components/Home';
+import UserInfo from './components/UserInfo';
+
+export default function App() {
   return (
-    <>
-      <h1>hello</h1>
-    </>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/info" component={UserInfo} />
+      </Switch>
+    </Router>
   );
 }
-
-export default App;
