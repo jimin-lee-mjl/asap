@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import TestProduct, TestUser
 
-# Register your models here.
+admin.site.register(TestProduct)
+admin.site.register(TestUser)
