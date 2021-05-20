@@ -7,12 +7,12 @@ from .models import TestProduct, TestUser
 
 class TestUserProfileAPIView(APITestCase):
     def setUp(self):
-        self.url = reverse('api-profile')
-        self.user = TestUser.objects.get(pk=1)
+        self.url = reverse('mypage:profile', kwargs={'user_id':1})
+        # self.user = TestUser.objects.get(pk=1)
 
     def test_get_profile(self):
-        data = {
-            'user_id': self.user.pk
-        }
-        response = self.client.get(self.url, data=data, format='json')
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        # data = {
+        #     'user_id': self.user.pk
+        # }
+        response = self.client.get(self.url, format='json')
+        self.assertEquals(response.status, status.HTTP_200_OK)
