@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function MyPage() {
+export default function MyPage({ user }) {
   return (
     <Container>
       <Nav>Navbar</Nav>

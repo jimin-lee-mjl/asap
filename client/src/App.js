@@ -9,6 +9,8 @@ import UserInfo from './components/UserInfo';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 
+import AuthRoute from './components/AuthRoute';
+
 export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
   const authenticated = user != null; // 로그인 된 사용자가 존재하는지, 인증 여부를 저장
@@ -19,6 +21,7 @@ export default function App() {
   const login = () => {};
   const logout = () => setUser(null);
 
+  // backend 통신 테스트 코드
   useEffect(() => {
     axios
       .get('http://localhost:5000/api/hello')
@@ -31,7 +34,11 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/mypage" component={MyPage} />
+        <AuthRoute
+          authenticated={authenticated}
+          path="/mypage"
+          render={(props) => <MyPage user={user} {...props} />}
+        />
         <Route path="/info" component={UserInfo} />
         <Route component={NotFound} />
       </Switch>
