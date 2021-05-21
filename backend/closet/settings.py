@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'mypage',
+    'drf_yasg',
 ]
 
 SITE_ID = 1
