@@ -10,8 +10,9 @@ class TestProduct(models.Model):
 
 class TestUser(models.Model):
     name = models.CharField('test user name', max_length=10)
-    likes = models.ManyToManyField(TestProduct, related_name='test_likes')
-    bags = models.ManyToManyField(TestProduct, related_name='test_bags')
+    wish = models.ManyToManyField(TestProduct, related_name='test_wish')
+    bag = models.ManyToManyField(TestProduct, related_name='test_bag')
+    history = models.ForeignKey(TestProduct, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name
