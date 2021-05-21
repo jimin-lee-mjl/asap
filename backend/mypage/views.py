@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,11 +8,21 @@ from .serializers import UserSerializer
 
 class ProfileView(APIView):
     def get(self, request, user_id, format=None):
-        user = TestUser.objects.get(pk=user_id)
-        serializer = UserSerializer({
-            'name': user.name
-        })
+        print(TestUser.objects.get(name='marina').pk)
+        user = get_object_or_404(TestUser, pk=user_id)
+        serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def put(self, request, format=None):
-        return None
+    def put(self, request, user_id, format=None):
+        serializer = UserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user_name = serializer.validated_data['name']
+            # print('marina2', TestUser.objects.get(name='marina').pk)
+            user = get_object_or_404(TestUser, pk=user_id)
+            user.name = user_name
+            user.save()
+            # print(TestUser.objects.get(pk=3).name)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
