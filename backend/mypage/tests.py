@@ -1,9 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import response
 from rest_framework.test import APITestCase
 from rest_framework.views import status
-from .models import TestProduct, TestUser
+from .models import TestUser
 from .serializers import UserSerializer
 
 
@@ -18,7 +17,7 @@ class TestUserProfileView(APITestCase):
         serializer = UserSerializer(test_user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data, serializer.data['name'])
 
     def test_update_profile(self):
         url = reverse('mypage:profile', kwargs={'user_id':5})
@@ -40,7 +39,7 @@ class TestUserHistoryView(APITestCase):
         serializer = UserSerializer(test_user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data, serializer.data['history'])
 
 
 class TestUserWishListView(APITestCase):

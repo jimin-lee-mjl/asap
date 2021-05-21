@@ -11,7 +11,9 @@ class ProfileView(APIView):
     def get(self, request, user_id, format=None):
         # print(TestUser.objects.get(name='marina').pk)
         user = get_object_or_404(TestUser, pk=user_id)
-        serializer = UserSerializer(user)
+        serializer = UserSerializer({
+            'name': user.name
+        })
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def put(self, request, user_id, format=None):
@@ -32,7 +34,9 @@ class ProfileView(APIView):
 class HistoryView(APIView):
     def get(self, request, user_id, format=None):
         user = get_object_or_404(TestUser, pk=user_id)
-        serializer = UserSerializer(user)
+        serializer = UserSerializer({
+            'history': user.history
+        })
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
