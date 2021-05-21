@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import environ
 
-# 환경 변수 초기화 
+# 환경 변수 초기화
 env = environ.Env()
 environ.Env.read_env()
 
@@ -86,7 +86,7 @@ DATABASES = {
         'USER': env('DATABASE_USER'),
         'HOST': env('DATABASE_HOST'),
         'PASSWORD': env('DATABASE_PW'),
-        'PORT':'5432',
+        'PORT': '5432',
     }
 }
 
