@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
 import { Card } from 'antd';
+import styled from 'styled-components';
 
 export default function ChoiceSummary() {
   return (
