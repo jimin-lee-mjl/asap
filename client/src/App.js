@@ -3,6 +3,8 @@ import axios from 'axios';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
+import Recommend from './components/Recommend';
+import Result from './components/Result';
 import Login from './components/Login';
 import Register from './components/Register';
 import UserInfo from './components/UserInfo';
@@ -40,6 +42,8 @@ export default function App() {
           render={(props) => <MyPage user={user} {...props} />}
         />
         <Route path="/info" component={UserInfo} />
+        <Route path="/recommend" component={Recommend} />
+        <Route path="/result" component={Result} />
         <Route component={NotFound} />
       </Switch>
     </Router>
