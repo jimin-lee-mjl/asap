@@ -1,0 +1,27 @@
+/* modal */
+
+.ant-modal-content {
+  height: 800px;
+}
+
+.product-detail-img img {
+  height: 600px;
+}
+
+.product-detail-description {
+  height: 600px;
+}
+
+.ant-modal-content .ant-modal-footer {
+  text-align: left;
+  padding-left: 90px;
+}
+
+.ant-modal-footer .ant-btn {
+  width: 150px;
+  height: 50px;
+}
+
+#pushpin-btn {
+  margin-left: 30px;
+}
