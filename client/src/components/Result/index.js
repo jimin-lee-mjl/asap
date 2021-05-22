@@ -1,7 +1,5 @@
 import React from 'react';
-
 import ProductTable from './productTable';
-import './result.css';
 
 export default function Result() {
   return (

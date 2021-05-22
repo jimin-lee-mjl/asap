@@ -1,8 +1,17 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography } from 'antd';
 import ProductCard from './productCard';
+import axios from 'axios';
+import styled from 'styled-components';
 
 export default function ProductTable() {
   const { Title } = Typography;
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const likesApiUrl = '';
+  const basketApiUrl = '';
+  const purchaseApiUrl = '';
 
   const columns = [
     {
@@ -39,10 +48,86 @@ export default function ProductTable() {
     });
   }
 
-  const rowSelection = () => {};
+  const rowSelection = {
+    // selectedRowKeys: [0],
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(selectedRows);
+      setSelectedProduct(selectedRows);
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        'selectedRows: ',
+        selectedRows,
+      );
+    },
+  };
+
+  const handleClickLikes = useCallback(async () => {
+    console.log('handleClickLikes');
+    console.log('selectedProduct: ', selectedProduct);
+    await axios
+      .put(likesApiUrl, {
+        data: selectedProduct,
+      })
+      .then(function (response) {
+        console.log('response: ', response);
+      })
+      .catch(function (error) {})
+      .then(function () {});
+  }, [likesApiUrl, selectedProduct]);
+
+  const handleClickBasket = useCallback(async () => {
+    console.log('handleClickBasket');
+    console.log('selectedProduct: ', selectedProduct);
+    await axios
+      .put(basketApiUrl, {
+        data: selectedProduct,
+      })
+      .then(function (response) {
+        console.log('response: ', response);
+      })
+      .catch(function (error) {})
+      .then(function () {});
+  }, [basketApiUrl, selectedProduct]);
+
+  const handleClickPurchase = useCallback(async () => {
+    console.log('handleClickPurchase');
+    console.log('selectedProduct: ', selectedProduct);
+    await axios
+      .put(purchaseApiUrl, {
+        data: selectedProduct,
+      })
+      .then(function (response) {
+        console.log('response: ', response);
+      })
+      .catch(function (error) {})
+      .then(function () {});
+  }, [purchaseApiUrl, selectedProduct]);
+
+  // 총 가격 표시
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  const CalTotalPrice = useEffect(() => {
+    var sumPrice = 0;
+    var price = 0;
+    var regex = /[^0-9]/g;
+
+    selectedProduct.map((product) => {
+      price = Number(product.price.replace(regex, ''));
+      console.log(price);
+      sumPrice += price;
+      console.log(sumPrice);
+    });
+
+    sumPrice = numberWithCommas(sumPrice);
+    console.log(sumPrice);
+    setTotalPrice(sumPrice);
+  }, [selectedProduct, totalPrice]);
+
   return (
     <div>
-      <Table
+      <ProductListTable
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
@@ -51,18 +136,66 @@ export default function ProductTable() {
           width: '1000px',
         }}
       />
-      <div className="table-footer">
+      <TableFooter>
         <div>
-          <Title>총 2개 상품 &nbsp; &nbsp;총 100,000원</Title>
+          <Title>
+            총 {selectedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
+            {totalPrice}원
+          </Title>
         </div>
-        <div className="btn-group">
-          <Button size="large">선택한 상품 찜하기</Button>
-          <Button size="large">선택한 상품 장바구니에 담기</Button>
-          <Button type="primary" size="large">
+        <ButtonGroup>
+          <Button
+            size="large"
+            onClick={() => {
+              handleClickLikes();
+            }}
+          >
+            선택한 상품 찜하기
+          </Button>
+          <Button
+            size="large"
+            onClick={() => {
+              handleClickBasket();
+            }}
+          >
+            선택한 상품 장바구니에 담기
+          </Button>
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => {
+              handleClickPurchase();
+            }}
+          >
             선택한 상품 구매하기
           </Button>
-        </div>
-      </div>
+        </ButtonGroup>
+      </TableFooter>
     </div>
   );
 }
+
+const ProductListTable = styled(Table)`
+  .ant-pagination {
+    display: none;
+  }
+  .ant-table-thead tr th {
+    color: white;
+    background: #1890ff;
+    text-align: center;
+  }
+
+  .ant-table table {
+    text-align: center;
+  }
+`;
+
+const TableFooter = styled.div`
+  text-align: right;
+  margin: 20px;
+`;
+const ButtonGroup = styled.div`
+  button {
+    margin-left: 5px;
+  }
+`;

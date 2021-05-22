@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
 import { Card, message } from 'antd';
 import { CheckCircleOutlined, PushpinOutlined } from '@ant-design/icons';
 import { ProductContext } from './UserContext';
+import styled from 'styled-components';
 
 export default function ProductCard() {
   const { visible, setVisible } = useContext(ProductContext);

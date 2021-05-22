@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Card, Typography } from 'antd';
+import { ProductContext } from './UserContext';
 import ProductCardGroup from './productCardGroup';
 import ProductDetail from './productDetail';
-import { ProductContext } from './UserContext';
 import ChoiceSummary from './choiceSummary';
-
-import './recommend.css';
+import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
 export default function Recommend() {
@@ -33,8 +31,7 @@ export default function Recommend() {
 }
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  height: '90vh'
   display: flex;
   flex-direction: column;
   align-items: center;

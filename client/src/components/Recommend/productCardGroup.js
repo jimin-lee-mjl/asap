@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Col, Typography } from 'antd';
-import ProductCard from './productCard';
 import { ProductContext } from './UserContext';
+import ProductCard from './productCard';
 import styled from 'styled-components';
 
 export default function ProductCardGroup() {
