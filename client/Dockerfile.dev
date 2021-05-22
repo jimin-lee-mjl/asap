@@ -1,0 +1,22 @@
+#base image: node 기반의 이미지를 만들 것(부모가 되는 이미지)
+#버전은 15.10.0 => 로컬 node -v 가 15.10.09
+FROM node:15.10.0
+
+#/client 에서 작업
+RUN mkdir /client
+WORKDIR /client
+
+#package.json /client/ 에 복사
+COPY package.json /client/
+
+#npm update
+#npm install로 package.json 파일에 적힌 dependecies 파일들을 설치
+Run npm install -g npm@7.14.0
+RUN npm install
+
+#작업 파일 /client/ 에 복사
+COPY . /client/
+
+EXPOSE 3000
+
+CMD ["yarn", "start"]
