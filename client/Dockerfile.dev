@@ -9,10 +9,10 @@ WORKDIR /client
 #package.json /client/ 에 복사
 COPY package.json /client/
 
-#npm update
 #npm install로 package.json 파일에 적힌 dependecies 파일들을 설치
-Run npm install -g npm@7.14.0
+RUN npm install -g npm@7.14.0
 RUN npm install
+RUN npm install react-scripts@4.0.3 -g
 
 #작업 파일 /client/ 에 복사
 COPY . /client/
