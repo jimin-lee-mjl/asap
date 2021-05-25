@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
+import axios from 'axios';
 
 const layout = {
   labelCol: {
@@ -21,9 +22,21 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const login = async (email, password) => {
+    const response = await axios
+      .post('https://fakestoreapi.com/auth/login', {
+        username: email,
+        password: password,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log(response);
+  };
+
   const handleClick = () => {
     try {
-      // login({ email, password });
+      login(email, password);
     } catch (e) {
       alert('Failed to login');
       setEmail('');
