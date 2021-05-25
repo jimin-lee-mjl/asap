@@ -1,14 +1,12 @@
 version: '3'
 
 services:
-  client:
+  react:
     build:
       context: . # 도커파일이 위치한 위치
       dockerfile: Dockerfile.dev # 도커파일 이름
     container_name: react
     restart: 'on-failure'
-    expose:
-      - 3000 # port 맵핑
     volumes:
       - '.:/client'
     environment:
