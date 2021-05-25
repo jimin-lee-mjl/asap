@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button } from 'antd';
 import axios from 'axios';
+import { login } from '../../actions/auth';
+import { useSelector, useDispatch } from 'react-redux';
 
 const layout = {
   labelCol: {
@@ -19,29 +21,33 @@ const tailLayout = {
 };
 
 export default function Login() {
+  const state = useSelector(state => state.auth)
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async (email, password) => {
-    const response = await axios
-      .post('https://fakestoreapi.com/auth/login', {
-        username: email,
-        password: password,
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(response);
-  };
+  // const login = async (email, password) => {
+  //   const response = await axios
+  //     .post('https://fakestoreapi.com/auth/login', {
+  //       username: email,
+  //       password: password,
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   console.log(response);
+  // };
 
   const handleClick = () => {
     try {
-      login(email, password);
+      dispatch(login(email, password));
     } catch (e) {
       alert('Failed to login');
       setEmail('');
       setPassword('');
     }
+    // console.log(state);
   };
 
   const onFinish = (values) => {

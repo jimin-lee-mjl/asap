@@ -41,8 +41,10 @@ export const login = (username, password) => (dispatch) => {
     const body = JSON.stringify({ username, password });
 
     axios
-    .post('/rest-auth/login', body, config)
+    .post('https://fakestoreapi.com/auth/login', body, config)
     .then((res) => {
+        // console.log("OK");
+        console.log(res.data);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data,
@@ -54,6 +56,7 @@ export const login = (username, password) => (dispatch) => {
             type: LOGIN_FAIL
         })
     })
+}
 
 // Register User
 export const register = ({ username, password, email }) => (dispatch) => {
@@ -76,7 +79,7 @@ export const register = ({ username, password, email }) => (dispatch) => {
     })
     .catch(err => {
             console.log(err);
-            dispach({type: REGISTER_FAIL});
+            dispatch({type: REGISTER_FAIL});
         })    
 }
 
