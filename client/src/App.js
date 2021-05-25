@@ -10,8 +10,8 @@ import Register from './components/Register';
 import UserInfo from './components/UserInfo';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
-
 import AuthRoute from './components/AuthRoute';
+
 
 export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
@@ -42,6 +42,7 @@ export default function App() {
           render={(props) => <MyPage user={user} {...props} />}
         />
         <Route path="/info" component={UserInfo} />
+        <Route path="/mypage" component={MyPage} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
         <Route component={NotFound} />

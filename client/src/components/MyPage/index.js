@@ -1,17 +1,43 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Avatar } from 'antd';
 
 export default function MyPage({ user }) {
   return (
     <Container>
-      <Nav>Navbar</Nav>
-      <Header>Header</Header>
-      <Profile>Profile</Profile>
+      <Nav>
+        <button>Home</button>
+      </Nav>
+      <Header>
+        <h1>My Page</h1>
+      </Header>
+      <Profile>
+        <h1>Profile</h1>
+        <Avatar shape="square" style={{ backgroundColor: 'gray' }} size={64}>
+          User
+        </Avatar>
+        <article>
+          <h2>ID: elice</h2>
+          <h2>Password: ********* </h2>
+          <h2>Email: elice@elice.com </h2>
+          <h2>Gender: Women </h2>
+          <h2>age: 20 </h2>
+          <h2>Size: M </h2>
+        </article>
+        <button>edit</button>
+      </Profile>
       <Keyword>Keyword</Keyword>
       <Color>Color</Color>
       <Budget>Budget</Budget>
-      <Liked>Liked</Liked>
-      <Purchased>Purchased</Purchased>
+      <Liked>
+        Liked
+        <button>더보기</button>
+        <div></div>
+      </Liked>
+      <Purchased>
+        Purchased
+        <button>더보기</button>
+      </Purchased>
     </Container>
   );
 }
@@ -29,9 +55,6 @@ const Container = styled.div`
     'profile keyword keyword liked'
     'profile color budget purchased';
   grid-gap: 0.2rem;
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap');
-  font-family: 'Rubik', sans-serif;
-  text-transform: uppercase;
 
   @media only screen and (max-width: 550px) {
     width: 100vw;
@@ -52,16 +75,22 @@ const Container = styled.div`
 const Nav = styled.nav`
   background: #a7ffeb;
   grid-area: nav;
+  text-align: right;
 `;
 
 const Header = styled.main`
   background: #81ecec;
   grid-area: header;
+  text-align: center;
 `;
 
 const Profile = styled.div`
   background: #80deea;
   grid-area: profile;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const Keyword = styled.div`
