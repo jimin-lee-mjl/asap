@@ -38,4 +38,4 @@ test-backend:
   script:
     - cd backend/
     - pip install -r requirements.txt
-    - python manage.py test --settings closet.ci-settings.py
+    - python manage.py test --settings=closet.ci-settings
