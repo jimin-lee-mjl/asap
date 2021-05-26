@@ -1,0 +1,63 @@
+[
+{
+    "model": "mypage.testproduct",
+    "pk": 1,
+    "fields": {
+        "name": "blue shirt"
+    }
+},
+{
+    "model": "mypage.testproduct",
+    "pk": 2,
+    "fields": {
+        "name": "emerald cardigan"
+    }
+},
+{
+    "model": "mypage.testproduct",
+    "pk": 3,
+    "fields": {
+        "name": "red canvas bag"
+    }
+},
+{
+    "model": "mypage.testproduct",
+    "pk": 4,
+    "fields": {
+        "name": "gray hoodie"
+    }
+},
+{
+    "model": "mypage.testuser",
+    "pk": 1,
+    "fields": {
+        "name": "marina",
+        "wish": [
+            1
+        ],
+        "bag": [
+            2
+        ],
+        "buy": [
+            2,
+            1
+        ]
+    }
+},
+{
+    "model": "mypage.testuser",
+    "pk": 2,
+    "fields": {
+        "name": "grace",
+        "wish": [
+            3
+        ],
+        "bag": [
+            4
+        ],
+        "buy": [
+            4
+        ]
+    }
+}
+]
