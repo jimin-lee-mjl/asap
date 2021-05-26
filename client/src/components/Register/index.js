@@ -87,7 +87,7 @@ function RegisterPage(props) {
             <br />
           </FormControl>
 
-          <Button type="submit">회원 가입</Button>
+          <Button onClick={onSubmitHandler}>회원 가입</Button>
         </form>
       </Container>
     </div>
