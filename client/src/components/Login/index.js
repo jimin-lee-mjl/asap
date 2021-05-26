@@ -1,62 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input } from 'antd';
-import axios from 'axios';
 import { login } from '../../actions/auth';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-const tailLayout = {
-  wrapperCol: {
-    offset: 8,
-    span: 16,
-  },
-};
-
 export default function Login() {
-  const state = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  // const login = async (email, password) => {
-  //   const response = await axios
-  //     .post('https://fakestoreapi.com/auth/login', {
-  //       username: email,
-  //       password: password,
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   console.log(response);
-  // };
 
   const handleClick = () => {
     try {
-      dispatch(login(email, password));
+      dispatch(login(username, password));
     } catch (e) {
       alert('Failed to login');
-      setEmail('');
+      setUsername('');
       setPassword('');
     }
-    // console.log(state);
-  };
-
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -70,7 +31,6 @@ export default function Login() {
       }}
     >
       <Container>
-        <h1 style={{ textAlign: 'center', margin: '0 0 20px' }}>Login</h1>
         <form
           style={{
             display: 'flex',
@@ -79,12 +39,14 @@ export default function Login() {
             textAlign: 'left',
           }}
         >
+          <h1 style={{ textAlign: 'center', margin: '0 0 20px' }}>Login</h1>
+
           <FormControl>
             <label>Name</label>
             <input
               type="test"
-              value={email}
-              onChange={({ target: { value } }) => setEmail(value)}
+              value={username}
+              onChange={({ target: { value } }) => setUsername(value)}
             />
           </FormControl>
 
@@ -101,6 +63,7 @@ export default function Login() {
             Login
           </Button>
         </form>
+
         <Link to="/register">Create Account</Link>
       </Container>
     </div>
