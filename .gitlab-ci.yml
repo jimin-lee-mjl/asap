@@ -1,0 +1,43 @@
+stages:
+  - lint
+  - test
+
+lint-client:
+  stage: lint
+  image: node:latest
+  script:
+    - cd client/
+    - npm install eslint \
+      eslint-config-prettier \
+      eslint-plugin-prettier \
+    - node_modules/eslint/bin/eslint.js .
+
+test-client:
+  stage: test
+  image: node:latest
+  script:
+    - cd client/
+    - npm install -g npm@7.14.0
+    - npm install
+    - npm install -g react-scripts@4.0.3 
+    - npm test
+
+lint-backend:
+  stage: lint
+  image: python:latest
+  script:
+    - cd backend/
+    - pip install autopep8
+    - autopep8 -i *.py
+
+test-backend:
+  stage: test
+  image: python:latest
+  services:
+    - postgres:latest
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/ci"
+  script:
+    - cd backend/
+    - pip install -r requirements.txt
+    - python manage.py test --settings closet.ci-settings.py
