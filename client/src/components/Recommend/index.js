@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Typography } from 'antd';
 import { ProductContext } from './UserContext';
-import ProductCardGroup from './productCardGroup';
+import ProductCardGroups from './productCardGroups';
 import ProductDetail from './productDetail';
 import ChoiceSummary from './choiceSummary';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ export default function Recommend() {
               제품입니다
             </Title>
           </div>
-          <ProductCardGroup />
+          <ProductCardGroups />
           <ChoiceSummary />
         </div>
         <ProductDetail />

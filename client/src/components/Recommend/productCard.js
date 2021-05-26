@@ -3,10 +3,13 @@ import { Card, message } from 'antd';
 import { CheckCircleOutlined, PushpinOutlined } from '@ant-design/icons';
 import { ProductContext } from './UserContext';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 export default function ProductCard() {
   const { visible, setVisible } = useContext(ProductContext);
   const { Meta } = Card;
+
+  const products = useSelector((state) => state.setProductsReducer.products);
 
   const handleClickCheck = (e) => {
     e.stopPropagation();
@@ -18,34 +21,34 @@ export default function ProductCard() {
     message.success('찜하기', 0.5);
   };
 
-  return (
-    <CardContainer>
-      <Card
-        hoverable
-        style={{ width: 240 }}
-        cover={
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+  const renderList = products.map((product) => {
+    const { id, title, image, price, category } = product;
+    return (
+      <CardContainer>
+        <Card
+          hoverable
+          style={{ width: 240 }}
+          cover={<img alt={title} src={image} />}
+          onClick={() => setVisible(true)}
+        >
+          <Meta
+            style={{ whiteSpace: 'none' }}
+            title={title}
+            description={price}
           />
-        }
-        onClick={() => setVisible(true)}
-      >
-        <Meta
-          style={{ whiteSpace: 'none' }}
-          title="Men's Cotton Performance Short Sleeve T-Shirt"
-          description="24,000 원"
-        />
-        <CardIcons>
-          <CheckCircleOutlined
-            style={{ marginRight: 40 }}
-            onClick={handleClickCheck}
-          />
-          <PushpinOutlined onClick={handleClickPushpin} />
-        </CardIcons>
-      </Card>
-    </CardContainer>
-  );
+          <CardIcons>
+            <CheckCircleOutlined
+              style={{ marginRight: 40 }}
+              onClick={handleClickCheck}
+            />
+            <PushpinOutlined onClick={handleClickPushpin} />
+          </CardIcons>
+        </Card>
+      </CardContainer>
+    );
+  });
+
+  return <>{renderList}</>;
 }
 
 const CardContainer = styled.div`
