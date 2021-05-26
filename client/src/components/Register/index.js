@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-
 import { withRouter } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { register } from '../../actions/auth';
 
 function RegisterPage(props) {
-  const [Email, setEmail] = useState('');
-  const [Password, setPassword] = useState('');
-  const [Name, setName] = useState('');
-  const [ConfirmPasword, setConfirmPasword] = useState('');
+  const [username, setName] = useState('');
+  const [password1, setPassword] = useState('');
+  const [password2, setConfirmPasword] = useState('');
+  const [email, setEmail] = useState('');
+
+  const dispatch = useDispatch();
 
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
@@ -14,6 +17,7 @@ function RegisterPage(props) {
 
   const onNameHandler = (e) => {
     setName(e.currentTarget.value);
+    console.log(username);
   };
 
   const onPasswordHanlder = (e) => {
@@ -26,7 +30,10 @@ function RegisterPage(props) {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    console.log(username, email, password1, password2);
+    dispatch(register({ username, email, password1, password2 }));
   };
+
   return (
     <div
       style={{
@@ -41,22 +48,25 @@ function RegisterPage(props) {
         onSubmit={onSubmitHandler}
         style={{ display: 'flex', flexDirection: 'column' }}
       >
-        <label>Email</label>
-        <input type="email" value={Email} onChange={onEmailHandler} />
+        <h1>Create Account</h1>
 
         <label>Name</label>
-        <input type="test" value={Name} onChange={onNameHandler} />
+        <input type="test" value={username} onChange={onNameHandler} />
 
         <label>Password</label>
-        <input type="password" value={Password} onChange={onPasswordHanlder} />
+        <input type="password" value={password1} onChange={onPasswordHanlder} />
 
-        <label>ConfirmPasword</label>
+        <label>Confirm Pasword</label>
         <input
           type="password"
-          value={ConfirmPasword}
+          value={password2}
           onChange={onConfirmPasswordHandler}
         />
+
+        <label>Email (선택)</label>
+        <input type="email" value={email} onChange={onEmailHandler} />
         <br />
+
         <button type="submit">회원 가입</button>
       </form>
     </div>
