@@ -105,6 +105,11 @@ const Container = styled.div`
   background-color: white;
   box-shadow: 20px 20px 60px #97a1a1, -20px -20px 60px #ffffff;
   margin: 20px auto;
+
+  @media only screen and (max-width: 600px) {
+    background-color: ivory;
+    box-shadow: none;
+  }
 `;
 
 const FormControl = styled.div`
