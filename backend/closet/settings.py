@@ -51,11 +51,13 @@ INSTALLED_APPS = [
     'allauth.account',
     'mypage',
     'drf_yasg',
+    'corsheaders',
 ]
 
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -84,6 +86,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'closet.wsgi.application'
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"\w*\W*localhost\W*\w*",
+    r"\w*\W*127.0.0.1\W*\w*",
+]
 
 
 # Database
