@@ -9,4 +9,5 @@ export const CLEAR_USER = 'CLEAR_USER';
 
 export const ProductActionTypes = {
   SET_PRODUCTS: 'SET_PRODUCTS',
+  SELECT_PRODUCT: 'SELECT_PRODUCT',
 };

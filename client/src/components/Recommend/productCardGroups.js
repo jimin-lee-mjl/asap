@@ -14,39 +14,47 @@ export default function ProductCardGroups() {
   const products = useSelector((state) => state.setProductsReducer.products);
   const dispatch = useDispatch();
 
-  const fetchProducts = async () => {
-    const response = await axios
-      .get('https://fakestoreapi.com/products/category/jewelery?limit=4')
-      .catch((err) => {
-        console.log('Err: ', err);
-      });
-    dispatch(setProducts(response.data));
-  };
-
   useEffect(() => {
-    fetchProducts();
+    dispatch(setProducts());
   }, []);
 
   console.log('Products :', products);
 
+  const renderCardGroup = () => {
+    const cardGroupArray = [];
+    Object.entries(products).map((product) => {
+      console.log(product);
+      const category = product[0];
+      const productList = product[1];
+
+      if (productList.length == 0) {
+        return false;
+      }
+
+      cardGroupArray.push(
+        <ProductCardGroup>
+          <Col span={3}>
+            <Title level={2}>{category}</Title>
+          </Col>
+          <Col
+            span={15}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              overflowX: 'scroll',
+            }}
+          >
+            <ProductCard categoryKey={category} />
+          </Col>
+        </ProductCardGroup>,
+      );
+    });
+
+    return cardGroupArray;
+  };
+
   return (
-    <ProductCardGroupContainer>
-      <ProductCardGroup>
-        <Col span={3}>
-          <Title level={2}>상의</Title>
-        </Col>
-        <Col
-          span={15}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            overflowX: 'scroll',
-          }}
-        >
-          <ProductCard />
-        </Col>
-      </ProductCardGroup>
-    </ProductCardGroupContainer>
+    <ProductCardGroupContainer>{renderCardGroup()}</ProductCardGroupContainer>
   );
 }
 
