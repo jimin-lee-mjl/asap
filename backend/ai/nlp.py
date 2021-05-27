@@ -24,18 +24,18 @@ for line in original:
     except:
         continue   
 original.close()
-print(len(data))
+# print(len(data))
 df = pd.DataFrame(data)
-print(df)
+# print(df)
 istrue = df['verified'] == True
 df = df[istrue]
 
 result = df[['overall', 'asin', 'reviewText', 'summary', 'vote']]
-print(result)
+# print(result)
 
-print(len(result))
-print(result.sample(10))
-print('Text 열에서 중복을 배제한 유일한 샘플의 수 :', result['reviewText'].nunique())
+# print(len(result))
+# print(result.sample(10))
+# print('Text 열에서 중복을 배제한 유일한 샘플의 수 :', result['reviewText'].nunique())
 
 contractions = {"ain't": "is not", "aren't": "are not","can't": "cannot", "'cause": "because", "could've": "could have", "couldn't": "could not", "didn't": "did not",  "doesn't": "does not", "don't": "do not",
                 "hadn't": "had not", "hasn't": "has not", "haven't": "have not", "he'd": "he would","he'll": "he will", "he's": "he is", "how'd": "how did", "how'd'y": "how do you", "how'll": "how will",
@@ -56,8 +56,8 @@ contractions = {"ain't": "is not", "aren't": "are not","can't": "cannot", "'caus
 # 축약어 처리
 
 stop_words = set(stopwords.words('english'))
-print('불용어 개수 :', len(stop_words))
-print(stop_words)
+# print('불용어 개수 :', len(stop_words))
+# print(stop_words)
 
 def preprocess_sentence(sentence, remove_stopwords = True):
     sentence = str(sentence) # NaN이 float로 인식되기 때문에 강제로 str로 변환
@@ -79,8 +79,8 @@ def preprocess_sentence(sentence, remove_stopwords = True):
 
 temp_text = 'Everything I bought was great, infact I ordered twice and the third ordered was<br />for my mother and father.'
 temp_summary = 'Great way to start (or finish) the day!!!'
-print(preprocess_sentence(temp_text))
-print(preprocess_sentence(temp_summary, 0))
+# print(preprocess_sentence(temp_text))
+# print(preprocess_sentence(temp_summary, 0))
 
 clean_text = []
 import math
@@ -97,7 +97,7 @@ for line in clean_text:
   if line == "error":
       count += 1
 
-print(count)
+# print(count)
 
 result[:5]['reviewText']
 
@@ -113,20 +113,20 @@ result['summary'] = clean_summary
 result
 
 result.replace('', np.nan, inplace=True)
-print(result.isnull().sum())
+# print(result.isnull().sum())
 
 result.dropna(axis = 0, inplace = True)
-print('전체 샘플수 :',(len(result)))
+# print('전체 샘플수 :',(len(result)))
 
 text_len = [len(s.split()) for s in result['reviewText']]
 summary_len = [len(s.split()) for s in result['summary']]
 
-print('텍스트의 최소 길이 : {}'.format(np.min(text_len)))
-print('텍스트의 최대 길이 : {}'.format(np.max(text_len)))
-print('텍스트의 평균 길이 : {}'.format(np.mean(text_len)))
-print('요약의 최소 길이 : {}'.format(np.min(summary_len)))
-print('요약의 최대 길이 : {}'.format(np.max(summary_len)))
-print('요약의 평균 길이 : {}'.format(np.mean(summary_len)))
+# print('텍스트의 최소 길이 : {}'.format(np.min(text_len)))
+# print('텍스트의 최대 길이 : {}'.format(np.max(text_len)))
+# print('텍스트의 평균 길이 : {}'.format(np.mean(text_len)))
+# print('요약의 최소 길이 : {}'.format(np.min(summary_len)))
+# print('요약의 최대 길이 : {}'.format(np.max(summary_len)))
+# print('요약의 평균 길이 : {}'.format(np.mean(summary_len)))
 
 plt.subplot(1,2,1)
 plt.boxplot(summary_len)
@@ -157,7 +157,7 @@ def below_threshold_len(max_len, nested_list):
   for s in nested_list:
     if(len(s.split()) <= max_len):
         cnt = cnt + 1
-  print('전체 샘플 중 길이가 %s 이하인 샘플의 비율: %s'%(max_len, (cnt / len(nested_list))))
+#   print('전체 샘플 중 길이가 %s 이하인 샘플의 비율: %s'%(max_len, (cnt / len(nested_list))))
 
 below_threshold_len(text_max_len, result['reviewText'])
 below_threshold_len(summary_max_len, result['summary'])
@@ -172,14 +172,14 @@ decoder_target = np.array(result['decoder_target'])
 
 indices = np.arange(encoder_input.shape[0])
 np.random.shuffle(indices)
-print(indices)
+# print(indices)
 
 encoder_input = encoder_input[indices]
 decoder_input = decoder_input[indices]
 decoder_target = decoder_target[indices]
 
 n_of_val = int(len(encoder_input)*0.2)
-print('테스트 데이터의 수 :',n_of_val)
+# print('테스트 데이터의 수 :',n_of_val)
 
 encoder_input_train = encoder_input[:-n_of_val]
 decoder_input_train = decoder_input[:-n_of_val]
@@ -189,10 +189,10 @@ encoder_input_test = encoder_input[-n_of_val:]
 decoder_input_test = decoder_input[-n_of_val:]
 decoder_target_test = decoder_target[-n_of_val:]
 
-print('훈련 데이터의 개수 :', len(encoder_input_train))
-print('훈련 레이블의 개수 :',len(decoder_input_train))
-print('테스트 데이터의 개수 :',len(encoder_input_test))
-print('테스트 레이블의 개수 :',len(decoder_input_test))
+# print('훈련 데이터의 개수 :', len(encoder_input_train))
+# print('훈련 레이블의 개수 :',len(decoder_input_train))
+# print('테스트 데이터의 개수 :',len(encoder_input_test))
+# print('테스트 레이블의 개수 :',len(decoder_input_test))
 
 src_tokenizer = Tokenizer()
 src_tokenizer.fit_on_texts(encoder_input_train)
@@ -212,11 +212,11 @@ for key, value in src_tokenizer.word_counts.items():
         rare_cnt = rare_cnt + 1
         rare_freq = rare_freq + value
 
-print('단어 집합(vocabulary)의 크기 :',total_cnt)
-print('등장 빈도가 %s번 이하인 희귀 단어의 수: %s'%(threshold - 1, rare_cnt))
-print('단어 집합에서 희귀 단어를 제외시킬 경우의 단어 집합의 크기 %s'%(total_cnt - rare_cnt))
-print("단어 집합에서 희귀 단어의 비율:", (rare_cnt / total_cnt)*100)
-print("전체 등장 빈도에서 희귀 단어 등장 빈도 비율:", (rare_freq / total_freq)*100)
+# print('단어 집합(vocabulary)의 크기 :',total_cnt)
+# print('등장 빈도가 %s번 이하인 희귀 단어의 수: %s'%(threshold - 1, rare_cnt))
+# print('단어 집합에서 희귀 단어를 제외시킬 경우의 단어 집합의 크기 %s'%(total_cnt - rare_cnt))
+# print("단어 집합에서 희귀 단어의 비율:", (rare_cnt / total_cnt)*100)
+# print("전체 등장 빈도에서 희귀 단어 등장 빈도 비율:", (rare_freq / total_freq)*100)
 
 src_vocab = 8000
 src_tokenizer = Tokenizer(num_words = src_vocab) 
@@ -226,7 +226,7 @@ src_tokenizer.fit_on_texts(encoder_input_train)
 encoder_input_train = src_tokenizer.texts_to_sequences(encoder_input_train) 
 encoder_input_test = src_tokenizer.texts_to_sequences(encoder_input_test)
 
-print(encoder_input_train[:3])
+# print(encoder_input_train[:3])
 
 tar_tokenizer = Tokenizer()
 tar_tokenizer.fit_on_texts(decoder_input_train)
@@ -246,11 +246,11 @@ for key, value in tar_tokenizer.word_counts.items():
         rare_cnt = rare_cnt + 1
         rare_freq = rare_freq + value
 
-print('단어 집합(vocabulary)의 크기 :',total_cnt)
-print('등장 빈도가 %s번 이하인 희귀 단어의 수: %s'%(threshold - 1, rare_cnt))
-print('단어 집합에서 희귀 단어를 제외시킬 경우의 단어 집합의 크기 %s'%(total_cnt - rare_cnt))
-print("단어 집합에서 희귀 단어의 비율:", (rare_cnt / total_cnt)*100)
-print("전체 등장 빈도에서 희귀 단어 등장 빈도 비율:", (rare_freq / total_freq)*100)
+# print('단어 집합(vocabulary)의 크기 :',total_cnt)
+# print('등장 빈도가 %s번 이하인 희귀 단어의 수: %s'%(threshold - 1, rare_cnt))
+# print('단어 집합에서 희귀 단어를 제외시킬 경우의 단어 집합의 크기 %s'%(total_cnt - rare_cnt))
+# print("단어 집합에서 희귀 단어의 비율:", (rare_cnt / total_cnt)*100)
+# print("전체 등장 빈도에서 희귀 단어 등장 빈도 비율:", (rare_freq / total_freq)*100)
 
 tar_vocab = 2000
 tar_tokenizer = Tokenizer(num_words = tar_vocab) 
@@ -262,14 +262,14 @@ decoder_target_train = tar_tokenizer.texts_to_sequences(decoder_target_train)
 decoder_input_test = tar_tokenizer.texts_to_sequences(decoder_input_test)
 decoder_target_test = tar_tokenizer.texts_to_sequences(decoder_target_test)
 
-print(decoder_input_train[:5])
-print(decoder_target_train[:5])
+# print(decoder_input_train[:5])
+# print(decoder_target_train[:5])
 
 drop_train = [index for index, sentence in enumerate(decoder_input_train) if len(sentence) == 1]
 drop_test = [index for index, sentence in enumerate(decoder_input_test) if len(sentence) == 1]
 
-print('삭제할 훈련 데이터의 개수 :',len(drop_train))
-print('삭제할 테스트 데이터의 개수 :',len(drop_test))
+# print('삭제할 훈련 데이터의 개수 :',len(drop_train))
+# print('삭제할 테스트 데이터의 개수 :',len(drop_test))
 
 encoder_input_train = np.delete(encoder_input_train, drop_train, axis=0)
 decoder_input_train = np.delete(decoder_input_train, drop_train, axis=0)
@@ -279,10 +279,10 @@ encoder_input_test = np.delete(encoder_input_test, drop_test, axis=0)
 decoder_input_test = np.delete(decoder_input_test, drop_test, axis=0)
 decoder_target_test = np.delete(decoder_target_test, drop_test, axis=0)
 
-print('훈련 데이터의 개수 :', len(encoder_input_train))
-print('훈련 레이블의 개수 :',len(decoder_input_train))
-print('테스트 데이터의 개수 :',len(encoder_input_test))
-print('테스트 레이블의 개수 :',len(decoder_input_test))
+# print('훈련 데이터의 개수 :', len(encoder_input_train))
+# print('훈련 레이블의 개수 :',len(decoder_input_train))
+# print('테스트 데이터의 개수 :',len(encoder_input_test))
+# print('테스트 레이블의 개수 :',len(decoder_input_test))
 
 encoder_input_train = pad_sequences(encoder_input_train, maxlen = text_max_len, padding='post')
 encoder_input_test = pad_sequences(encoder_input_test, maxlen = text_max_len, padding='post')
@@ -356,13 +356,11 @@ model.summary()
 model.compile(optimizer='rmsprop', loss='sparse_categorical_crossentropy')
 
 es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience = 2)
+mc = ModelCheckpoint("train_result.txt", verbose=1, save_best_only=True, mode = 'auto', save_freq = 'epoch', )
 
-f = open('train_result.txt', 'w')
-
-f.write(model.fit(x = [encoder_input_train, decoder_input_train], y = decoder_target_train, \
+history = model.fit(x = [encoder_input_train, decoder_input_train], y = decoder_target_train, \
           validation_data = ([encoder_input_test, decoder_input_test], decoder_target_test),
-          batch_size = 256, callbacks=[es], epochs = 50))
-f.close()
+          batch_size = 256, callbacks=[es, mc], epochs = 50)
 
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='test')
@@ -446,9 +444,10 @@ def seq2summary(input_seq):
             temp = temp + tar_index_to_word[i] + ' '
     return temp
 
+f = open("output.txt", 'w')
+
 for i in range(500, 1000):
-    print("원문 : ",seq2text(encoder_input_test[i]))
-    print("실제 요약문 :",seq2summary(decoder_input_test[i]))
-    print("예측 요약문 :",decode_sequence(encoder_input_test[i].reshape(1, text_max_len)))
-    print("\n")
+    f.write("원문 : " + seq2text(encoder_input_test[i]) + '\n')
+    f.write("실제 요약문 :" + seq2summary(decoder_input_test[i]) + '\n')
+    f.write("예측 요약문 :" + decode_sequence(encoder_input_test[i].reshape(1, text_max_len)) + '\n')
 
