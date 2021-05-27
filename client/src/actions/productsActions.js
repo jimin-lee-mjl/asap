@@ -94,6 +94,37 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
 };
 
 export const likeProduct = (likeProductId) => (dispatch, getstate) => {
+  // 추가할 코드:
+  // 로그인 안 한 경우, 프론트 쪽에서 미리 차단
+  // 회원에 대해서만 api post
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({
+    userId: 5,
+    date: '2020 - 02 - 03',
+    products: [
+      { productId: 5, quantity: 1 },
+      { productId: 1, quantity: 5 },
+    ],
+  });
+
+  axios
+    .post('https://fakestoreapi.com/carts', body, config)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+      dispatch({
+        type: ProductActionTypes.LIKE_ALREADY,
+      });
+    });
+
   const recommendProducts = getstate().setProductsReducer.products;
   const currentLikeProductsState = getstate().likeProductReducer.likeProducts;
   console.log('likeProductReducer:', currentLikeProductsState);

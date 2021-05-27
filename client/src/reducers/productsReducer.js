@@ -47,6 +47,7 @@ export const likeProductReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.LIKE_PRODUCT:
       return { ...state, likeProducts: action.payload };
+    case ProductActionTypes.LIKE_ALREADY:
     default:
       return state;
   }

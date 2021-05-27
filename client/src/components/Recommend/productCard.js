@@ -34,7 +34,11 @@ export default function ProductCard({ categoryKey }) {
     e.stopPropagation();
     console.log(e.currentTarget.getAttribute('productId'));
     const likeProductId = e.currentTarget.getAttribute('productId');
-    dispatch(likeProduct(likeProductId));
+    try {
+      dispatch(likeProduct(likeProductId));
+    } catch (e) {
+      alert('이미 찜한 상품입니다.');
+    }
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 

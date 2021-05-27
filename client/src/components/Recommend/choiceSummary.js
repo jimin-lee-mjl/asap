@@ -16,30 +16,37 @@ export default function ChoiceSummary() {
   const choiceSummary = () => {
     console.log('categoryList:', categoryList);
 
+    var TotalPrice = 0;
     categoryList.map((category) => {
-      var priceSum = 0;
+      var priceSumPerCategory = 0;
       selectedProducts[category].map((product) => {
-        priceSum += Number(product.price);
+        priceSumPerCategory += Number(product.price);
       });
-      console.log(priceSum);
+      console.log('priceSumPerCategory:', priceSumPerCategory);
       choiceSummaryArray.push(
         <div>
           <ChosenCategory>{category}</ChosenCategory>
-          <p>{priceSum}</p>
+          <p>{priceSumPerCategory}</p>
         </div>,
       );
+      TotalPrice += priceSumPerCategory;
     });
+
+    console.log('TotalPrice:', TotalPrice);
+    choiceSummaryArray.push(
+      <div>
+        <TotalSummary>합계</TotalSummary>
+        <p>{TotalPrice}</p>
+      </div>,
+    );
+
     return choiceSummaryArray;
   };
-
-  useEffect(() => {
-    choiceSummary();
-  }, [categoryList, selectedProducts]);
 
   return (
     <ChoiceSummaryContainer>
       <Card
-        title="총 가격"
+        title="가격 정보"
         style={{ width: 600 }}
         headStyle={{ fontSize: 30, fontWeight: 'bold' }}
       >
@@ -54,5 +61,9 @@ const ChoiceSummaryContainer = styled.div`
 `;
 
 const ChosenCategory = styled.p`
+  font-weight: bold;
+`;
+
+const TotalSummary = styled.p`
   font-weight: bold;
 `;
