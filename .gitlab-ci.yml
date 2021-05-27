@@ -26,7 +26,9 @@ lint-backend:
   script:
     - cd backend/
     - pip install autopep8
-    - autopep8 closet/*.py mypage/*.py recommend/*.py
+    - autopep8 closet/*.py 
+    - autopep8 mypage/*.py 
+    - autopep8 recommend/*.py
 
 test-backend:
   stage: test
