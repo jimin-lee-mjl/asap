@@ -62,16 +62,18 @@ class WishListView(APIView):
     ## 내용
        - name : 아이템 이름
     '''
+
     def delete(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data)
 
         if serializer.is_valid():
             user = get_object_or_404(TestUser, pk=user_id)
-            # name -> asin으로 변경 필요 
-            item = TestProduct.objects.filter(name__exact=serializer.validated_data['name']).get()
+            # name -> asin으로 변경 필요
+            item = TestProduct.objects.filter(
+                name__exact=serializer.validated_data['name']).get()
             user.wish.remove(item)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,13 +86,15 @@ class BagView(APIView):
     ## 내용
        - name : 아이템 이름
     '''
+
     def delete(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data)
 
         if serializer.is_valid():
             user = get_object_or_404(TestUser, pk=user_id)
-            # name -> asin으로 변경 필요 
-            item = TestProduct.objects.filter(name__exact=serializer.validated_data['name']).get()
+            # name -> asin으로 변경 필요
+            item = TestProduct.objects.filter(
+                name__exact=serializer.validated_data['name']).get()
             user.bag.remove(item)
             return Response(status=status.HTTP_204_NO_CONTENT)
 

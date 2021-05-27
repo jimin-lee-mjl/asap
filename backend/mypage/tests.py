@@ -11,14 +11,14 @@ class TestUserProfileView(APITestCase):
         self.user = TestUser.objects.create(name='marina')
 
     def test_get_profile(self):
-        url = reverse('mypage:profile', kwargs={'user_id':2})
+        url = reverse('mypage:profile', kwargs={'user_id': 2})
         serializer = UserSerializer(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
 
     def test_update_profile(self):
-        url = reverse('mypage:profile', kwargs={'user_id':3})
+        url = reverse('mypage:profile', kwargs={'user_id': 3})
         data = {
             'name': 'marisol'
         }
@@ -33,7 +33,7 @@ class TestUserWishView(APITestCase):
         self.user.wish.add(self.shirt)
 
     def test_delete_wish(self):
-        url = reverse('mypage:wishlist', kwargs={'user_id':4})
+        url = reverse('mypage:wishlist', kwargs={'user_id': 4})
         data = {
             'name': 'shirt'
         }
@@ -48,7 +48,7 @@ class TestUserBagView(APITestCase):
         self.user.bag.add(self.shirt)
 
     def test_delete_bag(self):
-        url = reverse('mypage:bag', kwargs={'user_id':1})
+        url = reverse('mypage:bag', kwargs={'user_id': 1})
         data = {
             'name': 'shirt'
         }
