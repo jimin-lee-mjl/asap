@@ -10,15 +10,15 @@ lint-client:
     - npm install eslint 
     - node_modules/eslint/bin/eslint.js .
 
-test-client:
-  stage: test
-  image: node:latest
-  script:
-    - cd client/
-    - npm install -g npm@7.14.0
-    - npm install
-    - npm install -g react-scripts@4.0.3 
-    - npm test
+# test-client:
+#   stage: test
+#   image: node:latest
+#   script:
+#     - cd client/
+#     - npm install -g npm@7.14.0
+#     - npm install
+#     - npm install -g react-scripts@4.0.3 
+#     - npm test
 
 lint-backend:
   stage: lint
@@ -38,4 +38,7 @@ test-backend:
   script:
     - cd backend/
     - pip install -r requirements.txt
-    - python manage.py test --settings=closet.ci-settings
+    - export DJANGO_SETTINGS_MODULE=closet.ci-settings
+    - python manage.py makemigrations 
+    - python manage.py migrate 
+    - python manage.py test 
