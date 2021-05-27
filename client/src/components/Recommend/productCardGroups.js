@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setProducts } from '../../actions/productsActions';
 
 export default function ProductCardGroups() {
-  const { visible, setVisible } = useContext(ProductContext);
   const { Title } = Typography;
 
   const products = useSelector((state) => state.setProductsReducer.products);
@@ -32,7 +31,7 @@ export default function ProductCardGroups() {
       }
 
       cardGroupArray.push(
-        <ProductCardGroup>
+        <ProductCardGroup key={category}>
           <Col span={3}>
             <Title level={2}>{category}</Title>
           </Col>

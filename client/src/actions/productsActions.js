@@ -6,7 +6,8 @@ export const setProducts = () => (dispatch, getstate) => {
   axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
-      const newData = {
+      const modalData = {};
+      const productData = {
         outer: [],
         top: [],
         bottom: [],
@@ -14,20 +15,23 @@ export const setProducts = () => (dispatch, getstate) => {
 
       console.log(res.data);
       res.data.map((data) => {
+        modalData[data.id] = false;
         if (data.category == 'jewelery') {
-          newData.outer.push(data);
+          productData.outer.push(data);
         } else if (data.category == "women's clothing") {
-          newData.top.push(data);
+          productData.top.push(data);
         } else if (data.category == "men's clothing") {
-          newData.bottom.push(data);
+          productData.bottom.push(data);
         }
       });
 
-      console.log(newData);
+      console.log(productData);
+      console.log(modalData);
       dispatch({
         type: ProductActionTypes.SET_PRODUCTS,
-        payload: newData,
+        payload: productData,
       });
+      dispatch({ type: ProductActionTypes.SET_MODAL, payload: modalData });
     })
     .catch((err) => {
       console.log('Err: ', err);
@@ -36,10 +40,10 @@ export const setProducts = () => (dispatch, getstate) => {
 
 export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
   const recommendProducts = getstate().setProductsReducer.products;
-  const selectedProductsState =
+  const currentSelectedProductsState =
     getstate().selectProductReducer.selectedProducts;
 
-  var newState = {};
+  var newSelectState = {};
   Object.entries(recommendProducts).map((products) => {
     const recommendProductList = products[1];
     recommendProductList.map((recommendProduct) => {
@@ -48,28 +52,65 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
         const productCategory = recommendProduct.category;
 
         if (productCategory == 'jewelery') {
-          newState = {
-            ...selectedProductsState,
-            outer: [...selectedProductsState.outer, recommendProduct],
+          newSelectState = {
+            ...currentSelectedProductsState,
+            outer: [...currentSelectedProductsState.outer, recommendProduct],
           };
         } else if (productCategory == "women's clothing") {
-          newState = {
-            ...selectedProductsState,
-            top: [...selectedProductsState.top, recommendProduct],
+          newSelectState = {
+            ...currentSelectedProductsState,
+            top: [...currentSelectedProductsState.top, recommendProduct],
           };
         } else if (productCategory == "men's clothing") {
-          newState = {
-            ...selectedProductsState,
-            bottom: [...selectedProductsState.bottom, recommendProduct],
+          newSelectState = {
+            ...currentSelectedProductsState,
+            bottom: [...currentSelectedProductsState.bottom, recommendProduct],
           };
         }
       }
     });
   });
-  console.log('newState:', newState);
+  console.log('newSelectState:', newSelectState);
 
   dispatch({
     type: ProductActionTypes.SELECT_PRODUCT,
-    payload: newState,
+    payload: newSelectState,
+  });
+};
+
+export const likeProduct = (likeProductId) => (dispatch, getstate) => {
+  const recommendProducts = getstate().setProductsReducer.products;
+  const currentLikeProductsState = getstate().likeProductReducer.likeProducts;
+  console.log('likeProductReducer:', currentLikeProductsState);
+
+  var newLikeState = [];
+  Object.entries(recommendProducts).map((products) => {
+    const recommendProductList = products[1];
+    recommendProductList.map((recommendProduct) => {
+      if (likeProductId == recommendProduct.id) {
+        newLikeState = [...currentLikeProductsState, recommendProduct];
+      }
+    });
+  });
+
+  console.log('newLikeState:', newLikeState);
+
+  dispatch({
+    type: ProductActionTypes.LIKE_PRODUCT,
+    payload: newLikeState,
+  });
+};
+
+export const controlModal = (productId, type) => (dispatch, getstate) => {
+  console.log('controlModal!!!!');
+  const currentModalState = getstate().setModalReducer.modals;
+  currentModalState[productId] = type;
+  console.log('currentModalState:', currentModalState);
+  var newModalState = currentModalState;
+  console.log('newModalState:', newModalState);
+
+  dispatch({
+    type: ProductActionTypes.CONTROL_MODAL,
+    payload: newModalState,
   });
 };
