@@ -13,12 +13,13 @@ import ProductDetail from './productDetail';
 
 export default function ProductCard({ categoryKey }) {
   const { Meta } = Card;
-
   const products = useSelector((state) => state.setProductsReducer.products);
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
-  const modals = useSelector((state) => state.setModalReducer.modals);
+  const likeProducts = useSelector(
+    (state) => state.likeProductReducer.likeProducts,
+  );
   const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
@@ -37,8 +38,6 @@ export default function ProductCard({ categoryKey }) {
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
-  console.log(categoryKey);
-  console.log('modal update:', modals);
   const renderProductCard = products[categoryKey].map((product) => {
     const { id, title, image, price, category } = product;
     return (

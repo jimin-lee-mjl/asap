@@ -12,6 +12,7 @@ export const setProducts = () => (dispatch, getstate) => {
         top: [],
         bottom: [],
       };
+      var categoryData = [];
 
       console.log(res.data);
       res.data.map((data) => {
@@ -27,11 +28,25 @@ export const setProducts = () => (dispatch, getstate) => {
 
       console.log(productData);
       console.log(modalData);
+
+      Object.entries(productData).map(([category, productList]) => {
+        console.log(category, productList);
+        if (productList == undefined) {
+        } else if (productList.length !== 0) {
+          categoryData = [...categoryData, category];
+        }
+      });
+
+      console.log('categoryData:', categoryData);
       dispatch({
         type: ProductActionTypes.SET_PRODUCTS,
         payload: productData,
       });
       dispatch({ type: ProductActionTypes.SET_MODAL, payload: modalData });
+      dispatch({
+        type: ProductActionTypes.SET_CATEGORY,
+        payload: [...categoryData],
+      });
     })
     .catch((err) => {
       console.log('Err: ', err);
@@ -104,9 +119,9 @@ export const likeProduct = (likeProductId) => (dispatch, getstate) => {
 export const controlModal = (productId, type) => (dispatch, getstate) => {
   console.log('controlModal!!!!');
   const currentModalState = getstate().setModalReducer.modals;
-  currentModalState[productId] = type;
   console.log('currentModalState:', currentModalState);
-  var newModalState = currentModalState;
+  currentModalState[productId] = type;
+  var newModalState = { ...currentModalState };
   console.log('newModalState:', newModalState);
 
   dispatch({

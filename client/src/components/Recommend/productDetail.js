@@ -16,6 +16,12 @@ import { setModal, controlModal } from '../../actions/productsActions';
 
 export default function ProductDetail({ productInfo }) {
   const { Title } = Typography;
+  const selectedProducts = useSelector(
+    (state) => state.selectProductReducer.selectedProducts,
+  );
+  const likeProducts = useSelector(
+    (state) => state.likeProductReducer.likeProducts,
+  );
   const modals = useSelector((state) => state.setModalReducer.modals);
   const dispatch = useDispatch();
 
@@ -35,10 +41,6 @@ export default function ProductDetail({ productInfo }) {
     dispatch(likeProduct(likeProductId));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
-
-  useEffect(() => {
-    console.log({ productInfo }, modals[productInfo.id]);
-  }, [modals, productInfo]);
 
   return (
     <DetailModal

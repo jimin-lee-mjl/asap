@@ -5,6 +5,7 @@ import {
   selectProductReducer,
   likeProductReducer,
   setModalReducer,
+  setCategoryReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   selectProductReducer,
   likeProductReducer,
   setModalReducer,
+  setCategoryReducer,
 });
 
 export default rootReducer;

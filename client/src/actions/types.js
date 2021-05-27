@@ -13,4 +13,5 @@ export const ProductActionTypes = {
   LIKE_PRODUCT: 'LIKE_PRODUCT',
   SET_MODAL: 'SET_MODAL',
   CONTROL_MODAL: 'CONTROL_MODAL',
+  SET_CATEGORY: 'SET_CATEGORY',
 };
