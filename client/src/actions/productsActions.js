@@ -17,11 +17,11 @@ export const setProducts = () => (dispatch, getstate) => {
       console.log(res.data);
       res.data.map((data) => {
         modalData[data.id] = false;
-        if (data.category == 'jewelery') {
+        if (data.category == "women's clothing") {
           productData.outer.push(data);
-        } else if (data.category == "women's clothing") {
-          productData.top.push(data);
         } else if (data.category == "men's clothing") {
+          productData.top.push(data);
+        } else if (data.category == 'jewelery') {
           productData.bottom.push(data);
         }
       });
@@ -66,17 +66,17 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
         console.log('recommendProduct:', recommendProduct);
         const productCategory = recommendProduct.category;
 
-        if (productCategory == 'jewelery') {
+        if (productCategory == "women's clothing") {
           newSelectState = {
             ...currentSelectedProductsState,
             outer: [...currentSelectedProductsState.outer, recommendProduct],
           };
-        } else if (productCategory == "women's clothing") {
+        } else if (productCategory == "men's clothing") {
           newSelectState = {
             ...currentSelectedProductsState,
             top: [...currentSelectedProductsState.top, recommendProduct],
           };
-        } else if (productCategory == "men's clothing") {
+        } else if (productCategory == 'jewelery') {
           newSelectState = {
             ...currentSelectedProductsState,
             bottom: [...currentSelectedProductsState.bottom, recommendProduct],

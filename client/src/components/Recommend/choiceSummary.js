@@ -16,28 +16,29 @@ export default function ChoiceSummary() {
   const choiceSummary = () => {
     console.log('categoryList:', categoryList);
 
-    var TotalPrice = 0;
+    var totalPrice = 0;
     categoryList.map((category) => {
       var priceSumPerCategory = 0;
       selectedProducts[category].map((product) => {
         priceSumPerCategory += Number(product.price);
       });
       console.log('priceSumPerCategory:', priceSumPerCategory);
+      const categoryName = category.toUpperCase();
       choiceSummaryArray.push(
         <div>
-          <ChosenCategory>{category}</ChosenCategory>
+          <ChosenCategory>{categoryName}</ChosenCategory>
           <p>{priceSumPerCategory}</p>
         </div>,
       );
-      TotalPrice += priceSumPerCategory;
+      totalPrice += priceSumPerCategory;
     });
 
-    console.log('TotalPrice:', TotalPrice);
+    console.log('totalPrice:', totalPrice);
     choiceSummaryArray.push(
-      <div>
-        <TotalSummary>합계</TotalSummary>
-        <p>{TotalPrice}</p>
-      </div>,
+      <TotalSummary>
+        <p>합계</p>
+        <p>{totalPrice.toFixed(2)}</p>
+      </TotalSummary>,
     );
 
     return choiceSummaryArray;
@@ -53,7 +54,7 @@ export default function ChoiceSummary() {
           fontWeight: 'bold',
           borderBottom: '5px solid #f0f0f0',
         }}
-        style={{ border: '5px solid #f0f0f0' }}
+        style={{ border: '5px solid #f0f0f0', position: 'fixed' }}
       >
         <div style={{ fontSize: 20 }}>{choiceSummary()}</div>
       </Card>
@@ -71,6 +72,8 @@ const ChosenCategory = styled.p`
   font-weight: bold;
 `;
 
-const TotalSummary = styled.p`
+const TotalSummary = styled.div`
   font-weight: bold;
+  border: solid 1px #1890ff;
+  padding-top: 10px;
 `;

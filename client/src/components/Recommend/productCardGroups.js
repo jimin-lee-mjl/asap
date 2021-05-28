@@ -29,11 +29,11 @@ export default function ProductCardGroups() {
       if (productList.length == 0) {
         return false;
       }
-
+      const categoryTitle = category.toUpperCase();
       cardGroupArray.push(
         <ProductCardGroup key={category}>
           <Col span={3}>
-            <Title level={2}>{category}</Title>
+            <Title level={2}>{categoryTitle}</Title>
           </Col>
           <Col
             span={20}

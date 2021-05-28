@@ -60,6 +60,7 @@ export default function ProductDetail({ productInfo }) {
           type="primary"
           productId={productInfo.id}
           onClick={handleClickCheck}
+          style={{ marginLeft: 30 }}
         >
           이 상품 선택하기
         </Button>,
@@ -78,39 +79,53 @@ export default function ProductDetail({ productInfo }) {
       >
         <Col span={11}>
           <div className="product-detail-img">
-            <img alt={productInfo.title} src={productInfo.image} />
+            <img
+              alt={productInfo.title}
+              src={productInfo.image}
+              style={{ width: 500, height: 600 }}
+            />
           </div>
         </Col>
         <Col span={13}>
           <div className="product-detail-description">
             <Title level={2}>{productInfo.title}</Title>
             <Title level={3}>가격: {productInfo.price}</Title>
-            <KeywordDiv>
-              <Title level={3}>긍정 키워드</Title>
-              <div>
-                <Tag color="green">편함</Tag>
-                <Tag color="cyan">깨끗함</Tag>
-                <Tag color="blue">가성비</Tag>
-                <Tag color="geekblue">빠른건조</Tag>
-                <Tag color="purple">무난</Tag>
-              </div>
-            </KeywordDiv>
-            <KeywordDiv>
-              <Title level={3}>부정 키워드</Title>
-              <div>
-                <Tag color="magenta">실밥마감</Tag>
-                <Tag color="red">무거움</Tag>
-                <Tag color="volcano">애매</Tag>
-                <Tag color="orange">목늘어남</Tag>
-                <Tag color="gold">비쌈</Tag>
-              </div>
-            </KeywordDiv>
+
+            <KeywordContainer>
+              <KeywordDiv>
+                <Title level={3}>긍정 키워드</Title>
+                <div>
+                  <Tag color="green">편함</Tag>
+                  <Tag color="cyan">깨끗함</Tag>
+                  <Tag color="blue">가성비</Tag>
+                  <Tag color="geekblue">빠른건조</Tag>
+                  <Tag color="purple">무난</Tag>
+                </div>
+              </KeywordDiv>
+              <KeywordDiv>
+                <Title level={3}>부정 키워드</Title>
+                <div>
+                  <Tag color="magenta">실밥마감</Tag>
+                  <Tag color="red">무거움</Tag>
+                  <Tag color="volcano">애매</Tag>
+                  <Tag color="orange">목늘어남</Tag>
+                  <Tag color="gold">비쌈</Tag>
+                </div>
+              </KeywordDiv>
+            </KeywordContainer>
           </div>
         </Col>
       </div>
     </DetailModal>
   );
 }
+
+const KeywordContainer = styled.div`
+  margin-top: 50px;
+  border: solid 1px gainsboro;
+  padding: 20px;
+  margin-right: 10px;
+`;
 
 const KeywordDiv = styled.div`
   margin-bottom: 15px;

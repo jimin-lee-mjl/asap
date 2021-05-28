@@ -22,7 +22,7 @@ export default function ProductTable() {
 
   const columns = [
     {
-      title: 'Image',
+      title: '상품 이미지',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
@@ -31,17 +31,17 @@ export default function ProductTable() {
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 80,
+      width: 100,
     },
     {
       title: '상품명',
       dataIndex: 'name',
-      width: 150,
+      width: 250,
     },
     {
       title: '가격',
       dataIndex: 'price',
-      width: 150,
+      width: 80,
     },
   ];
 
@@ -152,12 +152,14 @@ export default function ProductTable() {
         <div>
           <Title>
             총 {checkedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
-            {totalPrice}원
+            {totalPrice.toFixed(2)}원
           </Title>
         </div>
         <ButtonGroup>
-          <Link to="/recommend">
-            <Button size="large">다시 선택하기</Button>
+          <Link to="/recommend" style={{ float: 'left' }}>
+            <Button type="primary" size="large">
+              다시 선택하기
+            </Button>
           </Link>
           <Button
             size="large"
@@ -194,6 +196,15 @@ const ProductListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
+  .ant-table-wrapper {
+    border-left: solid 1px #dfe4ea;
+    border-bottom: solid 0.1px #dfe4ea;
+  }
+  thead .ant-table-cell {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
   .ant-table-thead tr th {
     color: white;
     background: #1890ff;
@@ -202,6 +213,10 @@ const ProductListTable = styled(Table)`
 
   .ant-table table {
     text-align: center;
+  }
+
+  .ant-table-tbody td {
+    font-size: 20px;
   }
 `;
 
