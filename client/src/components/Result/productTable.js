@@ -10,6 +10,7 @@ export default function ProductTable() {
   const { Title } = Typography;
   const [checkedProduct, setSelectedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
 
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
@@ -73,16 +74,44 @@ export default function ProductTable() {
   const handleClickLikes = useCallback(async () => {
     console.log('handleClickLikes');
     console.log('checkedProduct: ', checkedProduct);
+    // dispatch(selectProduct(checkedProduct));
   }, [likesApiUrl, checkedProduct]);
 
   const handleClickBasket = useCallback(async () => {
     console.log('handleClickBasket');
     console.log('checkedProduct: ', checkedProduct);
+
+    // post 코드
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
+
+    // const body = JSON.stringify({
+    //   userId: 5,
+    //   date: '2020 - 02 - 03',
+    //   products: [
+    //     { productId: 5, quantity: 1 },
+    //     { productId: 1, quantity: 5 },
+    //   ],
+    // });
+
+    // axios
+    //   .post('https://fakestoreapi.com/carts', body, config)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, [basketApiUrl, checkedProduct]);
 
   const handleClickPurchase = useCallback(async () => {
     console.log('handleClickPurchase');
     console.log('checkedProduct: ', checkedProduct);
+
+    // 구매 api post 코드 추가
   }, [purchaseApiUrl, checkedProduct]);
 
   // 총 가격 표시
@@ -114,7 +143,7 @@ export default function ProductTable() {
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
-        scroll={{ y: 500 }}
+        scroll={{ y: 720 }}
         style={{
           width: '1000px',
         }}

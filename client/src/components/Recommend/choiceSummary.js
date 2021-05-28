@@ -47,8 +47,13 @@ export default function ChoiceSummary() {
     <ChoiceSummaryContainer>
       <Card
         title="가격 정보"
-        style={{ width: 600 }}
-        headStyle={{ fontSize: 30, fontWeight: 'bold' }}
+        style={{ width: 200 }}
+        headStyle={{
+          fontSize: 30,
+          fontWeight: 'bold',
+          borderBottom: '5px solid #f0f0f0',
+        }}
+        style={{ border: '5px solid #f0f0f0' }}
       >
         <div style={{ fontSize: 20 }}>{choiceSummary()}</div>
       </Card>
@@ -58,6 +63,8 @@ export default function ChoiceSummary() {
 
 const ChoiceSummaryContainer = styled.div`
   display: inline-block;
+  margin-right: 200px;
+  margin-top: 10px;
 `;
 
 const ChosenCategory = styled.p`

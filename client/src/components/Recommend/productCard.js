@@ -49,22 +49,30 @@ export default function ProductCard({ categoryKey }) {
         <Card
           hoverable
           style={{ width: 240 }}
-          cover={<img alt={title} src={image} />}
+          cover={
+            <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
+          }
           onClick={() => dispatch(controlModal(id, true))}
         >
-          <Meta
+          {/* <Meta
             style={{ whiteSpace: 'none' }}
             title={title}
             description={price}
-          />
-          <CardIcons>
-            <CheckCircleOutlined
-              productId={id}
-              style={{ marginRight: 40 }}
-              onClick={handleClickCheck}
-            />
-            <PushpinOutlined productId={id} onClick={handleClickPushpin} />
-          </CardIcons>
+          /> */}
+          <CardBody>
+            <CardContent>
+              <ProductTitle style={{}}>{title}</ProductTitle>
+              <ProductPrice>$ {price}</ProductPrice>
+            </CardContent>
+            <CardIcons>
+              <CheckCircleOutlined
+                productId={id}
+                style={{ marginRight: 40 }}
+                onClick={handleClickCheck}
+              />
+              <PushpinOutlined productId={id} onClick={handleClickPushpin} />
+            </CardIcons>
+          </CardBody>
         </Card>
         <ProductDetail productInfo={product} />
       </CardContainer>
@@ -76,9 +84,56 @@ export default function ProductCard({ categoryKey }) {
 
 const CardContainer = styled.div`
   margin: 10px;
+  .ant-card {
+    height: 520px;
+    border: 5px solid #f0f0f0;
+  }
+  .ant-card-body {
+    height: 210px;
+    padding: 10px;
+  }
+  .ant-card-cover {
+    border-bottom: 5px solid #f0f0f0;
+  }
 `;
 
 const CardIcons = styled.div`
   margin-top: 20px;
   font-size: 30px;
+`;
+
+const CardBody = styled.div`
+  margin: 10px;
+  height: 100%;
+`;
+
+const CardContent = styled.div`
+  text-align: left;
+`;
+
+const ProductTitle = styled.div`
+  height: 80px;
+  font-weight: bold;
+  font-size: 17px;
+
+  // 영역을 넘어가는 텍스트 처리
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  display: -webkit-box;
+
+  // ellipsis line
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  // webkit 엔진을 사용하지 않는 브라우저를 위한 속성.
+  // height = line-height * line = 1.2em * 3 = 3.6em
+  line-height: 1.2em;
+  height: 3.6em;
+`;
+
+const ProductPrice = styled.div`
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 15px;
 `;

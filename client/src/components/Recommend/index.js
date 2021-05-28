@@ -12,15 +12,17 @@ export default function Recommend() {
 
   return (
     <Container>
-      <div>
+      <div style={{ margin: '30px auto' }}>
         <div style={{ margin: 50 }}>
           <Title>
             사용자님의 정보와 취향 키워드를 반영한<br></br>예산 10만원 내 추천
             제품입니다
           </Title>
         </div>
-        <ProductCardGroups />
-        <ChoiceSummary />
+        <div style={{ display: 'flex' }}>
+          <ProductCardGroups />
+          <ChoiceSummary />
+        </div>
         <Navigator />
       </div>
     </Container>

@@ -36,7 +36,7 @@ export default function ProductCardGroups() {
             <Title level={2}>{category}</Title>
           </Col>
           <Col
-            span={15}
+            span={20}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -58,8 +58,8 @@ export default function ProductCardGroups() {
 }
 
 const ProductCardGroupContainer = styled.div`
-  padding-left: 200px;
   margin-bottom: 50px;
+  width: 1250px;
 `;
 
 const ProductCardGroup = styled.div`
