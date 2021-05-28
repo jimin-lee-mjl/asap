@@ -15,7 +15,7 @@ export default function Home() {
         height: '100vh',
         width: '100vw',
         // background: "#F3EAD9"
-        background: 'ivory',
+        // background: 'ivory',
       }}
     >
       <Logo>ASAP</Logo>
