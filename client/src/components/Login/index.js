@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { login } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 export default function Login() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +14,7 @@ export default function Login() {
   const handleClick = () => {
     try {
       dispatch(login(username, password));
+      history.push('/mypage');
     } catch (e) {
       alert('Failed to login');
       setUsername('');

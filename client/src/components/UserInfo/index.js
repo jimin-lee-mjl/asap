@@ -4,6 +4,7 @@ import { Steps, Button, message } from 'antd';
 import Personal from './Personal';
 import Category from './Category';
 import Keyword from './Keyword';
+import { useHistory } from 'react-router-dom';
 
 const { Step } = Steps;
 
@@ -23,6 +24,8 @@ const steps = [
 ];
 
 function UserInfo() {
+  const history = useHistory();
+
   const [current, setCurrent] = React.useState(0);
 
   const next = () => {
@@ -66,10 +69,7 @@ function UserInfo() {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              onClick={() => message.success('Processing complete!')}
-            >
+            <Button type="primary" onClick={() => history.push('/recommend')}>
               Done
             </Button>
           )}
