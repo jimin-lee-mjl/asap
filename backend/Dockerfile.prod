@@ -1,7 +1,7 @@
 FROM python:3
 
 # create the app user
-RUN addgroup elice && adduser asap -G elice
+RUN addgroup elice && adduser asap --group elice
 
 # create the appropriate directories
 ENV APP_HOME=/backend
