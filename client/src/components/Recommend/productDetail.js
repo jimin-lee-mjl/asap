@@ -1,66 +1,97 @@
-import React, { useState, useContext } from 'react';
-import { Col, message, Typography, Modal, Button, Tag } from 'antd';
+import React, { useState, useContext, useEffect } from 'react';
+import {
+  CloseOutlined,
+  Col,
+  message,
+  Typography,
+  Modal,
+  Button,
+  Tag,
+} from 'antd';
 import { ProductContext } from './UserContext';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectProduct, likeProduct } from '../../actions/productsActions';
+import { setModal, controlModal } from '../../actions/productsActions';
 
-export default function ProductDetail() {
+export default function ProductDetail({ productInfo }) {
   const { Title } = Typography;
-  const { visible, setVisible } = useContext(ProductContext);
+  const selectedProducts = useSelector(
+    (state) => state.selectProductReducer.selectedProducts,
+  );
+  const likeProducts = useSelector(
+    (state) => state.likeProductReducer.likeProducts,
+  );
+  const modals = useSelector((state) => state.setModalReducer.modals);
+  const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
+    console.log(productInfo);
     e.stopPropagation();
-    message.success('This is a normal message', 0.5);
+    console.log(e.currentTarget.getAttribute('productId'));
+    const selectedProductId = e.currentTarget.getAttribute('productId');
+    dispatch(selectProduct(selectedProductId));
+    message.success('상품이 선택되었습니다.', 0.5);
   };
 
   const handleClickPushpin = (e) => {
     e.stopPropagation();
-    message.success('찜하기', 0.5);
+    console.log(e.currentTarget.getAttribute('productId'));
+    const likeProductId = e.currentTarget.getAttribute('productId');
+    try {
+      dispatch(likeProduct(likeProductId));
+    } catch (e) {
+      alert('이미 찜한 상품입니다.');
+    }
+    message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
   return (
-    <div>
-      <DetailModal
-        title="상품 상세"
-        centered
-        visible={visible}
-        onCancel={() => setVisible(false)}
-        width={1200}
-        footer={[
-          <Button
-            id="check-btn"
-            key="submit"
-            type="primary"
-            onClick={handleClickCheck}
-          >
-            이 상품 선택하기
-          </Button>,
-          <PushpinButton
-            key="submit"
-            type="primary"
-            onClick={handleClickPushpin}
-          >
-            찜하기
-          </PushpinButton>,
-        ]}
-      >
-        <div
-          className="product-detail"
-          style={{ display: 'flex', alignItems: 'center' }}
+    <DetailModal
+      title="상품 상세"
+      centered
+      visible={modals[productInfo.id]}
+      onCancel={() => dispatch(controlModal(productInfo.id, false))}
+      width={1200}
+      maskStyle={{ background: 'white' }}
+      footer={[
+        <Button
+          id="check-btn"
+          type="primary"
+          productId={productInfo.id}
+          onClick={handleClickCheck}
+          style={{ marginLeft: 30 }}
         >
-          <Col span={11}>
-            <div className="product-detail-img">
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            </div>
-          </Col>
-          <Col span={13}>
-            <div className="product-detail-description">
-              <Title level={2}>
-                Men's Cotton Performance Short Sleeve T-Shirt
-              </Title>
-              <Title level={3}>가격: 24,000 원</Title>
+          이 상품 선택하기
+        </Button>,
+        <PushpinButton
+          type="primary"
+          productId={productInfo.id}
+          onClick={handleClickPushpin}
+        >
+          찜하기
+        </PushpinButton>,
+      ]}
+    >
+      <div
+        className="product-detail"
+        style={{ display: 'flex', alignItems: 'center' }}
+      >
+        <Col span={11}>
+          <div className="product-detail-img">
+            <img
+              alt={productInfo.title}
+              src={productInfo.image}
+              style={{ width: 500, height: 600 }}
+            />
+          </div>
+        </Col>
+        <Col span={13}>
+          <div className="product-detail-description">
+            <Title level={2}>{productInfo.title}</Title>
+            <Title level={3}>가격: {productInfo.price}</Title>
+
+            <KeywordContainer>
               <KeywordDiv>
                 <Title level={3}>긍정 키워드</Title>
                 <div>
@@ -81,13 +112,20 @@ export default function ProductDetail() {
                   <Tag color="gold">비쌈</Tag>
                 </div>
               </KeywordDiv>
-            </div>
-          </Col>
-        </div>
-      </DetailModal>
-    </div>
+            </KeywordContainer>
+          </div>
+        </Col>
+      </div>
+    </DetailModal>
   );
 }
+
+const KeywordContainer = styled.div`
+  margin-top: 50px;
+  border: solid 1px gainsboro;
+  padding: 20px;
+  margin-right: 10px;
+`;
 
 const KeywordDiv = styled.div`
   margin-bottom: 15px;
