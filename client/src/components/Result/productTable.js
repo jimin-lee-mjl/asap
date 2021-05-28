@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography } from 'antd';
+import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProduct } from '../../actions/productsActions';
+import { selectProduct, likeProduct } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
 export default function ProductTable() {
@@ -74,12 +74,19 @@ export default function ProductTable() {
   const handleClickLikes = useCallback(async () => {
     console.log('handleClickLikes');
     console.log('checkedProduct: ', checkedProduct);
+    // try {
+    //   dispatch(likeProduct(checkedProduct));
+    // } catch (e) {
+    //   alert('이미 찜한 상품입니다.');
+    // }
+    message.success('찜 목록에 저장되었습니다', 0.5);
     // dispatch(selectProduct(checkedProduct));
   }, [likesApiUrl, checkedProduct]);
 
   const handleClickBasket = useCallback(async () => {
     console.log('handleClickBasket');
     console.log('checkedProduct: ', checkedProduct);
+    message.success('상품을 장바구니에 담았습니다.', 0.5);
 
     // post 코드
     // const config = {

@@ -54,11 +54,6 @@ export default function ProductCard({ categoryKey }) {
           }
           onClick={() => dispatch(controlModal(id, true))}
         >
-          {/* <Meta
-            style={{ whiteSpace: 'none' }}
-            title={title}
-            description={price}
-          /> */}
           <CardBody>
             <CardContent>
               <ProductTitle style={{}}>{title}</ProductTitle>
