@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Typography } from 'antd';
+import { Card, Typography, Col, Row } from 'antd';
 import { ProductContext } from './UserContext';
 import ProductCardGroups from './productCardGroups';
 import ChoiceSummary from './choiceSummary';
+import Navigator from './navigator';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
@@ -20,13 +21,14 @@ export default function Recommend() {
         </div>
         <ProductCardGroups />
         <ChoiceSummary />
+        <Navigator />
       </div>
     </Container>
   );
 }
 
 const Container = styled.div`
-  height: '90vh'
+  height: '90vh';
   display: flex;
   flex-direction: column;
   align-items: center;
