@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { Card } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { logout } from '../../actions/auth';
 
 function ItemCard({ productId }) {
-  const { Meta } = Card;
-
   const [item, setItem] = useState({});
 
   const fetchProductDetail = async () => {
@@ -42,13 +42,6 @@ function ItemCard({ productId }) {
           <p>
             {item.id}.{item.title}
           </p>
-          {/* <Card
-            hoverable
-            style={{ width: 240, height: 400 }}
-            cover={<img alt={item.id} src={item.image} />}
-          >
-            <Meta title={item.title} />
-          </Card> */}
         </div>
       )}
     </>
@@ -56,37 +49,55 @@ function ItemCard({ productId }) {
 }
 
 function MyPage() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const keywords = ['fit', 'office', 'great', 'awesome'];
   const asins = [1, 2, 3, 4, 15, 6, 17, 18];
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const res = asins.map((asin) => {
-      return fetchItems(asin);
-    });
-    console.log('resres', res);
-    setItems(res);
-  }, []);
-
-  useEffect(() => {
-    console.log('@@', items);
-  }, [items]);
-
-  const fetchItems = (asin) => {
-    let response;
-    fetch(`https://fakestoreapi.com/products/${asin}`)
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        setItems([...items, json]);
-        console.log('ttt', items);
-      });
-    console.log(response);
-    return response;
-  };
 
   return (
     <>
+      <Button
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '18rem',
+          margin: '0',
+          zIndex: '10',
+        }}
+        onClick={() => {
+          history.push('/');
+        }}
+      >
+        Back
+      </Button>
+      <Button
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '10rem',
+          margin: '0',
+          zIndex: '10',
+        }}
+        onClick={() => {}}
+      >
+        Edit
+      </Button>
+      <Button
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '2rem',
+          margin: '0',
+          zIndex: '10',
+        }}
+        onClick={() => {
+          dispatch(logout());
+        }}
+      >
+        Logout
+      </Button>
+
       <Header />
       <Title>My Page</Title>
       <Container>
@@ -220,4 +231,25 @@ const ItemCards = styled.div`
   width: 1100px;
   flex-wrap: wrap;
   margin: auto;
+`;
+
+const Button = styled.div`
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  font-family: 'Pacifico', cursive;
+  background: black;
+  width: 120px;
+  height: 50px;
+  font-size: 1.3rem;
+  color: white;
+  margin: 0 3vw;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2.5;
+
+  :hover {
+    color: black;
+    background: white;
+    border: solid black 2px;
+  }
 `;

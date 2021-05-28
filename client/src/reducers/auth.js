@@ -11,7 +11,7 @@ import {
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: '어텐티케이션',
+  isAuthenticated: false,
   isLoading: false,
   user: null,
 };
@@ -49,7 +49,7 @@ export default function Auth(state = initialState, action) {
         ...state,
         token: null,
         user: null,
-        isAutneticated: false,
+        isAuthenticated: false,
         isLoading: false,
       };
     default:

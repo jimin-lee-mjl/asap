@@ -17,9 +17,6 @@ export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
   const authenticated = user != null; // 로그인 된 사용자가 존재하는지, 인증 여부를 저장
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  console.log('뭬', isAuthenticated);
-
-  console.log(authenticated);
 
   return (
     <Router>
