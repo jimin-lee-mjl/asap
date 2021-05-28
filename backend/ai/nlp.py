@@ -367,7 +367,7 @@ mc = ModelCheckpoint(filepath="train_result/model_{epoch}.ckpt", verbose=1, save
 
 history = model.fit(x = [encoder_input_train, decoder_input_train], y = decoder_target_train, \
           validation_data = ([encoder_input_test, decoder_input_test], decoder_target_test),
-          batch_size = 256, callbacks=[es], epochs = 50)
+          batch_size = 256, callbacks=[es, mc], epochs = 50)
 
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='test')
@@ -455,7 +455,7 @@ f = open("output_test.txt", 'w')
 
 # 데이터 확인용
 for i in range(500, 1000):
-    f.write("asin : " + asin_input_test[i])
+    f.write("asin : " + asin_input_test[i] + '\n')
     f.write("원문 : " + seq2text(encoder_input_test[i]) + '\n')
     f.write("실제 요약문 :" + seq2summary(decoder_input_test[i]) + '\n')
     f.write("예측 요약문 :" + decode_sequence(encoder_input_test[i].reshape(1, text_max_len)) + '\n\n')
