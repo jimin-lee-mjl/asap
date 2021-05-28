@@ -16,7 +16,7 @@ import nltk
 # 필요한 패키지 : stopwords
 
 data = []
-original = open('AMAZON_FASHION.json', "r")
+original = open('data_clothing_shoes_and_jewelry.json', "r")
 for line in original:
     try:
         temp = json.loads(line)
@@ -159,6 +159,9 @@ def below_threshold_len(max_len, nested_list):
         cnt = cnt + 1
 #   print('전체 샘플 중 길이가 %s 이하인 샘플의 비율: %s'%(max_len, (cnt / len(nested_list))))
 
+
+#####################################################################################
+
 below_threshold_len(text_max_len, result['reviewText'])
 below_threshold_len(summary_max_len, result['summary'])
 
@@ -166,6 +169,7 @@ result['decoder_input'] = result['summary'].apply(lambda x : 'sostoken '+ x)
 result['decoder_target'] = result['summary'].apply(lambda x : x + ' eostoken')
 result.head()
 
+asin_input = np.array(result['asin'])
 encoder_input = np.array(result['reviewText'])
 decoder_input = np.array(result['decoder_input'])
 decoder_target = np.array(result['decoder_target'])
@@ -174,6 +178,7 @@ indices = np.arange(encoder_input.shape[0])
 np.random.shuffle(indices)
 # print(indices)
 
+asin_input = asin_input[indices]
 encoder_input = encoder_input[indices]
 decoder_input = decoder_input[indices]
 decoder_target = decoder_target[indices]
@@ -181,10 +186,12 @@ decoder_target = decoder_target[indices]
 n_of_val = int(len(encoder_input)*0.2)
 # print('테스트 데이터의 수 :',n_of_val)
 
+asin_input_train = asin_input[:-n_of_val]
 encoder_input_train = encoder_input[:-n_of_val]
 decoder_input_train = decoder_input[:-n_of_val]
 decoder_target_train = decoder_target[:-n_of_val]
 
+asin_input_test = asin_input[-n_of_val:]
 encoder_input_test = encoder_input[-n_of_val:]
 decoder_input_test = decoder_input[-n_of_val:]
 decoder_target_test = decoder_target[-n_of_val:]
@@ -356,11 +363,11 @@ model.summary()
 model.compile(optimizer='rmsprop', loss='sparse_categorical_crossentropy')
 
 es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience = 2)
-mc = ModelCheckpoint("train_result.txt", verbose=1, save_best_only=True, mode = 'auto', save_freq = 'epoch', )
+mc = ModelCheckpoint(filepath="train_result/model_{epoch}.ckpt", verbose=1, save_best_only=True, mode = 'auto', save_freq = 'epoch')
 
 history = model.fit(x = [encoder_input_train, decoder_input_train], y = decoder_target_train, \
           validation_data = ([encoder_input_test, decoder_input_test], decoder_target_test),
-          batch_size = 256, callbacks=[es, mc], epochs = 50)
+          batch_size = 256, callbacks=[es], epochs = 50)
 
 plt.plot(history.history['loss'], label='train')
 plt.plot(history.history['val_loss'], label='test')
@@ -444,10 +451,26 @@ def seq2summary(input_seq):
             temp = temp + tar_index_to_word[i] + ' '
     return temp
 
-f = open("output.txt", 'w')
+f = open("output_test.txt", 'w')
 
+# 데이터 확인용
 for i in range(500, 1000):
+    f.write("asin : " + asin_input_test[i])
     f.write("원문 : " + seq2text(encoder_input_test[i]) + '\n')
     f.write("실제 요약문 :" + seq2summary(decoder_input_test[i]) + '\n')
-    f.write("예측 요약문 :" + decode_sequence(encoder_input_test[i].reshape(1, text_max_len)) + '\n')
+    f.write("예측 요약문 :" + decode_sequence(encoder_input_test[i].reshape(1, text_max_len)) + '\n\n')
+f.close()
 
+# f = open("output_final.txt", 'w')
+# # 실제 output
+# for i in range(len(asin_input_test)):
+#     f.write("asin," + asin_input_test[i] + '\n')
+#     f.write("result," + decode_sequence(decode_sequence(encoder_input_test[i].reshape(1, text_max_len)) + '\n\n'))
+
+# for i in range(len(asin_input_train)):
+#     f.write("asin," + asin_input_train[i] + '\n')
+#     f.write("result," + decode_sequence(decode_sequence(encoder_input_train[i].reshape(1, text_max_len)) + '\n\n'))
+# # 결과물 예시
+# # asin,B00S7JLW94
+# # result,do not waste your money
+# f.close()
