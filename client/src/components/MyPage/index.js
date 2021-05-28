@@ -57,7 +57,7 @@ function ItemCard({ productId }) {
 
 function MyPage() {
   const keywords = ['fit', 'office', 'great', 'awesome'];
-  const asins = [1, 2, 3, 4, 5, 6, 7, 8];
+  const asins = [1, 2, 3, 4, 15, 6, 17, 18];
   const [items, setItems] = useState([]);
 
   useEffect(() => {

@@ -18,6 +18,19 @@ export default function Home() {
         // background: 'ivory',
       }}
     >
+      <Button
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '10vw',
+          margin: '0',
+        }}
+        onClick={() => {
+          history.push('/mypage');
+        }}
+      >
+        My Page
+      </Button>
       <Logo>ASAP</Logo>
       <Photo></Photo>
       <div
