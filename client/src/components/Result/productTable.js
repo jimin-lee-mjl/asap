@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography } from 'antd';
-import ProductCard from './productCard';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectProduct } from '../../actions/productsActions';
+import { Link } from 'react-router-dom';
 
 export default function ProductTable() {
   const { Title } = Typography;
-  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [checkedProduct, setSelectedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const selectedProducts = useSelector(
+    (state) => state.selectProductReducer.selectedProducts,
+  );
 
   const likesApiUrl = '';
   const basketApiUrl = '';
@@ -19,8 +25,8 @@ export default function ProductTable() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt="example"
-          src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+          alt={theImageURL}
+          src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
       ),
@@ -40,16 +46,19 @@ export default function ProductTable() {
 
   const data = [];
 
-  for (let i = 0; i < 10; i++) {
-    data.push({
-      key: i,
-      name: `Men's Cotton Performance Short Sleeve T-Shirt ${i}`,
-      price: '24,000원',
+  Object.entries(selectedProducts).map(([category, productList]) => {
+    console.log('selectedProductsList', productList);
+    productList.map((product) => {
+      data.push({
+        key: product.id,
+        ImageURL: product.image,
+        name: product.title,
+        price: product.price,
+      });
     });
-  }
+  });
 
   const rowSelection = {
-    // selectedRowKeys: [0],
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRows);
       setSelectedProduct(selectedRows);
@@ -63,67 +72,41 @@ export default function ProductTable() {
 
   const handleClickLikes = useCallback(async () => {
     console.log('handleClickLikes');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(likesApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [likesApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+  }, [likesApiUrl, checkedProduct]);
 
   const handleClickBasket = useCallback(async () => {
     console.log('handleClickBasket');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(basketApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [basketApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+  }, [basketApiUrl, checkedProduct]);
 
   const handleClickPurchase = useCallback(async () => {
     console.log('handleClickPurchase');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(purchaseApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [purchaseApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+  }, [purchaseApiUrl, checkedProduct]);
 
   // 총 가격 표시
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
+  // function numberWithCommas(x) {
+  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // }
 
   const CalTotalPrice = useEffect(() => {
     var sumPrice = 0;
     var price = 0;
     var regex = /[^0-9]/g;
 
-    selectedProduct.map((product) => {
-      price = Number(product.price.replace(regex, ''));
+    checkedProduct.map((product) => {
+      // price = Number(product.price.replace(regex, ''));
+      price = Number(product.price);
       console.log(price);
       sumPrice += price;
       console.log(sumPrice);
     });
 
-    sumPrice = numberWithCommas(sumPrice);
-    console.log(sumPrice);
+    // sumPrice = numberWithCommas(sumPrice);
+    // console.log(sumPrice);
     setTotalPrice(sumPrice);
-  }, [selectedProduct, totalPrice]);
+  }, [checkedProduct, totalPrice]);
 
   return (
     <div>
@@ -139,11 +122,14 @@ export default function ProductTable() {
       <TableFooter>
         <div>
           <Title>
-            총 {selectedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
+            총 {checkedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
             {totalPrice}원
           </Title>
         </div>
         <ButtonGroup>
+          <Link to="/recommend">
+            <Button size="large">다시 선택하기</Button>
+          </Link>
           <Button
             size="large"
             onClick={() => {
