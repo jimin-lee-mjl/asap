@@ -62,9 +62,10 @@ export const login = (username, password) => (dispatch) => {
   console.log(body);
 
   axios
-    .post('http://127.0.0.1:56537/rest-auth/login/', body, config)
+    // .post('http://127.0.0.1:56537/rest-auth/login/', body, config)
+    .post('https://fakestoreapi.com/auth/login', body, config)
     .then((res) => {
-      // console.log("OK");
+      console.log('OK');
       console.log(res.data);
       dispatch({
         type: LOGIN_SUCCESS,
