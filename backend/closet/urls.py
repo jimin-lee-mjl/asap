@@ -28,11 +28,11 @@ urlpatterns = [
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Fatris API",
+        title="ASAP API",
         default_version='v1',
-        description="Fatris Service의 API 문서 페이지입니다.",
+        description="ASAP의 API 문서 페이지입니다.",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="fatris@elice.io"),
+        contact=openapi.Contact(email="asap@elice.io"),
         license=openapi.License(name="Elice License"),
     ),
     public=True,
