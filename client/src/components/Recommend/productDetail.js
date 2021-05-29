@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CloseOutlined,
   Col,
@@ -8,7 +8,6 @@ import {
   Button,
   Tag,
 } from 'antd';
-import { ProductContext } from './UserContext';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectProduct, likeProduct } from '../../actions/productsActions';
@@ -73,52 +72,70 @@ export default function ProductDetail({ productInfo }) {
         </PushpinButton>,
       ]}
     >
-      <div
-        className="product-detail"
-        style={{ display: 'flex', alignItems: 'center' }}
-      >
+      <ProductDetailDiv>
         <Col span={11}>
-          <div className="product-detail-img">
-            <img
-              alt={productInfo.title}
-              src={productInfo.image}
-              style={{ width: 500, height: 600 }}
-            />
-          </div>
+          <img
+            alt={productInfo.title}
+            src={productInfo.image}
+            style={{ width: 500, height: 600 }}
+          />
         </Col>
-        <Col span={13}>
-          <div className="product-detail-description">
-            <Title level={2}>{productInfo.title}</Title>
-            <Title level={3}>가격: {productInfo.price}</Title>
+        <ProductDescriptionCol span={13}>
+          <Title level={2}>{productInfo.title}</Title>
+          <Title level={3}>가격: {productInfo.price}</Title>
 
-            <KeywordContainer>
-              <KeywordDiv>
-                <Title level={3}>긍정 키워드</Title>
-                <div>
-                  <Tag color="green">편함</Tag>
-                  <Tag color="cyan">깨끗함</Tag>
-                  <Tag color="blue">가성비</Tag>
-                  <Tag color="geekblue">빠른건조</Tag>
-                  <Tag color="purple">무난</Tag>
-                </div>
-              </KeywordDiv>
-              <KeywordDiv>
-                <Title level={3}>부정 키워드</Title>
-                <div>
-                  <Tag color="magenta">실밥마감</Tag>
-                  <Tag color="red">무거움</Tag>
-                  <Tag color="volcano">애매</Tag>
-                  <Tag color="orange">목늘어남</Tag>
-                  <Tag color="gold">비쌈</Tag>
-                </div>
-              </KeywordDiv>
-            </KeywordContainer>
-          </div>
-        </Col>
-      </div>
+          <KeywordContainer>
+            <KeywordDiv>
+              <Title level={3}>긍정 키워드</Title>
+              <div>
+                <Tag color="green">편함</Tag>
+                <Tag color="cyan">깨끗함</Tag>
+                <Tag color="blue">가성비</Tag>
+                <Tag color="geekblue">빠른건조</Tag>
+                <Tag color="purple">무난</Tag>
+              </div>
+            </KeywordDiv>
+            <KeywordDiv>
+              <Title level={3}>부정 키워드</Title>
+              <div>
+                <Tag color="magenta">실밥마감</Tag>
+                <Tag color="red">무거움</Tag>
+                <Tag color="volcano">애매</Tag>
+                <Tag color="orange">목늘어남</Tag>
+                <Tag color="gold">비쌈</Tag>
+              </div>
+            </KeywordDiv>
+          </KeywordContainer>
+        </ProductDescriptionCol>
+      </ProductDetailDiv>
     </DetailModal>
   );
 }
+
+const DetailModal = styled(Modal)`
+  .ant-modal-content {
+    height: 800px;
+  }
+
+  .ant-modal-content .ant-modal-footer {
+    text-align: left;
+    padding-left: 90px;
+  }
+
+  .ant-modal-footer .ant-btn {
+    width: 150px;
+    height: 50px;
+  }
+`;
+
+const ProductDetailDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ProductDescriptionCol = styled(Col)`
+  height: 600px;
+`;
 
 const KeywordContainer = styled.div`
   margin-top: 50px;
@@ -133,28 +150,4 @@ const KeywordDiv = styled.div`
 
 const PushpinButton = styled(Button)`
   margin-left: 30px;
-`;
-
-const DetailModal = styled(Modal)`
-  .ant-modal-content {
-    height: 800px;
-  }
-
-  .product-detail-img img {
-    height: 600px;
-  }
-
-  .product-detail-description {
-    height: 600px;
-  }
-
-  .ant-modal-content .ant-modal-footer {
-    text-align: left;
-    padding-left: 90px;
-  }
-
-  .ant-modal-footer .ant-btn {
-    width: 150px;
-    height: 50px;
-  }
 `;

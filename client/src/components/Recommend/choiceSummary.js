@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,13 +10,12 @@ export default function ChoiceSummary() {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
-  const dispatch = useDispatch();
 
   const choiceSummaryArray = [];
   const choiceSummary = () => {
     console.log('categoryList:', categoryList);
-
     var totalPrice = 0;
+
     categoryList.map((category) => {
       var priceSumPerCategory = 0;
       selectedProducts[category].map((product) => {
@@ -25,7 +24,7 @@ export default function ChoiceSummary() {
       console.log('priceSumPerCategory:', priceSumPerCategory);
       const categoryName = category.toUpperCase();
       choiceSummaryArray.push(
-        <div>
+        <div key={categoryName}>
           <ChosenCategory>{categoryName}</ChosenCategory>
           <p>{priceSumPerCategory}</p>
         </div>,
@@ -56,7 +55,7 @@ export default function ChoiceSummary() {
         }}
         style={{ border: '5px solid #f0f0f0', position: 'fixed' }}
       >
-        <div style={{ fontSize: 20 }}>{choiceSummary()}</div>
+        <ChoiceSummaryDiv>{choiceSummary()}</ChoiceSummaryDiv>
       </Card>
     </ChoiceSummaryContainer>
   );
@@ -68,6 +67,9 @@ const ChoiceSummaryContainer = styled.div`
   margin-top: 10px;
 `;
 
+const ChoiceSummaryDiv = styled.div`
+  font-size: 20px;
+`;
 const ChosenCategory = styled.p`
   font-weight: bold;
 `;
