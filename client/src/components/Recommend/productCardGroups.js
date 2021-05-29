@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Typography } from 'antd';
-import { ProductContext } from './UserContext';
 import ProductCard from './productCard';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -22,7 +21,6 @@ export default function ProductCardGroups() {
   const renderCardGroup = () => {
     const cardGroupArray = [];
     Object.entries(products).map((product) => {
-      console.log(product);
       const category = product[0];
       const productList = product[1];
 
@@ -35,20 +33,12 @@ export default function ProductCardGroups() {
           <Col span={3}>
             <Title level={2}>{categoryTitle}</Title>
           </Col>
-          <Col
-            span={20}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              overflowX: 'scroll',
-            }}
-          >
+          <ProductCardCol span={20}>
             <ProductCard categoryKey={category} />
-          </Col>
+          </ProductCardCol>
         </ProductCardGroup>,
       );
     });
-
     return cardGroupArray;
   };
 
@@ -65,4 +55,10 @@ const ProductCardGroupContainer = styled.div`
 const ProductCardGroup = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const ProductCardCol = styled(Col)`
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
 `;

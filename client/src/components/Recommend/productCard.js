@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, message } from 'antd';
 import { CheckCircleOutlined, PushpinOutlined } from '@ant-design/icons';
-import { ProductContext } from './UserContext';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -12,7 +11,6 @@ import {
 import ProductDetail from './productDetail';
 
 export default function ProductCard({ categoryKey }) {
-  const { Meta } = Card;
   const products = useSelector((state) => state.setProductsReducer.products);
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
@@ -56,7 +54,7 @@ export default function ProductCard({ categoryKey }) {
         >
           <CardBody>
             <CardContent>
-              <ProductTitle style={{}}>{title}</ProductTitle>
+              <ProductTitle>{title}</ProductTitle>
               <ProductPrice>$ {price}</ProductPrice>
             </CardContent>
             <CardIcons>
