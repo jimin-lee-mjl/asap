@@ -16,9 +16,11 @@ export default function Navigator() {
 
   return (
     <NavigatorContainer>
-      <Button type="primary" size={'large'} style={{ marginRight: 10 }}>
-        이전으로
-      </Button>
+      <Link to="/info">
+        <Button type="primary" size={'large'} style={{ marginRight: 10 }}>
+          이전으로
+        </Button>
+      </Link>
       <Link to="/result">
         <Button type="primary" size={'large'} onClick={handleClickComplete}>
           선택 완료
