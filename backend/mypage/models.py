@@ -1,18 +1,10 @@
 from django.db import models
+from ..recommend.models import Item
+from ..accounts.models import User
 
 
-class TestProduct(models.Model):
-    name = models.CharField('test product name', max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
-class TestUser(models.Model):
-    name = models.CharField('test user name', max_length=10)
-    wish = models.ManyToManyField(TestProduct, related_name='test_wish')
-    bag = models.ManyToManyField(TestProduct, related_name='test_bag')
-    buy = models.ManyToManyField(TestProduct, related_name='test_buy')
-
-    def __str__(self):
-        return self.name
+class OrderHistory(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(Item, related_name='order_items')
+    ordered_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.FloatField()
