@@ -7,12 +7,10 @@ class SuccessResponse(Enum):
         'Details successfully listed.',
         status.HTTP_200_OK
     )
-
     profile_updated = (
         'Profile successfully updated.',
         status.HTTP_204_NO_CONTENT
     )
-
     item_added = (
         'Item successfully added.',
         status.HTTP_201_CREATED,
@@ -29,17 +27,29 @@ class SuccessResponse(Enum):
 
 class ErrorResponse(Enum):
     item_exists = (
-        {'error_detail': 'Item already exists.'},
-        status.HTTP_409_CONFLICT,
+        'The item already exists.',
+        status.HTTP_409_CONFLICT
     )
     data_not_valid = (
         None,
         status.HTTP_400_BAD_REQUEST
     )
+    no_match = (
+        'Matching user or item does not exist.',
+        status.HTTP_404_NOT_FOUND
+    )
 
     def __init__(self, ERROR_MSG, STATUS_CODE):
         self.ERROR_MSG = ERROR_MSG
         self.STATUS_CODE = STATUS_CODE
+
+
+class ErrorResponseExample(Enum):
+    item_exists = ({'error_detail': 'Item already exists.'})
+    no_match = ({'detail': 'Not found.'})
+
+    def __init__(self, EXAMPLE):
+        self.EXAMPLE = EXAMPLE
 
 
 class SuccessResponseExample(Enum):

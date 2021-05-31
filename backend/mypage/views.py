@@ -1,3 +1,4 @@
+from django.core.checks.messages import Error
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,9 +7,8 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
 from accounts.models import User
-from .models import OrderDetail
 from .serializers import ItemSerializer, UserSerializer, OrderDetailSerializer
-from .responses import ErrorResponse, SuccessResponse, SuccessResponseExample
+from .responses import ErrorResponse, SuccessResponse, SuccessResponseExample, ErrorResponseExample
 
 
 class UserDetailListView(APIView):
@@ -35,6 +35,12 @@ class UserDetailListView(APIView):
             description=SuccessResponse.detail_listed.SUCCESS_MSG,
             examples={
                 'application/json': SuccessResponseExample.list_user_detail.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -68,6 +74,12 @@ class UserProfileUpdateView(APIView):
             description=SuccessResponse.profile_updated.SUCCESS_MSG,
             examples={
                 'application/json': SuccessResponseExample.update_profile.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -118,9 +130,15 @@ class LikeItemUpdateView(APIView):
             }
         ),
         '409': openapi.Response(
-            description='Error response when the item already exists.',
+            description=ErrorResponse.item_exists.ERROR_MSG,
             examples={
-                'application/json': ErrorResponse.item_exists.ERROR_MSG
+                'application/json': ErrorResponseExample.item_exists.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -130,6 +148,12 @@ class LikeItemUpdateView(APIView):
             description=SuccessResponse.item_removed.SUCCESS_MSG,
             examples={
                 'application/json': SuccessResponseExample.update_like.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -186,9 +210,15 @@ class CartItemUpdateView(APIView):
             }
         ),
         '409': openapi.Response(
-            description='Error response when the item already exists.',
+            description=ErrorResponse.item_exists.ERROR_MSG,
             examples={
-                'application/json': ErrorResponse.item_exists.ERROR_MSG
+                'application/json': ErrorResponseExample.item_exists.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -198,6 +228,12 @@ class CartItemUpdateView(APIView):
             description=SuccessResponse.item_removed.SUCCESS_MSG,
             examples={
                 'application/json': SuccessResponseExample.update_cart.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
@@ -250,6 +286,12 @@ class OrderDetailListView(APIView):
             description=SuccessResponse.detail_listed.SUCCESS_MSG,
             examples={
                 'application/json': SuccessResponseExample.list_order_detail.EXAMPLE
+            }
+        ),
+        '404': openapi.Response(
+            description=ErrorResponse.no_match.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.no_match.EXAMPLE
             }
         )
     }
