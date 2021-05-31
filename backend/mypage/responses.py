@@ -4,7 +4,7 @@ from rest_framework import status
 
 class SuccessResponse(Enum):
     detail_listed = (
-        'User detail successfully listed.',
+        'Details successfully listed.',
         status.HTTP_200_OK
     )
 
@@ -43,7 +43,7 @@ class ErrorResponse(Enum):
 
 
 class SuccessResponseExample(Enum):
-    list_detail = (
+    list_user_detail = (
         {
             'email': 'elice123@elice.io',
             'password': 'somepassword123',
@@ -52,14 +52,8 @@ class SuccessResponseExample(Enum):
             'like_items': ['1940280001', '8279996567'],
             'cart_items': ['B00005OTJ8', 'B000072X6P'],
             'order_history': [
-                {
-                    '구매한 날짜': '2021-05-21 13:30',
-                    '총 금액': 50.00
-                },
-                {
-                    '구매한 날짜': '2021-06-12 15:20',
-                    '총 금액': 80.00
-                }
+                '2021-05-31 10:15:48.321923+00:00, 30.00',
+                '2021-05-31 10:21:17.013279+00:00, 20.00'
             ]
         }
     )
@@ -81,6 +75,32 @@ class SuccessResponseExample(Enum):
     update_cart = (
         {
             'cart_items': ['1940280001', '8279996567']
+        }
+    )
+
+    list_order_detail = (
+        {
+            "order_history_details": [
+                {
+                    "id": 3,
+                    "ordered_at": "2021-05-31T10:15:48.321923Z",
+                    "total_price": 50.0,
+                    "user_id": 2,
+                    "items": [
+                        "40599922",
+                        "B0023446"
+                    ]
+                },
+                {
+                    "id": 4,
+                    "ordered_at": "2021-05-31T10:21:17.013279Z",
+                    "total_price": 20.0,
+                    "user_id": 2,
+                    "items": [
+                        "100045442"
+                    ]
+                }
+            ]
         }
     )
 

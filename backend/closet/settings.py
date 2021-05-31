@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
+    'recommend',
     'mypage',
     'drf_yasg',
     'corsheaders',
