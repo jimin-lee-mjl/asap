@@ -25,7 +25,7 @@ class Item(models.Model):
         ('accessaries', 'accessaries')
     )
     category = models.CharField(max_length=15, choices=CATEGORIES)
-    keywords = models.ManyToManyField(Keyword, related_name='item_keywords')
+    keywords = models.ManyToManyField(Keyword, related_name='items')
 
     def __str__(self):
-        return self.title
+        return self.asin
