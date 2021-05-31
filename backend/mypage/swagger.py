@@ -5,6 +5,14 @@ from .responses import ErrorResponse, SuccessResponse, SuccessResponseExample, E
 
 
 class ErrorCode(Enum):
+    error_400 = (
+        openapi.Response(
+            description=ErrorResponse.data_not_valid.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.data_not_valid.EXAMPLE
+            }
+        )
+    )
     error_404 = (
         openapi.Response(
             description=ErrorResponse.no_match.ERROR_MSG,
@@ -67,7 +75,12 @@ class SuccessCode(Enum):
                 'application/json': SuccessResponseExample.update_cart.EXAMPLE
             }
         ),
-        None
+        openapi.Response(
+            description=SuccessResponse.item_added.SUCCESS_MSG,
+            examples={
+                'application/json': SuccessResponseExample.post_new_order.EXAMPLE
+            }
+        )
     )
     success_204 = (
         openapi.Response(
@@ -108,6 +121,7 @@ class Swagger(Enum):
     update_user_profile_response = (
         {
             '204': SuccessCode.success_204.USER_RESPONSE,
+            '400':ErrorCode.error_400.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )
@@ -120,13 +134,15 @@ class Swagger(Enum):
     add_like_item_response = (
         {
             '201': SuccessCode.success_201.LIKE_RESPONSE,
-            '409': ErrorCode.error_409.RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '400':ErrorCode.error_400.RESPONSE,
+            '404': ErrorCode.error_404.RESPONSE,
+            '409': ErrorCode.error_409.RESPONSE
         }
     )
     del_like_item_response = (
         {
             '204': SuccessCode.success_204.LIKE_RESPONSE,
+            '400':ErrorCode.error_400.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )
@@ -139,19 +155,28 @@ class Swagger(Enum):
     add_cart_item_response = (
         {
             '201': SuccessCode.success_201.CART_RESPONSE,
-            '409': ErrorCode.error_409.RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '400':ErrorCode.error_400.RESPONSE,
+            '404': ErrorCode.error_404.RESPONSE,
+            '409': ErrorCode.error_409.RESPONSE
         }
     )
     del_cart_item_response = (
         {
             '204': SuccessCode.success_204.CART_RESPONSE,
+            '400':ErrorCode.error_400.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )
     list_order_detail_response = (
         {
             '200': SuccessCode.success_200.ORDER_RESPONSE,
+            '404': ErrorCode.error_404.RESPONSE
+        }
+    )
+    post_new_order_response = (
+        {
+            '201': SuccessCode.success_201.ORDER_RESPONSE,
+            '400':ErrorCode.error_400.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )

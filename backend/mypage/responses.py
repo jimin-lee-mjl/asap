@@ -31,7 +31,7 @@ class ErrorResponse(Enum):
         status.HTTP_409_CONFLICT
     )
     data_not_valid = (
-        None,
+        'Invalid data. Please check the response for error details.',
         status.HTTP_400_BAD_REQUEST
     )
     no_match = (
@@ -46,6 +46,9 @@ class ErrorResponse(Enum):
 
 class ErrorResponseExample(Enum):
     item_exists = ({'error_detail': 'Item already exists.'})
+    data_not_valid = ({
+        'detail': 'JSON parse error - Expecting property name enclosed in double quotes'
+    })
     no_match = ({'detail': 'Not found.'})
 
     def __init__(self, EXAMPLE):
@@ -139,6 +142,20 @@ class SuccessResponseExample(Enum):
                     ]
                 }
             ]
+        }
+    )
+    post_new_order = (
+        {
+            'new_order_details': {
+                "id": 5,
+                "ordered_at": "2021-05-31T21:42:06.390138Z",
+                "total_price": 50.0,
+                "user_id": 2,
+                "items": [
+                    "100045442",
+                    "B00123"
+                ]
+            }
         }
     )
 

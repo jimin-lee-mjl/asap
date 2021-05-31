@@ -27,3 +27,10 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
         fields = '__all__'
+
+
+class NewOrderSerializer(serializers.Serializer):
+    items = serializers.ListField(
+        child=serializers.CharField(max_length=50)
+    )
+    price = serializers.FloatField()
