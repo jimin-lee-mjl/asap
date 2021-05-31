@@ -1,14 +1,12 @@
-from django.core.checks.messages import Error
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
 from accounts.models import User
 from .serializers import ItemSerializer, UserSerializer, OrderDetailSerializer
-from .responses import ErrorResponse, SuccessResponse, SuccessResponseExample, ErrorResponseExample
+from .responses import ErrorResponse, SuccessResponse
+from .swagger import Swagger
 
 
 class UserDetailListView(APIView):
@@ -30,22 +28,7 @@ class UserDetailListView(APIView):
        - cart_items : 사용자의 장바구니 목록
        - order_history : 사용자의 구매 내역 (주문 일시, 총 금액)
     '''
-    list_user_detail_response = {
-        '200': openapi.Response(
-            description=SuccessResponse.detail_listed.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.list_user_detail.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
-
-    @swagger_auto_schema(responses=list_user_detail_response)
+    @swagger_auto_schema(responses=Swagger.list_user_detail_response.RESPONSE)
     def get(self, request, user_id, format=None):
         user = get_object_or_404(User, pk=user_id)
         serializer = UserSerializer(user)
@@ -69,22 +52,7 @@ class UserProfileUpdateView(APIView):
        - password : 사용자 비밀번호
        - address : 사용자의 배송지 주소
     '''
-    update_user_profile_response = {
-        '204': openapi.Response(
-            description=SuccessResponse.profile_updated.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_profile.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
-
-    @swagger_auto_schema(responses=update_user_profile_response)
+    @swagger_auto_schema(responses=Swagger.update_user_profile_response.RESPONSE)
     def patch(self, request, user_id, format=None):
         serializer = UserSerializer(data=request.data, partial=True)
 
@@ -122,45 +90,19 @@ class LikeItemUpdateView(APIView):
     ## 응답 내용
        - like_items : 사용자의 찜 목록  
     '''
-    add_like_item_response = {
-        '201': openapi.Response(
-            description=SuccessResponse.item_added.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_like.EXAMPLE
-            }
-        ),
-        '409': openapi.Response(
-            description=ErrorResponse.item_exists.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.item_exists.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
+    @swagger_auto_schema(responses=Swagger.list_like_item_detail_response.RESPONSE)
+    def get(self, request, user_id, format=None):
+        user = get_object_or_404(User, pk=user_id)
+        items = user.like_items.all()
+        data = []
+        for item in items:
+            Serializer = ItemSerializer(item)
+            data.append(Serializer.data)
+        return Response({'like_items': data}, status=SuccessResponse.detail_listed.STATUS_CODE)
 
-    del_like_item_response = {
-        '204': openapi.Response(
-            description=SuccessResponse.item_removed.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_like.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
-
-    @swagger_auto_schema(responses=add_like_item_response)
+    @swagger_auto_schema(responses=Swagger.add_like_item_response.RESPONSE)
     def post(self, request, user_id, format=None):
-        serializer = ItemSerializer(data=request.data)
+        serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             user = get_object_or_404(User, pk=user_id)
@@ -174,9 +116,9 @@ class LikeItemUpdateView(APIView):
             return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
-    @swagger_auto_schema(responses=del_like_item_response)
+    @swagger_auto_schema(responses=Swagger.del_like_item_response.RESPONSE)
     def delete(self, request, user_id, format=None):
-        serializer = ItemSerializer(data=request.data)
+        serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             user = get_object_or_404(User, pk=user_id)
@@ -202,45 +144,19 @@ class CartItemUpdateView(APIView):
     ## 응답 내용
        - cart_items : 사용자의 장바구니 목록 
     '''
-    add_cart_item_response = {
-        '201': openapi.Response(
-            description=SuccessResponse.item_added.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_cart.EXAMPLE
-            }
-        ),
-        '409': openapi.Response(
-            description=ErrorResponse.item_exists.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.item_exists.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
+    @swagger_auto_schema(responses=Swagger.list_cart_item_detail_response.RESPONSE)
+    def get(self, request, user_id, format=None):
+        user = get_object_or_404(User, pk=user_id)
+        items = user.cart_items.all()
+        data = []
+        for item in items:
+            Serializer = ItemSerializer(item)
+            data.append(Serializer.data)
+        return Response({'cart_items': data}, status=SuccessResponse.detail_listed.STATUS_CODE)
 
-    del_cart_item_response = {
-        '204': openapi.Response(
-            description=SuccessResponse.item_removed.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_cart.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
-
-    @swagger_auto_schema(responses=add_cart_item_response)
+    @swagger_auto_schema(responses=Swagger.add_cart_item_response.RESPONSE)
     def post(self, request, user_id, format=None):
-        serializer = ItemSerializer(data=request.data)
+        serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             user = get_object_or_404(User, pk=user_id)
@@ -254,9 +170,9 @@ class CartItemUpdateView(APIView):
             return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
-    @swagger_auto_schema(responses=del_cart_item_response)
+    @swagger_auto_schema(responses=Swagger.del_cart_item_response.RESPONSE)
     def delete(self, request, user_id, format=None):
-        serializer = ItemSerializer(data=request.data)
+        serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
             user = get_object_or_404(User, pk=user_id)
@@ -281,22 +197,7 @@ class OrderDetailListView(APIView):
     ## 응답 내용
        - order_history_details : 구매 내역 상세 정보 
     '''
-    list_order_detail_response = {
-        '200': openapi.Response(
-            description=SuccessResponse.detail_listed.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.list_order_detail.EXAMPLE
-            }
-        ),
-        '404': openapi.Response(
-            description=ErrorResponse.no_match.ERROR_MSG,
-            examples={
-                'application/json': ErrorResponseExample.no_match.EXAMPLE
-            }
-        )
-    }
-
-    @swagger_auto_schema(responses=list_order_detail_response)
+    @swagger_auto_schema(responses=Swagger.list_order_detail_response.RESPONSE)
     def get(self, request, user_id, format=None):
         user = get_object_or_404(User, pk=user_id)
         orders = user.order_history.all()

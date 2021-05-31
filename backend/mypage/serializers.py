@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['asin']
+        fields = ['asin', 'title', 'price']
         extra_kwargs = {
             'asin': {'validators': []},
         }

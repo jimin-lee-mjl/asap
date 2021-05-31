@@ -4,7 +4,8 @@ from accounts.models import User
 
 
 class OrderDetail(models.Model):
-    user_id = models.ForeignKey(User, related_name='order_history', on_delete=models.CASCADE)
+    user_id = models.ForeignKey(
+        User, related_name='order_history', on_delete=models.CASCADE)
     items = models.ManyToManyField(Item, related_name='orders')
     ordered_at = models.DateTimeField(auto_now_add=True)
     total_price = models.FloatField()
