@@ -14,12 +14,16 @@ services:
         context: .
         dockerfile: Dockerfile.prod
     command: gunicorn closet.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./static:/backend/static
     expose:
       - "8000"
     depends_on:
       - db
   nginx:
     build: ./nginx
+    volumes:
+      - ./static:/backend/static
     ports:
       - "80:80"
     depends_on:
