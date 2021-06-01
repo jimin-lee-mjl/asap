@@ -91,11 +91,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'closet.wsgi.application'
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"\w*\W*localhost\W*\w*",
-    r"\w*\W*127.0.0.1\W*\w*",
-]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"\w*\W*localhost\W*\w*",
+#     r"\w*\W*127.0.0.1\W*\w*",
+# ]
 
+CORS_ALLOW_ALL_ORIGINS = True  
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
