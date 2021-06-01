@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from accounts.models import User
 from ..serializers import UserSerializer, DeliveryInfoSerializer
-from ..responses import ErrorResponse, SuccessResponse
-from ..swagger import Swagger
-from ..req_params import RequestBody
+from ..swagger.responses import ErrorResponse, SuccessResponse
+from ..swagger.swagger import Swagger
+from ..swagger.req_params import RequestBody
 
 
 class UserDetailListView(APIView):

@@ -9,9 +9,9 @@ from ..serializers import (
     ItemSerializer, OrderDetailSerializer,
     NewOrderSerializer, DeliveryInfoSerializer
 )
-from ..responses import ErrorResponse, SuccessResponse
-from ..swagger import Swagger
-from ..req_params import RequestBody
+from ..swagger.responses import ErrorResponse, SuccessResponse
+from ..swagger.swagger import Swagger
+from ..swagger.req_params import RequestBody
 
 
 @swagger_auto_schema(method='get', responses=Swagger.list_order_detail_response.RESPONSE)

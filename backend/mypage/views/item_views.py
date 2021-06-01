@@ -5,9 +5,9 @@ from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
 from accounts.models import User
 from ..serializers import ItemSerializer
-from ..responses import ErrorResponse, SuccessResponse
-from ..swagger import Swagger
-from ..req_params import RequestBody
+from ..swagger.responses import ErrorResponse, SuccessResponse
+from ..swagger.swagger import Swagger
+from ..swagger.req_params import RequestBody
 
 
 class LikeItemDetailView(APIView):
