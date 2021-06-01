@@ -7,8 +7,8 @@ import {
   selectProduct,
   likeProduct,
   controlModal,
+  showModal,
 } from '../../actions/productsActions';
-import ProductDetail from './productDetail';
 
 export default function ProductCard({ categoryKey }) {
   const products = useSelector((state) => state.setProductsReducer.products);
@@ -50,7 +50,7 @@ export default function ProductCard({ categoryKey }) {
           cover={
             <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
           }
-          onClick={() => dispatch(controlModal(id, true))}
+          onClick={() => dispatch(showModal(id))}
         >
           <CardBody>
             <CardContent>
@@ -67,7 +67,6 @@ export default function ProductCard({ categoryKey }) {
             </CardIcons>
           </CardBody>
         </Card>
-        <ProductDetail productInfo={product} />
       </CardContainer>
     );
   });

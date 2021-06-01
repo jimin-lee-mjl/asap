@@ -4,14 +4,23 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import Home from './components/Home';
-import Recommend from './components/Recommend';
 import Result from './components/Result';
-import Login from './components/Login';
-import Register from './components/Register';
-import UserInfo from './components/UserInfo';
-import MyPage from './components/MyPage/';
+import Recommend from './components/Recommend';
+import {
+  Register,
+  Login,
+  ChangePassword,
+  DeleteAccount,
+} from './components/Auth';
+import UserSelect from './components/UserSelect';
+import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
+import Likes from './components/Likes';
+import Cart from './components/Cart';
+import OrderHistory from './components/OrderHistory';
+import Order from './components/Order';
+import Payment from './components/Payment';
 
 export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
@@ -26,12 +35,27 @@ export default function App() {
         <Route path="/register" component={Register} />
         <AuthRoute
           authenticated={isAuthenticated}
+          path="/changepassword"
+          component={ChangePassword}
+        />
+        <AuthRoute
+          authenticated={isAuthenticated}
+          path="/deleteaccount"
+          component={DeleteAccount}
+        />
+        <AuthRoute
+          authenticated={isAuthenticated}
           path="/mypage"
           render={(props) => <MyPage user={user} {...props} />}
         />
-        <Route path="/info" component={UserInfo} />
+        <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
+        <Route path="/likes" component={Likes} />
+        <Route path="/cart" component={Cart} />
+        <Route exact path="/orderhistory/:orderId" component={OrderHistory} />
+        <Route path="/order" component={Order} />
+        <Route path="/payment" component={Payment} />
         <Route component={NotFound} />
       </Switch>
     </Router>

@@ -1,14 +1,31 @@
 from django.db import models
 
-# Create your models here.
 
-
-class Amazon(models.Model):
-    # 상품 가격, asin, title, 키워드, 카테고리, (관련 상품)
-    asin = models.CharField(max_length=100)
-    price = models.CharField(max_length=100)
-    keyword = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
+class Keyword(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.keyword
+        return self.name
+
+
+class Item(models.Model):
+    asin = models.CharField(max_length=50, primary_key=True)
+    title = models.CharField(max_length=150)
+    price = models.FloatField(null=True)
+    is_women = models.BooleanField()
+    CATEGORIES = (
+        ('top', 'top'),
+        ('bottom', 'bottom'),
+        ('outer', 'outer'),
+        ('set', 'set'),
+        ('sport', 'sport'),
+        ('etc', 'etc'),
+        ('shoes', 'shoes'),
+        ('bag', 'bag'),
+        ('accessories', 'accessories')
+    )
+    category = models.CharField(max_length=15, choices=CATEGORIES)
+    keywords = models.ManyToManyField(Keyword, related_name='items')
+
+    def __str__(self):
+        return self.asin
