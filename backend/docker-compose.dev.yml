@@ -12,7 +12,9 @@ services:
     ports:
     - "5432:5432"
   djangoapp:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/backend  

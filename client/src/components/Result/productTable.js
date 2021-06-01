@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography } from 'antd';
-import ProductCard from './productCard';
+import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectProduct, likeProduct } from '../../actions/productsActions';
+import { Link } from 'react-router-dom';
 
 export default function ProductTable() {
   const { Title } = Typography;
-  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [checkedProduct, setSelectedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const dispatch = useDispatch();
+
+  const selectedProducts = useSelector(
+    (state) => state.selectProductReducer.selectedProducts,
+  );
 
   const likesApiUrl = '';
   const basketApiUrl = '';
@@ -15,41 +22,44 @@ export default function ProductTable() {
 
   const columns = [
     {
-      title: 'Image',
+      title: '상품 이미지',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt="example"
-          src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+          alt={theImageURL}
+          src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 80,
+      width: 100,
     },
     {
       title: '상품명',
       dataIndex: 'name',
-      width: 150,
+      width: 250,
     },
     {
       title: '가격',
       dataIndex: 'price',
-      width: 150,
+      width: 80,
     },
   ];
 
   const data = [];
 
-  for (let i = 0; i < 10; i++) {
-    data.push({
-      key: i,
-      name: `Men's Cotton Performance Short Sleeve T-Shirt ${i}`,
-      price: '24,000원',
+  Object.entries(selectedProducts).map(([category, productList]) => {
+    console.log('selectedProductsList', productList);
+    productList.map((product) => {
+      data.push({
+        key: product.id,
+        ImageURL: product.image,
+        name: product.title,
+        price: product.price,
+      });
     });
-  }
+  });
 
   const rowSelection = {
-    // selectedRowKeys: [0],
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRows);
       setSelectedProduct(selectedRows);
@@ -63,67 +73,76 @@ export default function ProductTable() {
 
   const handleClickLikes = useCallback(async () => {
     console.log('handleClickLikes');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(likesApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [likesApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+    // try {
+    //   dispatch(likeProduct(checkedProduct));
+    // } catch (e) {
+    //   alert('이미 찜한 상품입니다.');
+    // }
+    message.success('찜 목록에 저장되었습니다', 0.5);
+    // dispatch(selectProduct(checkedProduct));
+  }, [likesApiUrl, checkedProduct]);
 
   const handleClickBasket = useCallback(async () => {
     console.log('handleClickBasket');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(basketApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [basketApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+    message.success('상품을 장바구니에 담았습니다.', 0.5);
+
+    // post 코드
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // };
+
+    // const body = JSON.stringify({
+    //   userId: 5,
+    //   date: '2020 - 02 - 03',
+    //   products: [
+    //     { productId: 5, quantity: 1 },
+    //     { productId: 1, quantity: 5 },
+    //   ],
+    // });
+
+    // axios
+    //   .post('https://fakestoreapi.com/carts', body, config)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }, [basketApiUrl, checkedProduct]);
 
   const handleClickPurchase = useCallback(async () => {
     console.log('handleClickPurchase');
-    console.log('selectedProduct: ', selectedProduct);
-    await axios
-      .put(purchaseApiUrl, {
-        data: selectedProduct,
-      })
-      .then(function (response) {
-        console.log('response: ', response);
-      })
-      .catch(function (error) {})
-      .then(function () {});
-  }, [purchaseApiUrl, selectedProduct]);
+    console.log('checkedProduct: ', checkedProduct);
+
+    // 구매 api post 코드 추가
+  }, [purchaseApiUrl, checkedProduct]);
 
   // 총 가격 표시
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
+  // function numberWithCommas(x) {
+  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // }
 
   const CalTotalPrice = useEffect(() => {
     var sumPrice = 0;
     var price = 0;
     var regex = /[^0-9]/g;
 
-    selectedProduct.map((product) => {
-      price = Number(product.price.replace(regex, ''));
+    checkedProduct.map((product) => {
+      // price = Number(product.price.replace(regex, ''));
+      price = Number(product.price);
       console.log(price);
       sumPrice += price;
       console.log(sumPrice);
     });
 
-    sumPrice = numberWithCommas(sumPrice);
-    console.log(sumPrice);
+    // sumPrice = numberWithCommas(sumPrice);
+    // console.log(sumPrice);
     setTotalPrice(sumPrice);
-  }, [selectedProduct, totalPrice]);
+  }, [checkedProduct, totalPrice]);
 
   return (
     <div>
@@ -131,7 +150,7 @@ export default function ProductTable() {
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
-        scroll={{ y: 500 }}
+        scroll={{ y: 720 }}
         style={{
           width: '1000px',
         }}
@@ -139,11 +158,16 @@ export default function ProductTable() {
       <TableFooter>
         <div>
           <Title>
-            총 {selectedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
-            {totalPrice}원
+            총 {checkedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
+            {totalPrice.toFixed(2)}원
           </Title>
         </div>
         <ButtonGroup>
+          <Link to="/recommend" style={{ float: 'left' }}>
+            <Button type="primary" size="large">
+              다시 선택하기
+            </Button>
+          </Link>
           <Button
             size="large"
             onClick={() => {
@@ -179,6 +203,15 @@ const ProductListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
+  .ant-table-wrapper {
+    border-left: solid 1px #dfe4ea;
+    border-bottom: solid 0.1px #dfe4ea;
+  }
+  thead .ant-table-cell {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
   .ant-table-thead tr th {
     color: white;
     background: #1890ff;
@@ -187,6 +220,10 @@ const ProductListTable = styled(Table)`
 
   .ant-table table {
     text-align: center;
+  }
+
+  .ant-table-tbody td {
+    font-size: 20px;
   }
 `;
 

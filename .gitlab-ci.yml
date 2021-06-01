@@ -1,0 +1,42 @@
+stages:
+  - lint
+  - test
+
+lint-client:
+  stage: lint
+  image: node:latest
+  script:
+    - cd client/
+    - npm install eslint 
+    - node_modules/eslint/bin/eslint.js .
+
+# test-client:
+#   stage: test
+#   image: node:latest
+#   script:
+#     - cd client/
+#     - npm install -g npm@7.14.0
+#     - npm install
+#     - npm install -g react-scripts@4.0.3 
+#     - npm test
+
+lint-backend:
+  stage: lint
+  image: python:latest
+  script:
+    - cd backend/
+    - pip install autopep8
+    - autopep8 -i closet/*.py mypage/*.py recommend/*.py
+
+test-backend:
+  stage: test
+  image: python:latest
+  services:
+    - postgres:10.11
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/ci"
+  script:
+    - cd backend/
+    - pip install -r requirements.txt
+    - export DJANGO_SETTINGS_MODULE=closet.ci-settings
+    - python manage.py test 
