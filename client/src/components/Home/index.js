@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from '../Header';
 
 const Home = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <Container>
       <Header />
@@ -16,8 +19,14 @@ const Home = () => {
           zIndex: 2,
         }}
       >
-        <Button to="/login">Login</Button>
-        <Button to="/info">Guest</Button>
+        {isAuthenticated ? (
+          <Button to="/info">Start</Button>
+        ) : (
+          <>
+            <Button to="/login">Login</Button>
+            <Button to="/info">Guest</Button>
+          </>
+        )}
       </div>
     </Container>
   );
