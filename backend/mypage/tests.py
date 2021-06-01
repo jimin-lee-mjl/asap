@@ -25,7 +25,7 @@ class TestUserDetailListView(APITestCase):
         self.assertEqual(response.data, serializer.data)
 
 
-class TestDeliveryInfoUpdateView(APITestCase):
+class TestDeliveryInfoSaveView(APITestCase):
     def setUp(self):
         self.user = User.objects.create(
             email='testuser@test.com',

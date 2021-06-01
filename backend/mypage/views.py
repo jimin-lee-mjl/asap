@@ -43,9 +43,9 @@ class UserDetailListView(APIView):
         return Response(serializer.data, status=SuccessResponse.detail_listed.STATUS_CODE)
 
 
-class DeliveryInfoUpdateView(APIView):
+class DeliveryInfoSaveView(APIView):
     '''
-    사용자 배송지 정보를 업데이트하는 API
+    사용자 배송지 정보를 추가하거나 업데이트하는 API
 
     ---
     ## `/api/user/<int:user_id>/profile`
