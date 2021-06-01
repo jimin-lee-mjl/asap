@@ -21,7 +21,7 @@ def ListOrderDetailView(request, order_id):
     사용자의 구매 내역 상세 정보를 조회하고 구매 내역을 추가하는 API
 
     ---
-    ## `/api/order/detail/<int:order_id>/`
+    ## `/api/order/<int:order_id>/`
     ## 요청 패러미터 
        - order_id : 구매 내역의 id값
     ## 요청 형식
@@ -50,12 +50,12 @@ def ListOrderDetailView(request, order_id):
                      responses=Swagger.post_new_order_response.RESPONSE,
                      request_body=RequestBody.post_new_order_request.PARAMS)
 @api_view(['POST'])
-def CreateNewOrderView(request, user_id):
+def CreateNewOrderView(request):
     '''
     사용자의 구매 내역 상세 정보를 조회하고 구매 내역을 추가하는 API
 
     ---
-    ## `/api/order/<int:user_id>/`
+    ## `/api/order/`
     ## 요청 패러미터
        - user_id : 사용자의 id값 
        - items : 아이템 목록 (['asin', 'asin'] 형태)
@@ -76,7 +76,7 @@ def CreateNewOrderView(request, user_id):
 
     if serializer.is_valid():
         print(serializer.validated_data)
-        user = get_object_or_404(User, pk=user_id)
+        user = request.user
         new_order = OrderDetail.objects.create(
             user_id=user,
             total_price=serializer.data['total_price'],

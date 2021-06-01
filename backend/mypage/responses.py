@@ -7,10 +7,6 @@ class SuccessResponse(Enum):
         'Details successfully listed.',
         status.HTTP_200_OK
     )
-    delivery_info_created = (
-        'Delivery Information successfully created.',
-        status.HTTP_201_CREATED
-    )
     delivery_info_updated = (
         'Delivery Information successfully updated.',
         status.HTTP_204_NO_CONTENT
@@ -38,6 +34,10 @@ class ErrorResponse(Enum):
         'Invalid data. Please check the response for error details.',
         status.HTTP_400_BAD_REQUEST
     )
+    unauthorized = (
+        'Unauthorized User. Please send request with proper token.',
+        status.HTTP_401_UNAUTHORIZED
+    )
     no_match = (
         'Matching user or item does not exist.',
         status.HTTP_404_NOT_FOUND
@@ -52,6 +52,9 @@ class ErrorResponseExample(Enum):
     item_exists = ({'error_detail': 'Item already exists.'})
     data_not_valid = ({
         'detail': 'JSON parse error - Expecting property name enclosed in double quotes'
+    })
+    unauthorized = ({
+        'detail': 'Authentication credentials were not provided.'
     })
     no_match = ({'detail': 'Not found.'})
 
