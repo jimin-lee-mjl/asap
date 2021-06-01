@@ -18,25 +18,26 @@ class TestUserDetailListView(APITestCase):
         )
 
     def test_get_detail(self):
-        url = reverse('mypage:detail', kwargs={'user_id': 6})
+        url = reverse('mypage:detail', kwargs={'user_id': 7})
         serializer = UserSerializer(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
 
 
-class TestUserProfileUpdateView(APITestCase):
+class TestDeliveryInfoUpdateView(APITestCase):
     def setUp(self):
         self.user = User.objects.create(
             email='testuser@test.com',
             password='hello123',
-            address='Tamatea, Napier, NZ'
+            address='Tamatea, Napier, NZ',
+            postal_code='04256'
         )
 
-    def test_patch_profile(self):
-        url = reverse('mypage:profile', kwargs={'user_id': 7})
+    def test_patch_delivery_info(self):
+        url = reverse('mypage:delivery', kwargs={'user_id': 3})
         data = {
-            'password': 'marisol1234'
+            'postal_code': '04222'
         }
         response = self.client.patch(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -71,7 +72,7 @@ class TestLikeItemUpdateView(APITestCase):
         self.user.like_items.add(self.item)
 
     def test_post_like_item(self):
-        url = reverse('mypage:like', kwargs={'user_id': 4})
+        url = reverse('mypage:like', kwargs={'user_id': 5})
         data = {
             'asin': self.item2.asin
         }
@@ -79,7 +80,7 @@ class TestLikeItemUpdateView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_del_like_item(self):
-        url = reverse('mypage:like', kwargs={'user_id': 3})
+        url = reverse('mypage:like', kwargs={'user_id': 4})
         data = {
             'asin': self.item.asin
         }
@@ -158,6 +159,6 @@ class TestOrderDetailListView(APITestCase):
         self.order.items.add(self.item)
 
     def test_get_order_detail(self):
-        url = reverse('mypage:order_history', kwargs={'user_id': 5})
+        url = reverse('mypage:order_history', kwargs={'user_id': 6})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

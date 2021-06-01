@@ -7,8 +7,12 @@ class SuccessResponse(Enum):
         'Details successfully listed.',
         status.HTTP_200_OK
     )
-    profile_updated = (
-        'Profile successfully updated.',
+    delivery_info_created = (
+        'Delivery Information successfully created.',
+        status.HTTP_201_CREATED
+    )
+    delivery_info_updated = (
+        'Delivery Information successfully updated.',
         status.HTTP_204_NO_CONTENT
     )
     item_added = (
@@ -61,6 +65,7 @@ class SuccessResponseExample(Enum):
             'email': 'elice123@elice.io',
             'password': 'somepassword123',
             'address': 'Seongdong-gu, Seoul, Korea',
+            'postal_code': '04722',
             'keywords': ['homewear', 'sporty', 'cozy'],
             'like_items': ['1940280001', '8279996567'],
             'cart_items': ['B00005OTJ8', 'B000072X6P'],
@@ -70,11 +75,12 @@ class SuccessResponseExample(Enum):
             ]
         }
     )
-    update_profile = (
+    update_delivery_info = (
         {
-            'email': 'elice123@elice.io',
-            'password': 'somepassword123',
-            'address': 'Seongdong-gu, Seoul, Korea'
+            'first_name': 'Julie',
+            'last_name': 'Morgan',
+            'address': 'Seongdong-gu, Seoul, Korea',
+            'postal_code': '04256'
         }
     )
     list_like = (

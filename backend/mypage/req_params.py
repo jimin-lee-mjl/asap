@@ -3,12 +3,14 @@ from drf_yasg import openapi
 
 
 class RequestBody(Enum):
-    update_user_profile_request = (
+    update_delivery_info_request = (
         openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='newpassword123'),
-                'address': openapi.Schema(type=openapi.TYPE_STRING, description='Somewhere, Korea')
+                'first_name': openapi.Schema(type=openapi.TYPE_STRING, description='Julie'),
+                'last_name': openapi.Schema(type=openapi.TYPE_STRING, description='Morgan'),
+                'address': openapi.Schema(type=openapi.TYPE_STRING, description='Somewhere, Korea'),
+                'postal_code': openapi.Schema(type=openapi.TYPE_STRING, description='04256'),
             }
         )
     )
