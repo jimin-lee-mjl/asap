@@ -1,20 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import Header from '../Header';
 
 const Home = () => {
   return (
     <Container>
-      <Header>
-        <IconButton to="/cart">
-          <ShoppingCartOutlined />
-        </IconButton>
-
-        <IconButton to="/mypage">
-          <UserOutlined />
-        </IconButton>
-      </Header>
+      <Header />
       <img src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
       <div
         style={{
@@ -62,23 +54,4 @@ const Button = styled(Link)`
     color: #fb8c00;
     background: white;
   }
-`;
-
-const IconButton = styled(Button)`
-  width: 5rem;
-  height: 5rem;
-  font-size: '300%';
-  color: 'black';
-  margin: 0 0.5rem;
-  background: '#fb8c00';
-`;
-
-const Header = styled.header`
-  position: absolute;
-  top: 0;
-  width: 80vw;
-  height: 10vh;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
 `;
