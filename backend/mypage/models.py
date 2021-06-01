@@ -16,4 +16,4 @@ class OrderDetail(models.Model):
     postal_code = models.CharField(max_length=50, default='')
 
     def __str__(self):
-        return '%s, %.2f' % (self.ordered_at, self.total_price)
+        return '%d, %s, %.2f' % (self.pk, self.ordered_at, self.total_price)
