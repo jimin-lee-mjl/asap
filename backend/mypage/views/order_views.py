@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
-from accounts.models import User
 from ..models import OrderDetail
 from ..serializers import (
     ItemSerializer, OrderDetailSerializer,

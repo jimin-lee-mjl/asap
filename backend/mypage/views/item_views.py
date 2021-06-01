@@ -3,7 +3,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
-from accounts.models import User
 from ..serializers import ItemSerializer
 from ..swagger.responses import ErrorResponse, SuccessResponse
 from ..swagger.swagger import Swagger
