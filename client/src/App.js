@@ -10,7 +10,6 @@ import Login from './components/Login';
 import Register from './components/Register';
 import UserInfo from './components/UserInfo';
 import MyPage from './components/MyPage/';
-import Mypage from './components/MyPage/new';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
 
@@ -33,7 +32,6 @@ export default function App() {
         <Route path="/info" component={UserInfo} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
-        <Route path="/temp" component={Mypage} />
         <Route component={NotFound} />
       </Switch>
     </Router>
