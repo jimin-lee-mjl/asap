@@ -56,6 +56,7 @@ const Button = styled(Link)`
   display: table-cell;
   line-height: 2.5;
   margin: 5px 0;
+  border: 0.1rem solid #ff6f00;
 
   :hover {
     color: #ff6f00;
@@ -75,7 +76,8 @@ const IconButton = styled(Button)`
 const Header = styled.header`
   position: absolute;
   top: 0;
-  width: 80vw;
+  left: 15vw;
+  width: 70vw;
   height: 10vh;
   display: flex;
   justify-content: flex-end;
