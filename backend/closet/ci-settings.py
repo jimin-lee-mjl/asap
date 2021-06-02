@@ -1,9 +1,4 @@
 from pathlib import Path
-import environ
-import os
-
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = '7=7Aif=M&]o6XD4w@e1m"pjT~zLX'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,11 +87,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
+        'NAME': 'postgres',
+        'USER': 'postgres',
         'HOST': 'postgres',
-        'PASSWORD': env('DATABASE_PW'),
-        'PORT': env('DATABASE_PORT'),
+        'PASSWORD': 'postgres',
+        'PORT': 5432,
     }
 }
 
