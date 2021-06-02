@@ -46,7 +46,7 @@ const Container = styled.div`
 `;
 
 const Button = styled(Link)`
-  background: #fb8c00;
+  background: #ff6f00;
   width: 12rem;
   height: 5rem;
   border-radius: 0.5rem;
@@ -60,7 +60,7 @@ const Button = styled(Link)`
   margin: 5px 0;
 
   :hover {
-    color: #fb8c00;
+    color: #ff6f00;
     background: white;
   }
 `;
