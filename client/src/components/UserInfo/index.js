@@ -5,6 +5,7 @@ import Personal from './Personal';
 import Category from './Category';
 import Keyword from './Keyword';
 import { useHistory } from 'react-router-dom';
+import HeaderComponent from '../Header/withLogo';
 
 const { Step } = Steps;
 
@@ -38,6 +39,7 @@ function UserInfo() {
 
   return (
     <Container>
+      <HeaderComponent />
       <div style={{ width: '40%' }}>
         <Steps
           current={current}
