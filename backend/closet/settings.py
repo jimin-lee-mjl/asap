@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
+import os
 
 # 환경 변수 초기화
 env = environ.Env()
@@ -166,3 +167,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 # auth 유저 모델은 accounts의 User를 쓰겠다는 의미
 AUTH_USER_MODEL = 'accounts.User'
+
+# staticfile 관련 설정 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
