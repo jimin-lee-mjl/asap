@@ -5,6 +5,7 @@ from recommend.models import Keyword, Item
 
 class User(AbstractUser):
     address = models.CharField('Address', blank=True, max_length=200)
+    postal_code = models.CharField('Postal Code', blank=True, max_length=50)
     keywords = models.ManyToManyField(Keyword, related_name='users', blank=True)
     like_items = models.ManyToManyField(Item, related_name='like_users', blank=True)
     cart_items = models.ManyToManyField(Item, related_name='cart_users', blank=True)
