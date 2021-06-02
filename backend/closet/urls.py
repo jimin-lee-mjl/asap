@@ -27,6 +27,7 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/', include('mypage.urls', namespace='mypage')),
     path('api-token-auth/', views.obtain_auth_token),
+    path('api/account/', include('accounts.urls', namespace='accounts')),
 ]
 
 schema_view = get_schema_view(

@@ -12,6 +12,7 @@ class CustomUserAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "is_superuser",
+                    'username',
                     "email",
                     "password",
                     "keywords",

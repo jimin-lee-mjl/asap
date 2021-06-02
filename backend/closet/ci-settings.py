@@ -73,10 +73,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'closet.wsgi.application'
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"\w*\W*localhost\W*\w*",
-    r"\w*\W*127.0.0.1\W*\w*",
-]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"\w*\W*localhost\W*\w*",
+#     r"\w*\W*127.0.0.1\W*\w*",
+# ]
+
+CORS_ALLOW_ALL_ORIGINS = True  
 
 
 # Database
@@ -85,11 +87,11 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ci',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'HOST': 'postgres',
         'PASSWORD': 'postgres',
-        'PORT': '5432',
+        'PORT': 5432,
     }
 }
 
@@ -140,12 +142,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
+OLD_PASSWORD_FIELD_ENABLED = True
 
 AUTH_USER_MODEL = 'accounts.User'

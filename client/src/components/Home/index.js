@@ -55,10 +55,10 @@ const Logo = styled.img`
 
 const Button = styled(Link)`
   background: #ff6f00;
-  width: 12rem;
-  height: 5rem;
+  width: 10rem;
+  height: 4rem;
   border-radius: 0.5rem;
-  font-size: 2rem;
+  font-size: 1.7rem;
   color: black;
   margin: 0 3vw;
   text-align: center;

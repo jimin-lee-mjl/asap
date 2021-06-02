@@ -1,48 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { userinfo } from '../../actions/mypage';
 
 export default function OrderHistory() {
-  const [data, setData] = useState([]);
+  const history = useHistory();
+  const data = useSelector((state) => state.mypage.order_history);
 
-  // const url = '/api/user/<int:user_id>/'
-
-  const fakeDataUrl =
-    'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
-
-  useEffect(() => {
-    axios.get(fakeDataUrl).then((res) => {
-      console.log('!!!', res.data.results);
-      setData(user.order_history);
-    });
-  }, []);
-
-  const user = {
-    order_history: [
-      '2021-05-31 10:15:48.321923+00:00, 30.00',
-      '2021-05-31 10:21:17.013279+00:00, 20.00',
-      '2021-05-41 10:21:17.013279+00:00, 20.00',
-      '2021-05-51 10:21:17.013279+00:00, 20.00',
-      '2021-05-61 10:21:17.013279+00:00, 20.00',
-      '2021-05-71 10:21:17.013279+00:00, 20.00',
-      '2021-05-81 10:21:17.013279+00:00, 20.00',
-      '2021-05-91 10:21:17.013279+00:00, 20.00',
-      '2021-05-01 10:21:17.013279+00:00, 20.00',
-      '2021-05-11 10:21:17.013279+00:00, 20.00',
-      '2021-05-21 10:21:17.013279+00:00, 20.00',
-      '2021-06-31 10:21:17.013279+00:00, 20.00',
-    ],
-  };
+  // redux store에서 useSelector로 받아오기
 
   return (
     <Container>
-      <h1>Order History</h1>
+      <h2>Order History</h2>
       <ScrollingList>
-        {data.map((el) => {
-          const [time, price] = el.split(',');
+        {data.slice(1).map((el) => {
+          const [id, time, price] = el.split(',');
           return (
-            <HistoryCard>
-              <span>{time.split('.')[0].split(' ')[0]}</span>
+            <HistoryCard
+              onClick={() => {
+                history.push(`/orderhistory/${id}`);
+              }}
+            >
+              <span>{time.split('.')[0]}</span>
               <span>${price}</span>
             </HistoryCard>
           );
@@ -77,11 +58,11 @@ const HistoryCard = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   padding: 2rem;
 
   width: 90%;
-  height: 7rem;
+  height: 5rem;
   margin: 1rem auto;
 
   cursor: pointer;

@@ -15,6 +15,9 @@ export default function ProductCard({ categoryKey }) {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
+  const selectedProductIdList = useSelector(
+    (state) => state.selectProductReducer.selectedProductId,
+  );
   const likeProducts = useSelector(
     (state) => state.likeProductReducer.likeProducts,
   );
@@ -22,35 +25,39 @@ export default function ProductCard({ categoryKey }) {
 
   const handleClickCheck = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const selectedProductId = e.currentTarget.getAttribute('productId');
+    const selectedProductId = e.currentTarget.getAttribute('asin');
+    console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
     message.success('상품이 선택되었습니다.', 0.5);
+    console.log(selectedProductIdList);
   };
 
-  const handleClickPushpin = (e) => {
+  const handleClickLikes = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const likeProductId = e.currentTarget.getAttribute('productId');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
   const renderProductCard = products[categoryKey].map((product) => {
     const { id, title, image, price, category } = product;
     return (
-      <CardContainer key={id}>
+      <CardContainer
+        key={id}
+        $colorbyselect={
+          selectedProductIdList.includes(String(id)) ? '#ff6f00' : '#f0f0f0'
+        }
+      >
         <Card
           hoverable
           style={{ width: 240 }}
           cover={
             <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
           }
-          onClick={() => dispatch(showModal(id))}
+          onClick={(e) => {
+            dispatch(showModal(id));
+          }}
         >
           <CardBody>
             <CardContent>
@@ -59,11 +66,11 @@ export default function ProductCard({ categoryKey }) {
             </CardContent>
             <CardIcons>
               <CheckCircleOutlined
-                productId={id}
+                asin={id}
                 style={{ marginRight: 40 }}
                 onClick={handleClickCheck}
               />
-              <PushpinOutlined productId={id} onClick={handleClickPushpin} />
+              <PushpinOutlined asin={id} onClick={handleClickLikes} />
             </CardIcons>
           </CardBody>
         </Card>
@@ -78,7 +85,8 @@ const CardContainer = styled.div`
   margin: 10px;
   .ant-card {
     height: 520px;
-    border: 5px solid #f0f0f0;
+    border: 5px solid;
+    border-color: ${(props) => props.$colorbyselect};
   }
   .ant-card-body {
     height: 210px;

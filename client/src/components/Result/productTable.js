@@ -139,26 +139,18 @@ export default function ProductTable() {
     // 구매 api post 코드 추가
   }, [purchaseApiUrl, checkedProduct]);
 
-  // 총 가격 표시
-  // function numberWithCommas(x) {
-  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  // }
-
   const CalTotalPrice = useEffect(() => {
-    var sumPrice = 0;
-    var price = 0;
-    var regex = /[^0-9]/g;
+    let sumPrice = 0;
+    let price = 0;
+    let regex = /[^0-9]/g;
 
     checkedProduct.map((product) => {
-      // price = Number(product.price.replace(regex, ''));
       price = Number(product.price);
       console.log(price);
       sumPrice += price;
       console.log(sumPrice);
     });
 
-    // sumPrice = numberWithCommas(sumPrice);
-    // console.log(sumPrice);
     setTotalPrice(sumPrice);
   }, [checkedProduct, totalPrice]);
 

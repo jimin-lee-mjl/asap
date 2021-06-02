@@ -1,0 +1,144 @@
+[
+{
+    "model": "mypage.orderdetail",
+    "pk": 3,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-05-31T10:15:48.321Z",
+        "total_price": 30.0,
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "address": "",
+        "postal_code": "",
+        "items": [
+            "40599922"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 4,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-05-31T10:21:17.013Z",
+        "total_price": 20.0,
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "address": "",
+        "postal_code": "",
+        "items": [
+            "100045442"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 5,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-05-31T21:42:06.390Z",
+        "total_price": 50.0,
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "address": "",
+        "postal_code": "",
+        "items": [
+            "100045442",
+            "B00123"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 6,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-06-01T09:42:00.292Z",
+        "total_price": 80.0,
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "address": "lill@gmail.com",
+        "postal_code": "1123",
+        "items": [
+            "40599922",
+            "B00123"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 7,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-06-01T09:43:52.203Z",
+        "total_price": 80.0,
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "address": "Napier, NZ",
+        "postal_code": "1123",
+        "items": [
+            "100045442",
+            "40599922"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 8,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-06-01T09:55:41.701Z",
+        "total_price": 80.0,
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "address": "Napier, NZ",
+        "postal_code": "3345",
+        "items": [
+            "40599922",
+            "B00123"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 9,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-06-01T09:56:20.673Z",
+        "total_price": 80.0,
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "address": "Napier, NZ",
+        "postal_code": "3345",
+        "items": [
+            "100045442",
+            "B00123"
+        ]
+    }
+},
+{
+    "model": "mypage.orderdetail",
+    "pk": 10,
+    "fields": {
+        "user_id": 2,
+        "ordered_at": "2021-06-01T09:56:33.182Z",
+        "total_price": 80.0,
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "address": "Napier, NZ",
+        "postal_code": "1234",
+        "items": [
+            "100045442",
+            "B00123"
+        ]
+    }
+}
+]

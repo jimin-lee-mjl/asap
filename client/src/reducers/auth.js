@@ -16,7 +16,7 @@ const initialState = {
   user: null,
 };
 
-export default function Auth(state = initialState, action) {
+export default function auth(state = initialState, action) {
   switch (action.type) {
     case USER_LOADING:
       return {
@@ -32,8 +32,7 @@ export default function Auth(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      console.log('token', action.payload.token);
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload.key);
       return {
         ...state,
         ...action.payload,

@@ -12,6 +12,7 @@ const initialState = {
     top: [],
     bottom: [],
   },
+  selectedProductId: [],
   likeProducts: [],
   cartList: [],
   likesList: [],
@@ -44,6 +45,12 @@ export const selectProductReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SELECT_PRODUCT:
       return { ...state, selectedProducts: action.payload };
+    case ProductActionTypes.SELECT_PRODUCT_ID:
+      return { ...state, selectedProductId: action.payload };
+    case ProductActionTypes.UNSELECT_PRODUCT:
+      return { ...state, selectedProducts: action.payload };
+    case ProductActionTypes.UNSELECT_PRODUCT_ID:
+      return { ...state, selectedProductId: action.payload };
     default:
       return state;
   }
@@ -73,6 +80,8 @@ export const likeProductReducer = (state = initialState, action) => {
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_CART:
+      return { ...state, cartList: action.payload };
+    case ProductActionTypes.DELETE_CART:
       return { ...state, cartList: action.payload };
     default:
       return state;

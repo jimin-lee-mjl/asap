@@ -1,5 +1,11 @@
 import { ProductActionTypes } from './types';
 import axios from 'axios';
+import { tokenConfig } from './auth';
+
+const baseUrl = `http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/`;
+const orderApiUrl = `${baseUrl}api/order/`;
+const cartApiUrl = `${baseUrl}api/user/cart/`;
+const likesApiUrl = `${baseUrl}api/user/like/`;
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
@@ -10,7 +16,7 @@ export const setProducts = () => (dispatch, getstate) => {
         top: [],
         bottom: [],
       };
-      var categoryData = [];
+      const categoryData = [];
 
       console.log(res.data);
       res.data.map((data) => {
@@ -27,9 +33,9 @@ export const setProducts = () => (dispatch, getstate) => {
 
       Object.entries(productData).map(([category, productList]) => {
         console.log(category, productList);
-        if (productList == undefined) {
+        if (!productList) {
         } else if (productList.length !== 0) {
-          categoryData = [...categoryData, category];
+          categoryData.push(category);
         }
       });
 
@@ -44,101 +50,137 @@ export const setProducts = () => (dispatch, getstate) => {
       });
     })
     .catch((err) => {
-      console.log('Err: ', err);
+      console.log('Err: ', err.response);
     });
 };
 
 export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
   const recommendProducts = getstate().setProductsReducer.products;
-  const currentSelectedProductsState =
-    getstate().selectProductReducer.selectedProducts;
+  const curSelectedProducts = getstate().selectProductReducer.selectedProducts;
+  const curSelectedId = getstate().selectProductReducer.selectedProductId;
 
-  var newSelectState = {};
-  Object.entries(recommendProducts).map((products) => {
-    const recommendProductList = products[1];
-    recommendProductList.map((recommendProduct) => {
-      if (selectedProductId == recommendProduct.id) {
-        console.log('recommendProduct:', recommendProduct);
-        const productCategory = recommendProduct.category;
+  // 선택 취소
+  if (curSelectedId.includes(selectedProductId)) {
+    console.log('already Selected!');
+    const afterUnselectId = curSelectedId.filter(
+      (id) => id !== selectedProductId,
+    );
+    dispatch({
+      type: ProductActionTypes.UNSELECT_PRODUCT_ID,
+      payload: afterUnselectId,
+    });
+    console.log('curSelectedProducts:', curSelectedProducts);
+    Object.entries(curSelectedProducts).map(([category, productList]) => {
+      const newProductList = productList.filter(
+        (product) => product.id !== Number(selectedProductId),
+      );
+      curSelectedProducts[category] = newProductList;
+    });
 
-        if (productCategory == "women's clothing") {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            outer: [...currentSelectedProductsState.outer, recommendProduct],
-          };
-        } else if (productCategory == "men's clothing") {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            top: [...currentSelectedProductsState.top, recommendProduct],
-          };
-        } else if (productCategory == 'jewelery') {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            bottom: [...currentSelectedProductsState.bottom, recommendProduct],
-          };
-        }
+    const afterUnselectProducts = { ...curSelectedProducts };
+    console.log('afterUnselectProducts:', afterUnselectProducts);
+    dispatch({
+      type: ProductActionTypes.UNSELECT_PRODUCT,
+      payload: afterUnselectProducts,
+    });
+  } else {
+    // 선택
+    console.log('curSelectedId:', curSelectedId);
+    const newSelectId = [...curSelectedId, selectedProductId];
+    console.log(newSelectId);
+    dispatch({
+      type: ProductActionTypes.SELECT_PRODUCT_ID,
+      payload: newSelectId,
+    });
+
+    console.log('curSelectedProducts:', curSelectedProducts);
+
+    Object.entries(recommendProducts).map(([category, productList]) => {
+      const selectProduct = productList.find(
+        (product) => product.id === Number(selectedProductId),
+      );
+      if (selectProduct) {
+        curSelectedProducts[category] = [
+          ...curSelectedProducts[category],
+          selectProduct,
+        ];
       }
     });
-  });
-  console.log('newSelectState:', newSelectState);
+    const newSelectedProducts = { ...curSelectedProducts };
+    console.log('newSelectedProducts:', newSelectedProducts);
 
-  dispatch({
-    type: ProductActionTypes.SELECT_PRODUCT,
-    payload: newSelectState,
-  });
+    dispatch({
+      type: ProductActionTypes.SELECT_PRODUCT,
+      payload: newSelectedProducts,
+    });
+  }
 };
 
-export const likeProduct = (likeProductId) => (dispatch, getstate) => {
-  // 추가할 코드:
-  // 로그인 안 한 경우, 프론트 쪽에서 미리 차단
-  // 회원에 대해서만 api post
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
+export const likeProduct = (likeProduct) => (dispatch, getstate) => {
+  // asap api
   const body = JSON.stringify({
-    userId: 5,
-    date: '2020 - 02 - 03',
-    products: [
-      { productId: 5, quantity: 1 },
-      { productId: 1, quantity: 5 },
-    ],
+    asin: likeProduct,
   });
 
   axios
-    .post('https://fakestoreapi.com/carts', body, config)
+    .post(likesApiUrl, body, tokenConfig(getstate))
     .then((res) => {
       console.log(res.data);
     })
     .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: ProductActionTypes.LIKE_ALREADY,
-      });
+      console.log(err.response);
     });
 
-  const recommendProducts = getstate().setProductsReducer.products;
-  const currentLikeProductsState = getstate().likeProductReducer.likeProducts;
-  console.log('likeProductReducer:', currentLikeProductsState);
-
-  var newLikeState = [];
-  Object.entries(recommendProducts).map((products) => {
-    const recommendProductList = products[1];
-    recommendProductList.map((recommendProduct) => {
-      if (likeProductId == recommendProduct.id) {
-        newLikeState = [...currentLikeProductsState, recommendProduct];
-      }
-    });
-  });
-
-  console.log('newLikeState:', newLikeState);
+  const curLikesState = getstate().likeProductReducer.likeProducts;
+  console.log('curLikesState:', curLikesState);
+  const newLikesState = [...curLikesState, likeProduct];
+  console.log('newLikesState:', newLikesState);
 
   dispatch({
     type: ProductActionTypes.LIKE_PRODUCT,
-    payload: newLikeState,
+    payload: newLikesState,
+  });
+};
+
+export const addToCart = (addCartProduct) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: addCartProduct,
+  });
+
+  axios
+    .post(cartApiUrl, body, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const deleteCart = (deleteCartProduct) => (dispatch, getstate) => {
+  // const body = JSON.stringify({
+  //   asin: '0039487',
+  // });
+
+  // axios
+  //   .delete(cartApiUrl, body, tokenConfig(getstate))
+  //   .then((res) => {
+  //     console.log(res.data);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err.response);
+  //   });
+
+  const curCartState = getstate().cartReducer.cartList;
+  console.log('curLikesState:', curCartState);
+  const newCartState = curCartState.filter(
+    (product) => product.id !== Number(deleteCartProduct),
+  );
+  console.log('newCartState:', newCartState);
+
+  dispatch({
+    type: ProductActionTypes.DELETE_CART,
+    payload: newCartState,
   });
 };
 
@@ -167,17 +209,21 @@ export const showModal = (productId) => (dispatch, getstate) => {
         });
       })
       .catch((err) => {
-        console.log('Err: ', err);
+        console.log(err.response);
       });
   }
 };
 
 // cart
 export const setCart = () => (dispatch, getstate) => {
-  // 이 부분 url 을 user_id/cart 이런 식으로 바뀌어야 함.
-  // input: user_id
-  // output: 장바구니 데이터 {asin, imageURL, title, quantity, price}
-  console.log(getstate());
+  axios
+    .get(cartApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
 
   axios
     .get('https://fakestoreapi.com/products')
@@ -191,15 +237,20 @@ export const setCart = () => (dispatch, getstate) => {
       console.log(getstate());
     })
     .catch((err) => {
-      console.log('Err: ', err);
+      console.log(err.response);
     });
 };
 
 //likes
 export const setLikes = () => (dispatch, getstate) => {
-  // 이 부분 url 을 user_id/Likes 이런 식으로 바뀌어야 함.
-  // input: user_id
-  // output: 찜 데이터 {asin, imageURL, title, quantity, price}
+  axios
+    .get(likesApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
 
   axios
     .get('https://fakestoreapi.com/products')
@@ -212,13 +263,22 @@ export const setLikes = () => (dispatch, getstate) => {
       });
     })
     .catch((err) => {
-      console.log('Err: ', err);
+      console.log(err.response);
     });
 };
 
 //orderhistory
 export const setOrderDetails = (orderId) => (dispatch, getstate) => {
-  //fake api
+  axios
+    .get(`${orderApiUrl}${Number(orderId)}/`, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  // fake api
   axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
@@ -230,45 +290,6 @@ export const setOrderDetails = (orderId) => (dispatch, getstate) => {
       console.log(getstate());
     })
     .catch((err) => {
-      console.log('Err: ', err);
+      console.log(err.response);
     });
-
-  // api
-  // const sampleData = {
-  //   order_history_details: [
-  //     {
-  //       id: 3,
-  //       ordered_at: '2021-05-31T10:15:48.321923Z',
-  //       total_price: 50,
-  //       user_id: 2,
-  //       items: ['40599922', 'B0023446'],
-  //     },
-  //     {
-  //       id: 4,
-  //       ordered_at: '2021-05-31T10:21:17.013279Z',
-  //       total_price: 20,
-  //       user_id: 2,
-  //       items: ['100045442'],
-  //     },
-  //   ],
-  // };
-
-  // const orderDetailsApiUrl = '/api/user/<int:user_id>/order';
-
-  // axios
-  //   .get('https://fakestoreapi.com/products')
-  //   .then((res) => {
-  //     console.log(res.data);
-  //     const orderDetails = sampleData.order_history_details.find(
-  //       (order) => order.id === Number(orderId),
-  //     );
-  //     console.log(orderDetails);
-  //     dispatch({
-  //       type: ProductActionTypes.SET_ORDER_DETAILS,
-  //       payload: orderDetails,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log('Err: ', err);
-  //   });
 };

@@ -1,21 +1,52 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import baseUrl from '../../url';
+import { useSelector, useDispatch } from 'react-redux';
+import { userinfo } from '../../actions/mypage';
 
 export default function DeliveryInfo() {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.mypage);
+
   const [delivery, setDelivery] = useState({
-    firstName: 'Harry',
-    lastName: 'Potter',
-    address: '77 N Kainalu Dr, Kailua, HI 96734',
-    post: 96734,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    address: user.address,
+    post: user.postal_code,
   });
 
   const onClickHandler = () => {
-    // click한 시점의 delivery를 dispatch로 store에 보내야함, 유저 정보 변경
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    const body = {
+      first_name: delivery.firstName,
+      last_name: delivery.lastName,
+      address: delivery.address,
+      postal_code: delivery.post,
+    };
+    axios
+      .patch(baseUrl + '/api/user/delivery/', body, config)
+      .then((res) => {
+        console.log('change delivery info SUCCESSED', res);
+        alert('Delivery Information successfully updated.');
+        dispatch(userinfo(body));
+      })
+      .catch((err) => {
+        console.log(err.response);
+        alert('Update failed. Please try again.');
+      });
   };
 
   return (
     <Container>
-      <h1>Delivery Info</h1>
+      <h2>Delivery Info</h2>
       <form style={{ width: '70%' }}>
         <FormControl>
           <label>First Name</label>
@@ -75,7 +106,7 @@ const Container = styled.div`
 `;
 
 const FormControl = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
   position: relative;
 
@@ -84,6 +115,7 @@ const FormControl = styled.div`
     display: block;
     margin-bottom: 0.5rem;
     text-align: left;
+    font-size: 1rem;
   }
 
   input {
@@ -91,7 +123,7 @@ const FormControl = styled.div`
     border: gray solid 0.2rem;
     display: block;
     width: 100%;
-    font-size: 14px;
+    font-size: 1.2rem;
     padding: 7px;
   }
 `;
@@ -101,11 +133,12 @@ const Button = styled.button`
   margin: 0 1rem;
   color: white;
   border: none;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
+  font-size: 1.2rem;
 
   :hover {
-    box-shadow: 2px 4px 8px #ffb300;
+    box-shadow: 2px 4px 8px #c4c4c4;
   }
 `;
