@@ -26,6 +26,7 @@ urlpatterns = [
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api-token-auth/', views.obtain_auth_token),
+    path('api/account/', include('accounts.urls', namespace='accounts')),
     path('api/user/<int:user_id>/', include('mypage.urls', namespace='mypage')),
 ]
 
