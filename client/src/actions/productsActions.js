@@ -165,6 +165,7 @@ export const setCart = () => (dispatch, getstate) => {
   // 이 부분 url 을 user_id/cart 이런 식으로 바뀌어야 함.
   // input: user_id
   // output: 장바구니 데이터 {asin, imageURL, title, quantity, price}
+  console.log(getstate());
 
   axios
     .get('https://fakestoreapi.com/products')
@@ -175,6 +176,7 @@ export const setCart = () => (dispatch, getstate) => {
         type: ProductActionTypes.SET_CART,
         payload: res.data,
       });
+      console.log(getstate());
     })
     .catch((err) => {
       console.log('Err: ', err);
@@ -200,4 +202,61 @@ export const setLikes = () => (dispatch, getstate) => {
     .catch((err) => {
       console.log('Err: ', err);
     });
+};
+
+//orderhistory
+export const setOrderDetails = (orderId) => (dispatch, getstate) => {
+  //fake api
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+      dispatch({
+        type: ProductActionTypes.SET_ORDER_DETAILS,
+        payload: res.data,
+      });
+      console.log(getstate());
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
+
+  // api
+  // const sampleData = {
+  //   order_history_details: [
+  //     {
+  //       id: 3,
+  //       ordered_at: '2021-05-31T10:15:48.321923Z',
+  //       total_price: 50,
+  //       user_id: 2,
+  //       items: ['40599922', 'B0023446'],
+  //     },
+  //     {
+  //       id: 4,
+  //       ordered_at: '2021-05-31T10:21:17.013279Z',
+  //       total_price: 20,
+  //       user_id: 2,
+  //       items: ['100045442'],
+  //     },
+  //   ],
+  // };
+
+  // const orderDetailsApiUrl = '/api/user/<int:user_id>/order';
+
+  // axios
+  //   .get('https://fakestoreapi.com/products')
+  //   .then((res) => {
+  //     console.log(res.data);
+  //     const orderDetails = sampleData.order_history_details.find(
+  //       (order) => order.id === Number(orderId),
+  //     );
+  //     console.log(orderDetails);
+  //     dispatch({
+  //       type: ProductActionTypes.SET_ORDER_DETAILS,
+  //       payload: orderDetails,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('Err: ', err);
+  //   });
 };

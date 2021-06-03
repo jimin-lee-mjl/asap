@@ -18,4 +18,5 @@ export const ProductActionTypes = {
   SET_CATEGORY: 'SET_CATEGORY',
   SET_CART: 'SET_CART',
   SET_LIKES: 'SET_LIKES',
+  SET_ORDER_DETAILS: 'SET_ORDER_DETAILS',
 };

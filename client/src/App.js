@@ -14,6 +14,7 @@ import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
 import Likes from './components/Likes';
 import Cart from './components/Cart';
+import OrderHistory from './components/OrderHistory';
 import Order from './components/Order';
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/result" component={Result} />
         <Route path="/likes" component={Likes} />
         <Route path="/cart" component={Cart} />
+        <Route exact path="/orderhistory/:orderId" component={OrderHistory} />
         <Route path="/order" component={Order} />
         <Route component={NotFound} />
       </Switch>

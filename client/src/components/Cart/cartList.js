@@ -75,6 +75,7 @@ export default function CartList() {
     console.log('handleClickDelete');
     console.log('deleteProduct: ', checkedProduct);
     message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    console.log(cartList);
     // "Are you sure you want to delete?"alert 띄우기
     // delete api 코드
   }, [likesApiUrl, checkedProduct]);

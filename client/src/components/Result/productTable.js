@@ -87,31 +87,6 @@ export default function ProductTable() {
     console.log('handleClickBasket');
     console.log('checkedProduct: ', checkedProduct);
     message.success('상품을 장바구니에 담았습니다.', 0.5);
-
-    // post 코드
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-
-    // const body = JSON.stringify({
-    //   userId: 5,
-    //   date: '2020 - 02 - 03',
-    //   products: [
-    //     { productId: 5, quantity: 1 },
-    //     { productId: 1, quantity: 5 },
-    //   ],
-    // });
-
-    // axios
-    //   .post('https://fakestoreapi.com/carts', body, config)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   }, [basketApiUrl, checkedProduct]);
 
   const handleClickPurchase = useCallback(async () => {

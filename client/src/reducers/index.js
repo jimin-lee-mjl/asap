@@ -8,6 +8,7 @@ import {
   setCategoryReducer,
   cartReducer,
   likesReducer,
+  setOrderDetailsReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   setCategoryReducer,
   cartReducer,
   likesReducer,
+  setOrderDetailsReducer,
 });
 
 export default rootReducer;
