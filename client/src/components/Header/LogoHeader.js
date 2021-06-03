@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import HeaderComponent from './index';
+import BasicHeader from './BasicHeader';
 
 export default function LogoHeaderComponent() {
   const history = useHistory();
@@ -18,7 +18,7 @@ export default function LogoHeaderComponent() {
         />
       </LogoWrapper>
 
-      <HeaderComponent />
+      <BasicHeader />
     </Container>
   );
 }
@@ -43,4 +43,9 @@ const Logo = styled.img`
   width: 15rem;
   margin: 2rem 0px;
   cursor: pointer;
+  z-index: 5;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
 `;

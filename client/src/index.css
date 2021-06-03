@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@100;200;300;400&family=Bebas+Neue&family=Karla:wght@200;300;400;500&family=Open+Sans:wght@300;400;600;700;800&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Archivo:wght@100;200;300;400&family=Bebas+Neue&.cssfamily=Karla:wght@200;300;400;500&family=Open+Sans:wght@300;400;600;700;800&display=swap');
 
 html,
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans KR', sans-serif, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Archivo', sans-serif, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -21,6 +21,7 @@ code {
   height: 100%;
   margin: auto;
   text-align: center;
+  font-family: 'Archivo', sans-serif;
 }
 
 a {
@@ -34,4 +35,27 @@ li {
 
 html {
   font-size: 10px;
+}
+
+/* scrollbar css */
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ffcc80;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #e65100;
 }
