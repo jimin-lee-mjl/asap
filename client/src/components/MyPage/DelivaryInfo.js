@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 export default function DeliveryInfo() {
-  const delivery = {
+  const [delivery, setDelivery] = useState({
     firstName: 'Harry',
     lastName: 'Potter',
     address: '77 N Kainalu Dr, Kailua, HI 96734',
     post: 96734,
+  });
+
+  const onClickHandler = () => {
+    // click한 시점의 delivery를 dispatch로 store에 보내야함, 유저 정보 변경
   };
 
   return (
@@ -15,22 +19,46 @@ export default function DeliveryInfo() {
       <form style={{ width: '70%' }}>
         <FormControl>
           <label>First Name</label>
-          <input type="text" value={delivery.firstName}></input>
+          <input
+            type="text"
+            value={delivery.firstName}
+            onChange={({ target: { value } }) => {
+              setDelivery({ ...delivery, firstName: value });
+            }}
+          ></input>
         </FormControl>
         <FormControl>
           <label>Last Name</label>
-          <input type="text" value={delivery.lastName}></input>
+          <input
+            type="text"
+            value={delivery.lastName}
+            onChange={({ target: { value } }) => {
+              setDelivery({ ...delivery, lastName: value });
+            }}
+          ></input>
         </FormControl>
         <FormControl>
           <label>Shipping Address </label>
-          <input type="text" value={delivery.address}></input>
+          <input
+            type="text"
+            value={delivery.address}
+            onChange={({ target: { value } }) => {
+              setDelivery({ ...delivery, address: value });
+            }}
+          ></input>
         </FormControl>
         <FormControl>
           <label>Postal Code</label>
-          <input type="text" value={delivery.post}></input>
+          <input
+            type="text"
+            value={delivery.post}
+            onChange={({ target: { value } }) => {
+              setDelivery({ ...delivery, post: value });
+            }}
+          ></input>
         </FormControl>
       </form>
-      <Button>Edit Delivery Info</Button>
+      <Button onClick={onClickHandler}>Edit Delivery Info</Button>
     </Container>
   );
 }
