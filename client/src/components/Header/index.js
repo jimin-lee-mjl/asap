@@ -8,7 +8,7 @@ export default function HeaderComponent({ type }) {
     <>
       {type === 'logo' && <LogoHeader />}
       {type === 'guest' && <GuestHeader />}
-      {type === true && <BasicHeader />}
+      {type === undefined && <BasicHeader />}
     </>
   );
 }

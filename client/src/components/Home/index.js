@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <Container>
-      <Header type="guest" />
+      {isAuthenticated ? <Header /> : <Header type="guest" />}
       <Logo src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
       <div
         style={{
