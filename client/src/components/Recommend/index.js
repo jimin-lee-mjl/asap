@@ -13,8 +13,9 @@ export default function Recommend() {
     <Container>
       <Header>
         <Title>
-          사용자님의 정보와 취향 키워드를 반영한<br></br>예산 10만원 내 추천
-          제품입니다
+          These are recommended products within the budget of 100 dollars,
+          <br></br>
+          Reflecting your information and preference keywords.
         </Title>
       </Header>
       <Body>

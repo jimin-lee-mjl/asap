@@ -3,21 +3,22 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProduct, likeProduct } from '../../actions/productsActions';
+import { setLikes } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
-export default function ProductTable() {
+export default function CartList() {
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const cartList = useSelector((state) => state.likesReducer.likesList);
   const dispatch = useDispatch();
 
-  const selectedProducts = useSelector(
-    (state) => state.selectProductReducer.selectedProducts,
-  );
+  useEffect(() => {
+    dispatch(setLikes());
+  }, []);
 
   const likesApiUrl = '';
-  const basketApiUrl = '';
   const purchaseApiUrl = '';
 
   const columns = [
@@ -45,17 +46,16 @@ export default function ProductTable() {
     },
   ];
 
-  const data = [];
+  const CartListTableData = [];
 
-  Object.entries(selectedProducts).map(([category, productList]) => {
-    console.log('selectedProductsList', productList);
-    productList.map((product) => {
-      data.push({
-        key: product.id,
-        ImageURL: product.image,
-        name: product.title,
-        price: product.price,
-      });
+  Object.entries(cartList).map((cart) => {
+    const cartProduct = cart[1];
+    console.log('cartProduct', cartProduct);
+    CartListTableData.push({
+      key: cartProduct.id,
+      ImageURL: cartProduct.image,
+      name: cartProduct.title,
+      price: cartProduct.price,
     });
   });
 
@@ -71,60 +71,20 @@ export default function ProductTable() {
     },
   };
 
+  const handleClickDelete = useCallback(async () => {
+    console.log('handleClickDelete');
+    console.log('deleteProduct: ', checkedProduct);
+    message.success('선택한 상품이 찜 목록에서 삭제되었습니다. ', 0.5);
+    // "Are you sure you want to delete?"alert 띄우기
+    // delete api 코드
+  }, [likesApiUrl, checkedProduct]);
+
   const handleClickLikes = useCallback(async () => {
     console.log('handleClickLikes');
     console.log('checkedProduct: ', checkedProduct);
-    // try {
-    //   dispatch(likeProduct(checkedProduct));
-    // } catch (e) {
-    //   alert('이미 찜한 상품입니다.');
-    // }
     message.success('찜 목록에 저장되었습니다', 0.5);
     // dispatch(selectProduct(checkedProduct));
   }, [likesApiUrl, checkedProduct]);
-
-  const handleClickBasket = useCallback(async () => {
-    console.log('handleClickBasket');
-    console.log('checkedProduct: ', checkedProduct);
-    message.success('상품을 장바구니에 담았습니다.', 0.5);
-
-    // post 코드
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-
-    // const body = JSON.stringify({
-    //   userId: 5,
-    //   date: '2020 - 02 - 03',
-    //   products: [
-    //     { productId: 5, quantity: 1 },
-    //     { productId: 1, quantity: 5 },
-    //   ],
-    // });
-
-    // axios
-    //   .post('https://fakestoreapi.com/carts', body, config)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  }, [basketApiUrl, checkedProduct]);
-
-  const handleClickPurchase = useCallback(async () => {
-    console.log('handleClickPurchase');
-    console.log('checkedProduct: ', checkedProduct);
-
-    // 구매 api post 코드 추가
-  }, [purchaseApiUrl, checkedProduct]);
-
-  // 총 가격 표시
-  // function numberWithCommas(x) {
-  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  // }
 
   const CalTotalPrice = useEffect(() => {
     var sumPrice = 0;
@@ -132,24 +92,21 @@ export default function ProductTable() {
     var regex = /[^0-9]/g;
 
     checkedProduct.map((product) => {
-      // price = Number(product.price.replace(regex, ''));
       price = Number(product.price);
       console.log(price);
       sumPrice += price;
       console.log(sumPrice);
     });
 
-    // sumPrice = numberWithCommas(sumPrice);
-    // console.log(sumPrice);
     setTotalPrice(sumPrice);
   }, [checkedProduct, totalPrice]);
 
   return (
     <div>
-      <ProductListTable
+      <CartListTable
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
+        dataSource={CartListTableData}
         scroll={{ y: 720 }}
         style={{
           width: '1000px',
@@ -158,48 +115,42 @@ export default function ProductTable() {
       <TableFooter>
         <div>
           <Title>
-            총 {checkedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
-            {totalPrice.toFixed(2)}원
+            Subtotal ({checkedProduct.length}{' '}
+            {checkedProduct.length <= 1 ? 'item' : 'items'}): $
+            {totalPrice.toFixed(2)}
           </Title>
         </div>
         <ButtonGroup>
-          <Link to="/recommend" style={{ float: 'left' }}>
-            <Button type="primary" size="large">
-              다시 선택하기
+          <div style={{ float: 'left' }}>
+            <Button
+              size="large"
+              onClick={() => {
+                handleClickDelete();
+              }}
+            >
+              DELETE SELECTED
             </Button>
-          </Link>
+          </div>
           <Button
             size="large"
             onClick={() => {
               handleClickLikes();
             }}
           >
-            선택한 상품 찜하기
+            ADD TO CART
           </Button>
-          <Button
-            size="large"
-            onClick={() => {
-              handleClickBasket();
-            }}
-          >
-            선택한 상품 장바구니에 담기
-          </Button>
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => {
-              handleClickPurchase();
-            }}
-          >
-            선택한 상품 구매하기
-          </Button>
+          <Link to="/purchase">
+            <Button type="primary" size="large">
+              ORDER NOW
+            </Button>
+          </Link>
         </ButtonGroup>
       </TableFooter>
     </div>
   );
 }
 
-const ProductListTable = styled(Table)`
+const CartListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }

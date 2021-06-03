@@ -6,6 +6,8 @@ import {
   likeProductReducer,
   setModalReducer,
   setCategoryReducer,
+  cartReducer,
+  likesReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   likeProductReducer,
   setModalReducer,
   setCategoryReducer,
+  cartReducer,
+  likesReducer,
 });
 
 export default rootReducer;
