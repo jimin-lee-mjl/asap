@@ -1,21 +1,6 @@
 from rest_framework import serializers
-
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
-from rest_auth.serializers import LoginSerializer
-from rest_auth.registration.serializers import RegisterSerializer
-
-
-# class UserLoginSerializer(LoginSerializer):
-#     username = None
-
-
-class UserRegisterSerializer(RegisterSerializer):
-    username = None
-    address = serializers.CharField(
-        required=False,
-        max_length=200,
-    )
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):

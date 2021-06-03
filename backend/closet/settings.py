@@ -161,22 +161,13 @@ REST_FRAMEWORK = {
     ]
 }
 
-# REST_AUTH_SERIALIZERS = {
-#     'LOGIN_SERIALZERS': 'accounts.serializers.UserLoginSerializer',
-# }
-
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'accounts.serializers.UserRegisterSerializer',
-}
-
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 
 AUTH_USER_MODEL = 'accounts.User'
 
-# staticfile 관련 설정 
+# staticfile 관련 설정
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

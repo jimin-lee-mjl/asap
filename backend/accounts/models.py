@@ -5,11 +5,18 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from ..recommend.models import Keyword, Item
+from recommend.models import Keyword, Item
 
 
 class User(AbstractUser):
     address = models.CharField('Address', blank=True, max_length=200)
+    postal_code = models.CharField('Postal Code', blank=True, max_length=50)
+    keywords = models.ManyToManyField(
+        Keyword, related_name='users', blank=True)
+    like_items = models.ManyToManyField(
+        Item, related_name='like_users', blank=True)
+    cart_items = models.ManyToManyField(
+        Item, related_name='cart_users', blank=True)
 
     def get_keywords(self):
         return str([kw.name for kw in self.keywords.all()])
@@ -28,7 +35,3 @@ class User(AbstractUser):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
-    postal_code = models.CharField('Postal Code', blank=True, max_length=50)
-    keywords = models.ManyToManyField(Keyword, related_name='users', blank=True)
-    like_items = models.ManyToManyField(Item, related_name='like_users', blank=True)
-    cart_items = models.ManyToManyField(Item, related_name='cart_users', blank=True)
