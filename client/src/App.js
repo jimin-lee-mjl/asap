@@ -31,8 +31,16 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/changepassword" component={ChangePassword} />
-        <Route path="/deleteaccount" component={DeleteAccount} />
+        <AuthRoute
+          authenticated={isAuthenticated}
+          path="/changepassword"
+          component={ChangePassword}
+        />
+        <AuthRoute
+          authenticated={isAuthenticated}
+          path="/deleteaccount"
+          component={DeleteAccount}
+        />
         <AuthRoute
           authenticated={isAuthenticated}
           path="/mypage"
