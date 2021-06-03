@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
@@ -9,6 +8,7 @@ from .models import OrderDetail
 from .serializers import ItemSerializer, UserSerializer, OrderDetailSerializer, NewOrderSerializer
 from .responses import ErrorResponse, SuccessResponse
 from .swagger import Swagger
+from .req_params import RequestBody
 
 
 class UserDetailListView(APIView):
@@ -54,7 +54,8 @@ class UserProfileUpdateView(APIView):
        - password : 사용자 비밀번호
        - address : 사용자의 배송지 주소
     '''
-    @swagger_auto_schema(responses=Swagger.update_user_profile_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.update_user_profile_response.RESPONSE, 
+                         request_body=RequestBody.update_user_profile_request.PARAMS)
     def patch(self, request, user_id, format=None):
         serializer = UserSerializer(data=request.data, partial=True)
 
@@ -102,7 +103,8 @@ class LikeItemDetailView(APIView):
             data.append(Serializer.data)
         return Response({'like_items': data}, status=SuccessResponse.detail_listed.STATUS_CODE)
 
-    @swagger_auto_schema(responses=Swagger.add_like_item_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.add_like_item_response.RESPONSE,
+                         request_body=RequestBody.update_item_request.PARAMS)
     def post(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
@@ -118,7 +120,8 @@ class LikeItemDetailView(APIView):
             return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
-    @swagger_auto_schema(responses=Swagger.del_like_item_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.del_like_item_response.RESPONSE,
+                         request_body=RequestBody.update_item_request.PARAMS)
     def delete(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
@@ -156,7 +159,8 @@ class CartItemDetailView(APIView):
             data.append(Serializer.data)
         return Response({'cart_items': data}, status=SuccessResponse.detail_listed.STATUS_CODE)
 
-    @swagger_auto_schema(responses=Swagger.add_cart_item_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.add_cart_item_response.RESPONSE,
+                         request_body=RequestBody.update_item_request.PARAMS)
     def post(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
@@ -172,7 +176,8 @@ class CartItemDetailView(APIView):
             return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
-    @swagger_auto_schema(responses=Swagger.del_cart_item_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.del_cart_item_response.RESPONSE,
+                         request_body=RequestBody.update_item_request.PARAMS)
     def delete(self, request, user_id, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
@@ -214,7 +219,8 @@ class OrderItemDetailView(APIView):
             data.append(serializer.data)
         return Response({'order_history_details': data}, status=SuccessResponse.detail_listed.STATUS_CODE)
 
-    @swagger_auto_schema(responses=Swagger.post_new_order_response.RESPONSE)
+    @swagger_auto_schema(responses=Swagger.post_new_order_response.RESPONSE,
+                         request_body=RequestBody.post_new_order_request.PARAMS)
     def post(self, request, user_id, format=None):
         serializer = NewOrderSerializer(data=request.data)
 
@@ -228,6 +234,6 @@ class OrderItemDetailView(APIView):
                 item = get_object_or_404(Item, pk=asin)
                 new_order.items.add(item)
             new_order.save()
-        
+
         response_serial = OrderDetailSerializer(new_order)
         return Response(response_serial.data, status=SuccessResponse.item_added.STATUS_CODE)
