@@ -9,8 +9,8 @@ const Home = () => {
 
   return (
     <Container>
-      <Header />
-      <img src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
+      <Header type="guest" />
+      <Logo src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
       <div
         style={{
           display: 'flex',
@@ -35,7 +35,7 @@ const Home = () => {
 export default Home;
 
 const Container = styled.div`
-  width: 80vw;
+  width: 75vw;
   height: 100%;
   margin: auto;
   display: flex;
@@ -43,6 +43,14 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background: url('calhartt.png') center;
+`;
+
+const Logo = styled.img`
+  z-index: 2;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
 `;
 
 const Button = styled(Link)`
@@ -60,7 +68,7 @@ const Button = styled(Link)`
   margin: 5px 0;
 
   :hover {
-    color: #ff6f00;
-    background: white;
+    color: white;
+    box-shadow: 2px 4px 8px #ffb300;
   }
 `;
