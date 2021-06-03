@@ -37,10 +37,12 @@ export default function Register() {
       <Header />
       <Wrapper>
         <Form onSubmit={onSubmitHandler}>
-          <img
+          <Logo
             src="logo-circle.png"
             alt="logo"
-            style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
+            onClick={() => {
+              history.push('/');
+            }}
           />
           <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
             Are you sure delete your account?
@@ -58,9 +60,9 @@ export default function Register() {
           </div>
         </Form>
 
-        {/* <Link to="/login" style={{ color: '#fb8c00' }}>
-          Go back to Login
-        </Link> */}
+        <Link to="/login" style={{ color: '#fb8c00' }}>
+          Back to My Page
+        </Link>
       </Wrapper>
     </Container>
   );
@@ -72,6 +74,17 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 90vh;
+`;
+
+const Logo = styled.img`
+  width: 15rem;
+  height: 15rem;
+  margin: 3rem auto;
+  cursor: pointer;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
 `;
 
 const Wrapper = styled.div`
