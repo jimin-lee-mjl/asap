@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 from recommend.models import Item
 from accounts.models import User
@@ -10,8 +11,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'address', 'keywords',
-                  'like_items', 'cart_items', 'order_history']
+        fields = ['email', 'password', 'first_name', 'last_name',
+                  'address', 'postal_code', 'keywords', 'like_items', 
+                  'cart_items', 'order_history']
+
+
+class DeliveryInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'address', 'postal_code']
 
 
 class ItemSerializer(serializers.ModelSerializer):
