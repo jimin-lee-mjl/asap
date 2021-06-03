@@ -1,22 +1,45 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { Menu, Dropdown } from 'antd';
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { logout } from '../../actions/auth';
+import { useDispatch } from 'react-redux';
 
-const HeaderComponent = () => {
+export default function HeaderComponent() {
+  const dispatch = useDispatch();
+
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link to="/mypage">My Page</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link
+          to="#"
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
+          Logout
+        </Link>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <Header>
       <IconButton to="/cart">
         <ShoppingCartOutlined />
       </IconButton>
-      <IconButton to="/login">
-        <UserOutlined />
-      </IconButton>
+      <Dropdown overlay={menu} placement="bottomRight">
+        <IconButton to="/mypage">
+          <UserOutlined />
+        </IconButton>
+      </Dropdown>
     </Header>
   );
-};
-
-export default HeaderComponent;
+}
 
 const Button = styled(Link)`
   background: #ff6f00;
@@ -31,6 +54,7 @@ const Button = styled(Link)`
   display: table-cell;
   line-height: 2.5;
   margin: 5px 0;
+  border: 0.1rem solid #ff6f00;
 
   :hover {
     box-shadow: 2px 4px 8px #ffb300;
