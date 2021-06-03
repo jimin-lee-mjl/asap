@@ -4,7 +4,9 @@ from . import views
 app_name = 'mypage'
 
 urlpatterns = [
-    path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('wishlist/', views.WishListView.as_view(), name='wishlist'),
-    path('bag/', views.BagView.as_view(), name='bag'),
+    path('', views.UserDetailListView.as_view(), name='detail'),
+    path('profile/', views.UserProfileUpdateView.as_view(), name='profile'),
+    path('like/', views.LikeItemDetailView.as_view(), name='like'),
+    path('cart/', views.CartItemDetailView.as_view(), name='cart'),
+    path('order/', views.OrderItemDetailView.as_view(), name='order_history')
 ]
