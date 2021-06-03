@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'recommend',
     'mypage',
     'drf_yasg',
@@ -142,10 +143,9 @@ REST_FRAMEWORK = {
     ]
 }
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 
-# auth 유저 모델은 accounts의 User를 쓰겠다는 의미
 AUTH_USER_MODEL = 'accounts.User'
