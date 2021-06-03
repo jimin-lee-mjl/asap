@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
-import os
 
 # 환경 변수 초기화
 env = environ.Env()
@@ -50,11 +49,9 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
-    'recommend',
     'mypage',
     'drf_yasg',
     'corsheaders',
-    'accounts',
 ]
 
 SITE_ID = 1
@@ -159,15 +156,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
-
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-
-# auth 유저 모델은 accounts의 User를 쓰겠다는 의미
-AUTH_USER_MODEL = 'accounts.User'
-
-# staticfile 관련 설정 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')

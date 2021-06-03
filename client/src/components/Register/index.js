@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
 import { register } from '../../actions/auth';
 import styled from 'styled-components';
-import Header from '../Header';
 
-export default function Register() {
-  const dispatch = useDispatch();
-  const history = useHistory();
-
+function RegisterPage(props) {
+  const [username, setName] = useState('');
   const [password1, setPassword] = useState('');
   const [password2, setConfirmPasword] = useState('');
   const [email, setEmail] = useState('');
 
+  const dispatch = useDispatch();
+
   const onEmailHandler = (e) => {
     setEmail(e.currentTarget.value);
+  };
+
+  const onNameHandler = (e) => {
+    setName(e.currentTarget.value);
+    console.log(username);
   };
 
   const onPasswordHanlder = (e) => {
@@ -27,28 +31,36 @@ export default function Register() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(email, password1, password2);
-    dispatch(register({ email, password1, password2 }));
-    history.push('/login');
+    console.log(username, email, password1, password2);
+    dispatch(register({ username, email, password1, password2 }));
   };
 
   return (
-    <Container>
-      <Header />
-      <Wrapper>
-        <Form onSubmit={onSubmitHandler}>
-          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100vh',
+      }}
+    >
+      <Container>
+        <form
+          onSubmit={onSubmitHandler}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '30px 40px',
+          }}
+        >
+          <h1 style={{ textAlign: 'center', margin: '0 0 20px' }}>
             Create Account
-          </h1> */}
-          <img
-            src="logo-circle.png"
-            alt="logo"
-            style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
-          />
+          </h1>
 
           <FormControl>
-            <label>Email</label>
-            <input type="email" value={email} onChange={onEmailHandler} />
+            <label>Name</label>
+            <input type="test" value={username} onChange={onNameHandler} />
           </FormControl>
 
           <FormControl>
@@ -69,58 +81,52 @@ export default function Register() {
             />
           </FormControl>
 
-          <Button onClick={onSubmitHandler}>Create Account</Button>
-        </Form>
+          <FormControl>
+            <label>Email (선택)</label>
+            <input type="email" value={email} onChange={onEmailHandler} />
+            <br />
+          </FormControl>
 
-        <Link to="/login" style={{ color: '#fb8c00' }}>
-          Go back to Login
-        </Link>
-      </Wrapper>
-    </Container>
+          <Button onClick={onSubmitHandler}>회원 가입</Button>
+        </form>
+      </Container>
+    </div>
   );
 }
 
+export default withRouter(RegisterPage);
+
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
-`;
-
-const Wrapper = styled.div`
-  width: 40rem;
-  min-height: 45rem;
-  border-radius: 0.5rem;
-  padding: 2rem;
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 400px;
+  border-radius: 0.6em;
+  padding: 20px;
   background-color: white;
-  box-shadow: 2rem 2rem 6rem #97a1a1, -2rem -2rem 6rem #ffffff;
-  margin: 2rem auto;
-  text-align: center;
-`;
+  box-shadow: 20px 20px 60px #97a1a1, -20px -20px 60px #ffffff;
+  margin: 20px auto;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  padding: 3rem 4rem;
-  text-align: left;
+  @media only screen and (max-width: 600px) {
+    background-color: ivory;
+    box-shadow: none;
+  }
 `;
 
 const FormControl = styled.div`
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
   position: relative;
 
   label {
     color: #33032d;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 5px;
   }
 
   input {
-    border-radius: 0.5rem;
+    border-radius: 6px;
     min-height: 2.618em;
-    border: gray solid 0.2rem;
+    border: gray solid 2px;
     display: block;
     width: 100%;
     font-size: 14px;
@@ -135,13 +141,13 @@ const Button = styled.div`
   vertical-align: middle;
   display: table-cell;
   line-height: 2.5;
-  font-size: 1.8rem;
-  border-radius: 0.5rem;
-  border: solid black 0.2rem;
-  margin-top: 1rem;
+  padding: 7px;
+  border-radius: 0.6em;
+  border: solid white 2px;
 
   :hover {
     color: black;
     background: white;
+    border: solid black 2px;
   }
 `;

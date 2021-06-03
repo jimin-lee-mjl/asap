@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('api/user/<int:user_id>/', include('mypage.urls', namespace='mypage')),
+    path('api/mypage/<int:user_id>/', include('mypage.urls', namespace='mypage')),
 ]
 
 schema_view = get_schema_view(

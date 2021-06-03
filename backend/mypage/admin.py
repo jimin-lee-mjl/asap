@@ -1,8 +1,5 @@
 from django.contrib import admin
-from accounts.models import User
-from recommend.models import Item, Keyword
-from .models import OrderDetail
+from .models import TestProduct, TestUser
 
-admin.site.register(Item)
-admin.site.register(Keyword)
-admin.site.register(OrderDetail)
+admin.site.register(TestUser)
+admin.site.register(TestProduct)

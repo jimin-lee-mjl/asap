@@ -3,43 +3,52 @@ import { Link, useHistory } from 'react-router-dom';
 import { login } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import Header from '../Header';
 
 export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleClick = () => {
     try {
-      dispatch(login(email, password));
-      history.push('/');
+      dispatch(login(username, password));
+      history.push('/mypage');
     } catch (e) {
       alert('Failed to login');
-      setEmail('');
+      setUsername('');
       setPassword('');
     }
   };
 
   return (
-    <Container>
-      <Header />
-      <Wrapper>
-        <Form>
-          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>Login</h1> */}
-          <img
-            src="logo-circle.png"
-            alt="logo"
-            style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
-          />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '90vh',
+      }}
+    >
+      <Container>
+        <form
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '30px 40px',
+            textAlign: 'left',
+          }}
+        >
+          <h1 style={{ textAlign: 'center', margin: '0 0 20px' }}>Login</h1>
+
           <FormControl>
-            <label>Email</label>
+            <label>Name</label>
             <input
               type="test"
-              value={email}
-              onChange={({ target: { value } }) => setEmail(value)}
+              value={username}
+              onChange={({ target: { value } }) => setUsername(value)}
             />
           </FormControl>
 
@@ -55,57 +64,47 @@ export default function Login() {
           <Button type="primary" htmlType="submit" onClick={handleClick}>
             Login
           </Button>
-        </Form>
+        </form>
 
-        <Link to="/register" style={{ color: '#fb8c00' }}>
-          Create Account
-        </Link>
-      </Wrapper>
-    </Container>
+        <Link to="/register">Create Account</Link>
+      </Container>
+    </div>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
-`;
-
-const Wrapper = styled.div`
-  width: 40rem;
-  min-height: 45rem;
-  border-radius: 0.5rem;
-  padding: 2rem;
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+  font-family: 'Noto Sans KR', sans-serif;
+  width: 400px;
+  min-height: 450px;
+  border-radius: 0.6em;
+  padding: 20px;
   background-color: white;
-  box-shadow: 2rem 2rem 6rem #97a1a1, -2rem -2rem 6rem #ffffff;
-  margin: 2rem auto;
+  box-shadow: 20px 20px 60px #97a1a1, -20px -20px 60px #ffffff;
+  margin: 20px auto;
   text-align: center;
-`;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  padding: 3rem 4rem;
-  text-align: left;
+  @media only screen and (max-width: 600px) {
+    background-color: ivory;
+    box-shadow: none;
+  }
 `;
 
 const FormControl = styled.div`
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
   position: relative;
 
   label {
     color: #33032d;
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 5px;
   }
 
   input {
-    border-radius: 0.5rem;
+    border-radius: 6px;
     min-height: 2.618em;
-    border: gray solid 0.2rem;
+    border: gray solid 2px;
     display: block;
     width: 100%;
     font-size: 14px;
@@ -120,13 +119,14 @@ const Button = styled.div`
   vertical-align: middle;
   display: table-cell;
   line-height: 2.5;
-  font-size: 1.8rem;
-  border-radius: 0.5rem;
-  border: solid black 0.2rem;
-  margin-top: 1rem;
+  padding: 7px;
+  border-radius: 0.6em;
+  border: solid white 2px;
+  margin-top: 10px;
 
   :hover {
     color: black;
     background: white;
+    border: solid black 2px;
   }
 `;

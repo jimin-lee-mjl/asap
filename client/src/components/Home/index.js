@@ -1,66 +1,113 @@
 import React from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Header from '../Header';
 
-const Home = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+export default function Home() {
+  let history = useHistory();
 
   return (
-    <Container>
-      <Header />
-      <img src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        height: '100vh',
+        width: '100vw',
+        // background: "#F3EAD9"
+        // background: 'ivory',
+      }}
+    >
+      <Button
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '10vw',
+          margin: '0',
+        }}
+        onClick={() => {
+          history.push('/mypage');
+        }}
+      >
+        My Page
+      </Button>
+      <Logo>ASAP</Logo>
+      <Photo></Photo>
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
-          marginTop: '10vh',
-          zIndex: 2,
+          position: 'absoulte',
+          zIndex: '5000',
+          marginBottom: '100px',
+          alignItems: 'space-between',
         }}
       >
-        {isAuthenticated ? (
-          <Button to="/info">Start</Button>
-        ) : (
-          <>
-            <Button to="/login">Login</Button>
-            <Button to="/info">Guest</Button>
-          </>
-        )}
+        <Button
+          onClick={() => {
+            history.push('/login');
+          }}
+        >
+          Login
+        </Button>
+        <Button
+          onClick={() => {
+            history.push('/info');
+          }}
+        >
+          Guest
+        </Button>
       </div>
-    </Container>
+    </div>
   );
-};
+}
 
-export default Home;
+const Photo = styled.div`
+  height: 80%;
+  width: 80%;
+  background-size: cover;
+  background-image: url('bg9.png');
+  background-position: center;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
 
-const Container = styled.div`
-  width: 80vw;
-  height: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: url('calhartt.png') center;
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
-const Button = styled(Link)`
-  background: #fb8c00;
-  width: 12rem;
-  height: 5rem;
-  border-radius: 0.5rem;
-  font-size: 2rem;
-  color: black;
+const Logo = styled.h1`
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  font-family: 'Pacifico', cursive;
+  font-size: 5rem;
+  font-weight: 900;
+  letter-spacing: 0.1rem;
+  position: absolute;
+  top: 12%;
+  z-index: 10;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 2rem;
+  }
+`;
+
+const Button = styled.div`
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+  font-family: 'Pacifico', cursive;
+  background: black;
+  width: 120px;
+  height: 50px;
+  font-size: 1.3rem;
+  color: white;
   margin: 0 3vw;
   text-align: center;
   vertical-align: middle;
   display: table-cell;
   line-height: 2.5;
-  margin: 5px 0;
 
   :hover {
-    color: #fb8c00;
+    color: black;
     background: white;
+    border: solid black 2px;
   }
 `;
