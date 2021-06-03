@@ -1,64 +1,89 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { login } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import { register } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
 
-export default function Login() {
+export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [id, setId] = useState('');
+  const [password1, setPassword] = useState('');
+  const [password2, setConfirmPasword] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleClick = () => {
-    try {
-      dispatch(login(email, password));
-      history.push('/');
-    } catch (e) {
-      alert('Failed to login');
-      setEmail('');
-      setPassword('');
-    }
+  const onIdHandler = (e) => {
+    setId(e.currentTarget.value);
+  };
+
+  const onEmailHandler = (e) => {
+    setEmail(e.currentTarget.value);
+  };
+
+  const onPasswordHanlder = (e) => {
+    setPassword(e.currentTarget.value);
+  };
+
+  const onConfirmPasswordHandler = (e) => {
+    setConfirmPasword(e.currentTarget.value);
+  };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log(email, password1, password2);
+    dispatch(register({ email, password1, password2 }));
+    history.push('/login');
   };
 
   return (
     <Container>
       <Header />
       <Wrapper>
-        <Form>
-          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>Login</h1> */}
+        <Form onSubmit={onSubmitHandler}>
+          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
+            Create Account
+          </h1> */}
           <img
             src="logo-circle.png"
             alt="logo"
             style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
           />
+
+          <FormControl>
+            <label>ID</label>
+            <input type="text" value={id} onChange={onIdHandler} />
+          </FormControl>
+
           <FormControl>
             <label>Email</label>
-            <input
-              type="test"
-              value={email}
-              onChange={({ target: { value } }) => setEmail(value)}
-            />
+            <input type="email" value={email} onChange={onEmailHandler} />
           </FormControl>
 
           <FormControl>
             <label>Password</label>
             <input
               type="password"
-              value={password}
-              onChange={({ target: { value } }) => setPassword(value)}
+              value={password1}
+              onChange={onPasswordHanlder}
             />
           </FormControl>
 
-          <Button type="primary" htmlType="submit" onClick={handleClick}>
-            Login
-          </Button>
+          <FormControl>
+            <label>Confirm Pasword</label>
+            <input
+              type="password"
+              value={password2}
+              onChange={onConfirmPasswordHandler}
+            />
+          </FormControl>
+
+          <Button onClick={onSubmitHandler}>Create Account</Button>
         </Form>
 
-        <Link to="/register" style={{ color: '#fb8c00' }}>
-          Create Account
+        <Link to="/login" style={{ color: '#fb8c00' }}>
+          Go to Login
         </Link>
       </Wrapper>
     </Container>
