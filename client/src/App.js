@@ -12,7 +12,7 @@ import {
   ChangePassword,
   DeleteAccount,
 } from './components/Auth';
-import UserInfo from './components/UserInfo';
+import UserSelect from './components/UserSelect';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
@@ -46,7 +46,7 @@ export default function App() {
           path="/mypage"
           render={(props) => <MyPage user={user} {...props} />}
         />
-        <Route path="/info" component={UserInfo} />
+        <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
         <Route path="/likes" component={Likes} />
