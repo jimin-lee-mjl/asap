@@ -5,7 +5,6 @@ export const setProducts = () => (dispatch, getstate) => {
   axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
-      const modalData = {};
       const productData = {
         outer: [],
         top: [],
@@ -15,7 +14,6 @@ export const setProducts = () => (dispatch, getstate) => {
 
       console.log(res.data);
       res.data.map((data) => {
-        modalData[data.id] = false;
         if (data.category == "women's clothing") {
           productData.outer.push(data);
         } else if (data.category == "men's clothing") {
@@ -26,7 +24,6 @@ export const setProducts = () => (dispatch, getstate) => {
       });
 
       console.log(productData);
-      console.log(modalData);
 
       Object.entries(productData).map(([category, productList]) => {
         console.log(category, productList);
@@ -41,7 +38,6 @@ export const setProducts = () => (dispatch, getstate) => {
         type: ProductActionTypes.SET_PRODUCTS,
         payload: productData,
       });
-      dispatch({ type: ProductActionTypes.SET_MODAL, payload: modalData });
       dispatch({
         type: ProductActionTypes.SET_CATEGORY,
         payload: [...categoryData],
@@ -146,17 +142,10 @@ export const likeProduct = (likeProductId) => (dispatch, getstate) => {
   });
 };
 
-export const controlModal = (productId, type) => (dispatch, getstate) => {
-  console.log('controlModal!!!!');
-  const currentModalState = getstate().setModalReducer.modals;
-  console.log('currentModalState:', currentModalState);
-  currentModalState[productId] = type;
-  var newModalState = { ...currentModalState };
-  console.log('newModalState:', newModalState);
-
+export const showModal = (productId) => (dispatch, getstate) => {
   dispatch({
-    type: ProductActionTypes.CONTROL_MODAL,
-    payload: newModalState,
+    type: ProductActionTypes.SHOW_MODAL,
+    payload: productId,
   });
 };
 

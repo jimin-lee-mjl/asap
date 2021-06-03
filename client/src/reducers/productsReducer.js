@@ -17,6 +17,7 @@ const initialState = {
   cartList: [],
   likesList: [],
   orderDetails: [],
+  modalKey: '',
 };
 
 export const setProductsReducer = (state = initialState, action) => {
@@ -46,12 +47,10 @@ export const selectProductReducer = (state = initialState, action) => {
   }
 };
 
-export const setModalReducer = (state = initialState, action) => {
+export const showModalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ProductActionTypes.SET_MODAL:
-      return { ...state, modals: action.payload };
-    case ProductActionTypes.CONTROL_MODAL:
-      return { ...state, modals: action.payload };
+    case ProductActionTypes.SHOW_MODAL:
+      return { ...state, modalKey: action.payload };
     default:
       return state;
   }

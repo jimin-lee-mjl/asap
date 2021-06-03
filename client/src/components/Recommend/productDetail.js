@@ -10,7 +10,11 @@ import {
 } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProduct, likeProduct } from '../../actions/productsActions';
+import {
+  selectProduct,
+  likeProduct,
+  showModal,
+} from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
 export default function ProductDetail({ productInfo }) {
@@ -21,7 +25,8 @@ export default function ProductDetail({ productInfo }) {
   const likeProducts = useSelector(
     (state) => state.likeProductReducer.likeProducts,
   );
-  const modals = useSelector((state) => state.setModalReducer.modals);
+  const modalKey = useSelector((state) => state.showModalReducer.modalKey);
+
   const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
@@ -49,8 +54,8 @@ export default function ProductDetail({ productInfo }) {
     <DetailModal
       title="상품 상세"
       centered
-      visible={modals[productInfo.id]}
-      onCancel={() => dispatch(controlModal(productInfo.id, false))}
+      visible={modalKey === productInfo.id}
+      onCancel={() => dispatch(showModal(0))}
       width={1200}
       maskStyle={{ background: 'white' }}
       footer={[
