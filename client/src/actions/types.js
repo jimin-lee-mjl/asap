@@ -16,4 +16,6 @@ export const ProductActionTypes = {
   SET_MODAL: 'SET_MODAL',
   CONTROL_MODAL: 'CONTROL_MODAL',
   SET_CATEGORY: 'SET_CATEGORY',
+  SET_CART: 'SET_CART',
+  SET_LIKES: 'SET_LIKES',
 };

@@ -35,7 +35,7 @@ export default function ChoiceSummary() {
     console.log('totalPrice:', totalPrice);
     choiceSummaryArray.push(
       <TotalSummary>
-        <p>합계</p>
+        <p>Total Price</p>
         <p>{totalPrice.toFixed(2)}</p>
       </TotalSummary>,
     );
@@ -46,7 +46,7 @@ export default function ChoiceSummary() {
   return (
     <ChoiceSummaryContainer>
       <Card
-        title="가격 정보"
+        title="Price Info"
         style={{ width: 200 }}
         headStyle={{
           fontSize: 30,

@@ -16,6 +16,9 @@ import UserInfo from './components/UserInfo';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
+import Likes from './components/Likes';
+import Cart from './components/Cart';
+import Order from './components/Order';
 
 export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
@@ -38,6 +41,9 @@ export default function App() {
         <Route path="/info" component={UserInfo} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
+        <Route path="/likes" component={Likes} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/order" component={Order} />
         <Route component={NotFound} />
       </Switch>
     </Router>
