@@ -12,49 +12,79 @@ export default function Keywords() {
     'black',
     'white',
     'gray',
+    'fit',
+    'office',
+    'great',
+    'awesome',
+    'pink',
+    'yellow',
+    'black',
+    'white',
+    'gray',
+    'fit',
+    'office',
+    'great',
+    'awesome',
+    'pink',
+    'yellow',
+    'black',
+    'white',
+    'gray',
+    'fit',
+    'office',
+    'great',
+    'awesome',
+    'pink',
+    'yellow',
+    'black',
+    'white',
+    'gray',
   ];
   return (
     <Container>
       <h1>Keywords</h1>
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '35rem',
-        }}
-      >
+      <ScrollingList>
         {keywords.map((word) => {
-          return (
-            <div
-              style={{
-                backgroundColor: 'rgba(196, 196, 196, 0.4)',
-                width: '10rem',
-                height: '3rem',
-                fontSize: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '1rem 0.5rem',
-              }}
-            >
-              <h4>{word}</h4>
-            </div>
-          );
+          return <KeywordCard>{word}</KeywordCard>;
         })}
-      </div>
-      <button>more</button>
+      </ScrollingList>
+      {/* <button>Edit</button> */}
     </Container>
   );
 }
 
 const Container = styled.div`
-  border: solid 0.1rem black;
-  padding: 2rem 1rem;
+  border: solid 0.1rem #ff6f00;
+  border-radius: 0.8rem;
+  padding: 3rem 2rem;
   grid-area: keyword;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+`;
+
+const ScrollingList = styled.div`
+  width: 80%;
+  height: 30rem;
+  overflow: auto;
+  margin: 2rem auto;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: center;
+  /* width: 35rem */
+`;
+
+const KeywordCard = styled.div`
+  background-color: rgba(196, 196, 196, 0.4);
+  border-radius: 0.5rem;
+  width: 40%;
+  height: 5rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0.5rem;
 `;

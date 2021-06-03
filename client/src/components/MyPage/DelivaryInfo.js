@@ -30,14 +30,15 @@ export default function DeliveryInfo() {
           <input type="text" value={delivery.post}></input>
         </FormControl>
       </form>
-      <button>Edit Delivery Info</button>
+      <Button>Edit Delivery Info</Button>
     </Container>
   );
 }
 
 const Container = styled.div`
-  border: solid 0.1rem black;
-  padding: 2rem 1rem;
+  border: solid 0.1rem #ff6f00;
+  border-radius: 0.8rem;
+  padding: 3rem 2rem;
   grid-area: deliveryInfo;
   display: flex;
   flex-direction: column;
@@ -64,5 +65,19 @@ const FormControl = styled.div`
     width: 100%;
     font-size: 14px;
     padding: 7px;
+  }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  margin: 0 1rem;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  :hover {
+    box-shadow: 2px 4px 8px #ffb300;
   }
 `;

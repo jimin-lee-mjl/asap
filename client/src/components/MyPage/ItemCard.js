@@ -23,25 +23,29 @@ export default function ItemCard({ productId }) {
       {Object.keys(item).length === 0 ? (
         <div>...Loading</div>
       ) : (
-        <div
-          style={{
-            width: '40%',
-            height: '25%',
-            border: '1px solid black',
-            margin: '1rem',
-            padding: '0.5rem',
-          }}
-        >
+        <Container>
           <img
             src={item.image}
             alt={item.title}
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
-          {/* <p>
-              {item.id}.{item.title}
-            </p> */}
-        </div>
+        </Container>
       )}
     </>
   );
 }
+
+const Container = styled.div`
+  width: 40%;
+  height: 25%;
+  border: 1px solid black;
+  border-radius: 0.8rem;
+  margin: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+
+  :hover {
+    border: solid 0.1rem #ff6f00;
+    box-shadow: 0 0 10px #ffecb3;
+  }
+`;

@@ -1,8 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom';
 
 export default function UserInfo() {
+  const history = useHistory();
+
   const user = {
+    id: 'asap2021',
     email: 'elice@elice.com',
     password: '123456',
   };
@@ -12,25 +16,44 @@ export default function UserInfo() {
       <h1>User Info</h1>
       <form style={{ width: '70%' }}>
         <FormControl>
-          <label>email</label>
+          <label>Id</label>
+          <input type="text" value={user.id}></input>
+        </FormControl>
+        <FormControl>
+          <label>Email</label>
           <input type="email" value={user.email}></input>
         </FormControl>
         <FormControl>
-          <label>password</label>
+          <label>Password</label>
           <input type="password" value={user.password}></input>
         </FormControl>
       </form>
-      <div>
-        <button>Change Password</button>
-        <button>Delete Account</button>
+      <div
+        style={{
+          display: 'flex',
+        }}
+      >
+        <Button
+          onClick={() => history.push('/changepassword')}
+          style={{ margin: '0 1rem' }}
+        >
+          Change Password
+        </Button>
+        <Button
+          onClick={() => history.push('/deleteaccount')}
+          style={{ margin: '0 0.5rem' }}
+        >
+          Delete Account
+        </Button>
       </div>
     </Container>
   );
 }
 
 const Container = styled.div`
-  border: solid 0.1rem black;
-  padding: 2rem 1rem;
+  border: solid 0.1rem #ff6f00;
+  border-radius: 0.8rem;
+  padding: 3rem 2rem;
   grid-area: userInfo;
   display: flex;
   flex-direction: column;
@@ -57,5 +80,19 @@ const FormControl = styled.div`
     width: 100%;
     font-size: 14px;
     padding: 7px;
+  }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  margin: 0 1rem;
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  :hover {
+    box-shadow: 2px 4px 8px #ffb300;
   }
 `;
