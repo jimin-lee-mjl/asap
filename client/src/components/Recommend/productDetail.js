@@ -25,7 +25,7 @@ export default function ProductDetail({ productInfo }) {
   const likeProducts = useSelector(
     (state) => state.likeProductReducer.likeProducts,
   );
-  const modalKey = useSelector((state) => state.showModalReducer.modalKey);
+  const modal = useSelector((state) => state.showModalReducer.modal);
 
   const dispatch = useDispatch();
 
@@ -54,7 +54,7 @@ export default function ProductDetail({ productInfo }) {
     <DetailModal
       title="상품 상세"
       centered
-      visible={modalKey === productInfo.id}
+      visible={modal.key > 0}
       onCancel={() => dispatch(showModal(0))}
       width={1200}
       maskStyle={{ background: 'white' }}
@@ -62,7 +62,7 @@ export default function ProductDetail({ productInfo }) {
         <Button
           id="check-btn"
           type="primary"
-          productId={productInfo.id}
+          productId={modal.data.id}
           onClick={handleClickCheck}
           style={{ marginLeft: 30 }}
         >
@@ -70,7 +70,7 @@ export default function ProductDetail({ productInfo }) {
         </Button>,
         <PushpinButton
           type="primary"
-          productId={productInfo.id}
+          productId={modal.data.id}
           onClick={handleClickPushpin}
         >
           찜하기
@@ -80,14 +80,14 @@ export default function ProductDetail({ productInfo }) {
       <ProductDetailDiv>
         <Col span={11}>
           <img
-            alt={productInfo.title}
-            src={productInfo.image}
+            alt={modal.data.title}
+            src={modal.data.image}
             style={{ width: 500, height: 600 }}
           />
         </Col>
         <ProductDescriptionCol span={13}>
-          <Title level={2}>{productInfo.title}</Title>
-          <Title level={3}>가격: {productInfo.price}</Title>
+          <Title level={2}>{modal.data.title}</Title>
+          <Title level={3}>가격: {modal.data.price}</Title>
 
           <KeywordContainer>
             <KeywordDiv>

@@ -68,7 +68,6 @@ export default function ProductCard({ categoryKey }) {
             </CardIcons>
           </CardBody>
         </Card>
-        <ProductDetail productInfo={product} />
       </CardContainer>
     );
   });

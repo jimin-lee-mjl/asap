@@ -143,10 +143,33 @@ export const likeProduct = (likeProductId) => (dispatch, getstate) => {
 };
 
 export const showModal = (productId) => (dispatch, getstate) => {
-  dispatch({
-    type: ProductActionTypes.SHOW_MODAL,
-    payload: productId,
-  });
+  if (productId === 0) {
+    const resetModalState = {
+      key: '',
+      data: {},
+    };
+    dispatch({
+      type: ProductActionTypes.RESET_MODAL,
+      payload: resetModalState,
+    });
+  } else {
+    axios
+      .get(`https://fakestoreapi.com/products/${productId}`)
+      .then((res) => {
+        console.log(res.data);
+        const newModalState = {
+          key: productId,
+          data: res.data,
+        };
+        dispatch({
+          type: ProductActionTypes.SHOW_MODAL,
+          payload: newModalState,
+        });
+      })
+      .catch((err) => {
+        console.log('Err: ', err);
+      });
+  }
 };
 
 // cart
