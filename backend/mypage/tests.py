@@ -4,7 +4,7 @@ from rest_framework.test import APITestCase
 from rest_framework.views import status
 from datetime import datetime
 from .serializers import UserSerializer
-from accounts.models import User 
+from accounts.models import User
 from .models import OrderDetail
 from recommend.models import Keyword, Item
 
