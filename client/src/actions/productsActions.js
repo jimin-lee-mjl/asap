@@ -1,6 +1,5 @@
 import { ProductActionTypes } from './types';
 import axios from 'axios';
-import ProductCardGroups from '../components/Recommend/productCardGroups';
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
@@ -159,4 +158,46 @@ export const controlModal = (productId, type) => (dispatch, getstate) => {
     type: ProductActionTypes.CONTROL_MODAL,
     payload: newModalState,
   });
+};
+
+// cart
+export const setCart = () => (dispatch, getstate) => {
+  // 이 부분 url 을 user_id/cart 이런 식으로 바뀌어야 함.
+  // input: user_id
+  // output: 장바구니 데이터 {asin, imageURL, title, quantity, price}
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_CART,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
+};
+
+//likes
+export const setLikes = () => (dispatch, getstate) => {
+  // 이 부분 url 을 user_id/Likes 이런 식으로 바뀌어야 함.
+  // input: user_id
+  // output: 찜 데이터 {asin, imageURL, title, quantity, price}
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_LIKES,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
 };
