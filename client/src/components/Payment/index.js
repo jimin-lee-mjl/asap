@@ -26,7 +26,7 @@ export default function Payment() {
     },
     {
       title: 'Item Name',
-      dataIndex: 'name',
+      dataIndex: 'title',
     },
     {
       title: 'Price',
@@ -60,6 +60,7 @@ export default function Payment() {
       <Container>
         <DeliveryInfo>
           <h1>Delivery Info</h1>
+          <br />
           <form style={{ width: '70%', margin: 'auto' }}>
             <FormControl>
               <label>First Name</label>
@@ -109,14 +110,17 @@ export default function Payment() {
         <OrderInfo>
           <div>
             <h1>Your Order</h1>
+            <br />
             <Table
               columns={columns}
               dataSource={data}
               bordered
-              title={() => 'Header'}
-              footer={() => 'Footer'}
+              footer={() => 'Total : $1000'}
+              pagination={false}
             />
           </div>
+          <br />
+          <br />
           <Button>Pay with Paypal</Button>
         </OrderInfo>
       </Container>
@@ -141,8 +145,10 @@ const DeliveryInfo = styled.div`
 const OrderInfo = styled.div`
   /* border: solid 0.1rem #ff6f00;
   border-radius: 0.8rem; */
-  padding: 3rem 2rem;
+  padding: 10rem 2rem;
   width: 35vw;
+  display: flex;
+  flex-direction: column;
 `;
 
 const FormControl = styled.div`
@@ -179,7 +185,8 @@ const Button = styled.div`
   font-size: 1.8rem;
   border-radius: 0.5rem;
   border: solid black 0.2rem;
-  margin-top: 1rem;
+  margin: 1rem auto;
+  width: 70%;
 
   :hover {
     color: black;
