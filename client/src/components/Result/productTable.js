@@ -3,8 +3,12 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProduct, likeProduct } from '../../actions/productsActions';
-import { Link, useHistory } from 'react-router-dom';
+import {
+  selectProduct,
+  likeProduct,
+  showModal,
+} from '../../actions/productsActions';
+import { useHistory, Link } from 'react-router-dom';
 
 export default function ProductTable() {
   const history = useHistory();
@@ -17,6 +21,7 @@ export default function ProductTable() {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
+  const modal = useSelector((state) => state.showModalReducer.modal);
 
   const likesApiUrl = '';
   const basketApiUrl = '';
@@ -24,7 +29,7 @@ export default function ProductTable() {
 
   const columns = [
     {
-      title: '상품 이미지',
+      title: '',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
@@ -36,14 +41,50 @@ export default function ProductTable() {
       width: 100,
     },
     {
-      title: '상품명',
+      title: 'Description',
       dataIndex: 'name',
       width: 250,
     },
     {
-      title: '가격',
+      title: 'Price',
       dataIndex: 'price',
       width: 80,
+    },
+    {
+      title: '',
+      dataIndex: 'action',
+      render: (text, record) => (
+        <div
+          style={{
+            fontSize: 'xx-small',
+            paddingRight: '10px',
+            display: 'inline-block',
+            textAlign: 'center',
+          }}
+        >
+          <Button
+            size="small"
+            style={{ fontSize: 'x-small', marginBottom: '10px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO CART!', record);
+            }}
+          >
+            ADD TO CART
+          </Button>
+          <Button
+            size="small"
+            style={{ fontSize: 'xx-small' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO LIKES!', record);
+            }}
+          >
+            ADD TO LIKES
+          </Button>
+        </div>
+      ),
+      width: '10%',
     },
   ];
 
@@ -89,31 +130,6 @@ export default function ProductTable() {
     console.log('handleClickBasket');
     console.log('checkedProduct: ', checkedProduct);
     message.success('상품을 장바구니에 담았습니다.', 0.5);
-
-    // post 코드
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // };
-
-    // const body = JSON.stringify({
-    //   userId: 5,
-    //   date: '2020 - 02 - 03',
-    //   products: [
-    //     { productId: 5, quantity: 1 },
-    //     { productId: 1, quantity: 5 },
-    //   ],
-    // });
-
-    // axios
-    //   .post('https://fakestoreapi.com/carts', body, config)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   }, [basketApiUrl, checkedProduct]);
 
   const handleClickPurchase = useCallback(async () => {
@@ -153,21 +169,25 @@ export default function ProductTable() {
         columns={columns}
         dataSource={data}
         scroll={{ y: 720 }}
-        style={{
-          width: '1000px',
-        }}
+        onRow={(record, index) => ({
+          onClick: () => {
+            console.log(record, index, 'clicked!!');
+            dispatch(showModal(record.key));
+          },
+        })}
       />
       <TableFooter>
         <div>
           <Title>
-            총 {checkedProduct.length}개 상품 선택 &nbsp;&nbsp;&nbsp; &nbsp;총{' '}
-            {totalPrice.toFixed(2)}원
+            Subtotal ({checkedProduct.length}{' '}
+            {checkedProduct.length <= 1 ? 'item' : 'items'}): $
+            {totalPrice.toFixed(2)}
           </Title>
         </div>
         <ButtonGroup>
           <Link to="/recommend" style={{ float: 'left' }}>
             <Button type="primary" size="large">
-              다시 선택하기
+              Previous
             </Button>
           </Link>
           <Button
@@ -176,7 +196,7 @@ export default function ProductTable() {
               handleClickLikes();
             }}
           >
-            선택한 상품 찜하기
+            ADD TO LIKES
           </Button>
           <Button
             size="large"
@@ -184,7 +204,7 @@ export default function ProductTable() {
               handleClickBasket();
             }}
           >
-            선택한 상품 장바구니에 담기
+            ADD TO CART
           </Button>
           <Button
             type="primary"
@@ -194,7 +214,7 @@ export default function ProductTable() {
               history.push('/payment');
             }}
           >
-            선택한 상품 구매하기
+            ORDER NOW
           </Button>
         </ButtonGroup>
       </TableFooter>
@@ -217,12 +237,11 @@ const ProductListTable = styled(Table)`
 
   .ant-table-thead tr th {
     color: white;
-    background: #1890ff;
-    text-align: center;
+    background: #ff6f00;
   }
 
   .ant-table table {
-    text-align: center;
+    text-align: left;
   }
 
   .ant-table-tbody td {

@@ -4,10 +4,11 @@ import {
   setProductsReducer,
   selectProductReducer,
   likeProductReducer,
-  setModalReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,
+  setOrderDetailsReducer,
+  showModalReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -15,10 +16,11 @@ const rootReducer = combineReducers({
   setProductsReducer,
   selectProductReducer,
   likeProductReducer,
-  setModalReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,
+  setOrderDetailsReducer,
+  showModalReducer,
 });
 
 export default rootReducer;
