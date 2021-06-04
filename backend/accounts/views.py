@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 
 class UserDeleteView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def delete(self, request, format=None):
         user = request.user
         user.delete()
