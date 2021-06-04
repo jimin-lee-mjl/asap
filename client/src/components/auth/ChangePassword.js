@@ -9,12 +9,12 @@ export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [old, setOld] = useState('');
   const [password1, setPassword] = useState('');
   const [password2, setConfirmPasword] = useState('');
-  const [email, setEmail] = useState('');
 
-  const onEmailHandler = (e) => {
-    setEmail(e.currentTarget.value);
+  const onOldHandler = (e) => {
+    setOld(e.currentTarget.value);
   };
 
   const onPasswordHanlder = (e) => {
@@ -27,8 +27,8 @@ export default function Register() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(email, password1, password2);
-    dispatch(register({ email, password1, password2 }));
+    console.log(old, password1, password2);
+    dispatch(register({ old, password1, password2 }));
     history.push('/login');
   };
 
@@ -47,12 +47,12 @@ export default function Register() {
           />
 
           <FormControl>
-            <label>Email</label>
-            <input type="email" value={email} onChange={onEmailHandler} />
+            <label>Current Password</label>
+            <input type="password" value={old} onChange={onOldHandler} />
           </FormControl>
 
           <FormControl>
-            <label>Password</label>
+            <label>New Password</label>
             <input
               type="password"
               value={password1}
@@ -61,7 +61,7 @@ export default function Register() {
           </FormControl>
 
           <FormControl>
-            <label>Confirm Pasword</label>
+            <label>Confirm New Pasword</label>
             <input
               type="password"
               value={password2}
@@ -69,12 +69,8 @@ export default function Register() {
             />
           </FormControl>
 
-          <Button onClick={onSubmitHandler}>Create Account</Button>
+          <Button onClick={onSubmitHandler}>Change Password</Button>
         </Form>
-
-        <Link to="/login" style={{ color: '#fb8c00' }}>
-          Go back to Login
-        </Link>
       </Wrapper>
     </Container>
   );

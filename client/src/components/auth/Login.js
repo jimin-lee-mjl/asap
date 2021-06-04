@@ -9,16 +9,16 @@ export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [email, setEmail] = useState('');
+  const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleClick = () => {
     try {
-      dispatch(login(email, password));
+      dispatch(login(id, password));
       history.push('/');
     } catch (e) {
       alert('Failed to login');
-      setEmail('');
+      setId('');
       setPassword('');
     }
   };
@@ -35,11 +35,11 @@ export default function Login() {
             style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
           />
           <FormControl>
-            <label>Email</label>
+            <label>ID</label>
             <input
               type="test"
-              value={email}
-              onChange={({ target: { value } }) => setEmail(value)}
+              value={id}
+              onChange={({ target: { value } }) => setId(value)}
             />
           </FormControl>
 

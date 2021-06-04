@@ -4,12 +4,16 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import Home from './components/Home';
-import Recommend from './components/Recommend';
 import Result from './components/Result';
-import Login from './components/Login';
-import Register from './components/Register';
+import Recommend from './components/Recommend';
+import {
+  Register,
+  Login,
+  ChangePassword,
+  DeleteAccount,
+} from './components/Auth';
 import UserInfo from './components/UserInfo';
-import MyPage from './components/MyPage/';
+import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
 import Likes from './components/Likes';
@@ -28,6 +32,8 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/changepassword" component={ChangePassword} />
+        <Route path="/deleteaccount" component={DeleteAccount} />
         <AuthRoute
           authenticated={isAuthenticated}
           path="/mypage"
