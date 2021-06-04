@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Checkbox } from 'antd';
+import { Table } from 'antd';
 import HeaderComponent from '../Header';
 
 export default function Payment() {
@@ -18,13 +19,44 @@ export default function Payment() {
     console.log(`checked = ${e.target.checked}`);
   }
 
+  const columns = [
+    {
+      title: 'Item code',
+      dataIndex: 'asin',
+    },
+    {
+      title: 'Item Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Price',
+      className: 'column-price',
+      dataIndex: 'price',
+      align: 'right',
+    },
+  ];
+
+  const data = [
+    {
+      asin: '100045442',
+      title: 'blue hoody',
+      price: 20,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+  ];
+
   return (
     <>
-      {true ? (
+      {/* {true ? (
         <HeaderComponent type="logo" />
       ) : (
         <HeaderComponent type="logo guest" />
-      )}
+      )} */}
+      <HeaderComponent type="logo" />
       <Container>
         <DeliveryInfo>
           <h1>Delivery Info</h1>
@@ -77,8 +109,15 @@ export default function Payment() {
         <OrderInfo>
           <div>
             <h1>Your Order</h1>
+            <Table
+              columns={columns}
+              dataSource={data}
+              bordered
+              title={() => 'Header'}
+              footer={() => 'Footer'}
+            />
           </div>
-          <button>Pay with Paypal</button>
+          <Button>Pay with Paypal</Button>
         </OrderInfo>
       </Container>
     </>
@@ -127,5 +166,23 @@ const FormControl = styled.div`
     font-size: 1.8rem;
     padding: 1rem;
     margin-bottom: 1rem;
+  }
+`;
+
+const Button = styled.div`
+  background: black;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2.5;
+  font-size: 1.8rem;
+  border-radius: 0.5rem;
+  border: solid black 0.2rem;
+  margin-top: 1rem;
+
+  :hover {
+    color: black;
+    background: white;
   }
 `;
