@@ -8,7 +8,7 @@ import {
   likeProduct,
   showModal,
 } from '../../actions/productsActions';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 export default function ProductTable() {
   const history = useHistory();
