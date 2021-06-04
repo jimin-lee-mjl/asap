@@ -3,15 +3,15 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLikes } from '../../actions/productsActions';
+import { setLikes, showModal } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
 export default function CartList() {
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
-  const cartList = useSelector((state) => state.likesReducer.likesList);
+  const likesList = useSelector((state) => state.likesReducer.likesList);
+  const modal = useSelector((state) => state.showModalReducer.modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function CartList() {
 
   const columns = [
     {
-      title: '상품 이미지',
+      title: '',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
@@ -35,27 +35,62 @@ export default function CartList() {
       width: 100,
     },
     {
-      title: '상품명',
+      title: 'Description',
       dataIndex: 'name',
       width: 250,
     },
     {
-      title: '가격',
+      title: 'Price',
       dataIndex: 'price',
       width: 80,
     },
+    {
+      title: '',
+      dataIndex: 'action',
+      render: (text, record) => (
+        <div
+          style={{
+            fontSize: 'xx-small',
+            paddingRight: '10px',
+            display: 'inline-block',
+            textAlign: 'center',
+          }}
+        >
+          <Button
+            size="small"
+            style={{ fontSize: 'x-small', marginBottom: '10px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO CART!', record);
+            }}
+          >
+            ADD TO CART
+          </Button>
+          <Button
+            size="small"
+            style={{ fontSize: 'xx-small' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('DELETE!', record);
+            }}
+          >
+            DELETE
+          </Button>
+        </div>
+      ),
+      width: '10%',
+    },
   ];
+  const likesListTableData = [];
 
-  const CartListTableData = [];
-
-  Object.entries(cartList).map((cart) => {
-    const cartProduct = cart[1];
-    console.log('cartProduct', cartProduct);
-    CartListTableData.push({
-      key: cartProduct.id,
-      ImageURL: cartProduct.image,
-      name: cartProduct.title,
-      price: cartProduct.price,
+  Object.entries(likesList).map((likes) => {
+    const likesProduct = likes[1];
+    console.log('likesProduct', likesProduct);
+    likesListTableData.push({
+      key: likesProduct.id,
+      ImageURL: likesProduct.image,
+      name: likesProduct.title,
+      price: likesProduct.price,
     });
   });
 
@@ -79,47 +114,32 @@ export default function CartList() {
     // delete api 코드
   }, [likesApiUrl, checkedProduct]);
 
-  const handleClickLikes = useCallback(async () => {
-    console.log('handleClickLikes');
+  const handleClickCart = useCallback(async () => {
+    console.log('handleClickCart');
     console.log('checkedProduct: ', checkedProduct);
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('ADD TO CART', 0.5);
     // dispatch(selectProduct(checkedProduct));
   }, [likesApiUrl, checkedProduct]);
 
-  const CalTotalPrice = useEffect(() => {
-    var sumPrice = 0;
-    var price = 0;
-    var regex = /[^0-9]/g;
-
-    checkedProduct.map((product) => {
-      price = Number(product.price);
-      console.log(price);
-      sumPrice += price;
-      console.log(sumPrice);
-    });
-
-    setTotalPrice(sumPrice);
-  }, [checkedProduct, totalPrice]);
-
   return (
     <div>
-      <CartListTable
+      <LikesListTable
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={CartListTableData}
+        dataSource={likesListTableData}
         scroll={{ y: 720 }}
-        style={{
-          width: '1000px',
-        }}
+        onRow={(
+          record,
+
+          index,
+        ) => ({
+          onClick: () => {
+            console.log(record, index, 'clicked!!');
+            dispatch(showModal(record.key));
+          },
+        })}
       />
       <TableFooter>
-        <div>
-          <Title>
-            Subtotal ({checkedProduct.length}{' '}
-            {checkedProduct.length <= 1 ? 'item' : 'items'}): $
-            {totalPrice.toFixed(2)}
-          </Title>
-        </div>
         <ButtonGroup>
           <div style={{ float: 'left' }}>
             <Button
@@ -134,12 +154,12 @@ export default function CartList() {
           <Button
             size="large"
             onClick={() => {
-              handleClickLikes();
+              handleClickCart();
             }}
           >
             ADD TO CART
           </Button>
-          <Link to="/purchase">
+          <Link to="/order">
             <Button type="primary" size="large">
               ORDER NOW
             </Button>
@@ -150,7 +170,7 @@ export default function CartList() {
   );
 }
 
-const CartListTable = styled(Table)`
+const LikesListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
@@ -165,12 +185,11 @@ const CartListTable = styled(Table)`
 
   .ant-table-thead tr th {
     color: white;
-    background: #1890ff;
-    text-align: center;
+    background: #ff6f00;
   }
 
   .ant-table table {
-    text-align: center;
+    text-align: left;
   }
 
   .ant-table-tbody td {

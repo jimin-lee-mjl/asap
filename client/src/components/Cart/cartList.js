@@ -3,7 +3,7 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCart, likeProduct } from '../../actions/productsActions';
+import { setCart, likeProduct, showModal } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
 export default function CartList() {
@@ -12,6 +12,7 @@ export default function CartList() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartList = useSelector((state) => state.cartReducer.cartList);
+  const modal = useSelector((state) => state.showModalReducer.modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function CartList() {
 
   const columns = [
     {
-      title: '상품 이미지',
+      title: '',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
@@ -35,14 +36,50 @@ export default function CartList() {
       width: 100,
     },
     {
-      title: '상품명',
+      title: 'Description',
       dataIndex: 'name',
       width: 250,
     },
     {
-      title: '가격',
+      title: 'Price',
       dataIndex: 'price',
       width: 80,
+    },
+    {
+      title: '',
+      dataIndex: 'action',
+      render: (text, record) => (
+        <div
+          style={{
+            fontSize: 'xx-small',
+            paddingRight: '10px',
+            display: 'inline-block',
+            textAlign: 'center',
+          }}
+        >
+          <Button
+            size="small"
+            style={{ fontSize: 'x-small', marginBottom: '10px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO LIKES!', record);
+            }}
+          >
+            ADD TO LIKES
+          </Button>
+          <Button
+            size="small"
+            style={{ fontSize: 'xx-small' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('DELETE!', record);
+            }}
+          >
+            DELETE
+          </Button>
+        </div>
+      ),
+      width: '10%',
     },
   ];
 
@@ -109,9 +146,16 @@ export default function CartList() {
         columns={columns}
         dataSource={CartListTableData}
         scroll={{ y: 720 }}
-        style={{
-          width: '1000px',
-        }}
+        onRow={(
+          record,
+
+          index,
+        ) => ({
+          onClick: () => {
+            console.log(record, index, 'clicked!!');
+            dispatch(showModal(record.key));
+          },
+        })}
       />
       <TableFooter>
         <div>
@@ -166,7 +210,7 @@ const CartListTable = styled(Table)`
 
   .ant-table-thead tr th {
     color: white;
-    background: #1890ff;
+    background: #ff6f00;
     text-align: center;
   }
 
@@ -178,7 +222,6 @@ const CartListTable = styled(Table)`
     font-size: 20px;
   }
 `;
-
 const TableFooter = styled.div`
   text-align: right;
   margin: 20px;

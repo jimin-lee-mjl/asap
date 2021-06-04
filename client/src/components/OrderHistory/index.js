@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { setOrderDetails } from '../../actions/productsActions';
+import { setOrderDetails, showModal } from '../../actions/productsActions';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import ProductDetailModal from './productDetailModal';
 // import OrderInfo from './orderInfo';
 
 export default function OrderHistory() {
@@ -16,6 +17,8 @@ export default function OrderHistory() {
   const orderDetails = useSelector(
     (state) => state.setOrderDetailsReducer.orderDetails,
   );
+  const modal = useSelector((state) => state.showModalReducer.modal);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,7 +27,7 @@ export default function OrderHistory() {
 
   const columns = [
     {
-      title: '상품 이미지',
+      title: '',
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
@@ -36,14 +39,50 @@ export default function OrderHistory() {
       width: 100,
     },
     {
-      title: '상품명',
+      title: 'Description',
       dataIndex: 'name',
       width: 250,
     },
     {
-      title: '가격',
+      title: 'Price',
       dataIndex: 'price',
       width: 80,
+    },
+    {
+      title: '',
+      dataIndex: 'action',
+      render: (text, record) => (
+        <div
+          style={{
+            fontSize: 'xx-small',
+            paddingRight: '10px',
+            display: 'inline-block',
+            textAlign: 'center',
+          }}
+        >
+          <Button
+            size="small"
+            style={{ fontSize: 'x-small', marginBottom: '10px' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO CART!', record);
+            }}
+          >
+            ADD TO CART
+          </Button>
+          <Button
+            size="small"
+            style={{ fontSize: 'xx-small' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log('ADD TO LIKES!', record);
+            }}
+          >
+            ADD TO LIKES
+          </Button>
+        </div>
+      ),
+      width: '10%',
     },
   ];
 
@@ -85,13 +124,10 @@ export default function OrderHistory() {
           columns={columns}
           dataSource={orderedItemsTableData}
           scroll={{ y: 400 }}
-          onRow={(
-            record,
-
-            index,
-          ) => ({
+          onRow={(record, index) => ({
             onClick: () => {
               console.log(record, index, 'clicked!!');
+              dispatch(showModal(record.key));
             },
           })}
         />
@@ -116,6 +152,7 @@ export default function OrderHistory() {
           </InfoContentDiv>
         </DeliveryInfo>
       </DeliveryInfoContainer>
+      <ProductDetailModal />
     </Container>
   );
 }
@@ -127,6 +164,7 @@ const Container = styled.div`
   align-items: center;
   width: 60vw;
   margin: auto;
+  margin-top: 100px;
 `;
 
 const CartListTable = styled(Table)`
@@ -144,7 +182,7 @@ const CartListTable = styled(Table)`
 
   .ant-table-thead tr th {
     color: white;
-    background: #1890ff;
+    background: #ff6f00;
     text-align: center;
   }
 

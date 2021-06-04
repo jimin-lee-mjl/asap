@@ -9,7 +9,6 @@ import {
   controlModal,
   showModal,
 } from '../../actions/productsActions';
-import ProductDetail from './productDetail';
 
 export default function ProductCard({ categoryKey }) {
   const products = useSelector((state) => state.setProductsReducer.products);

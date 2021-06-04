@@ -3,7 +3,7 @@ import { Card, Typography, Col, Row } from 'antd';
 import ProductCardGroups from './productCardGroups';
 import ChoiceSummary from './choiceSummary';
 import Navigator from './navigator';
-import ProductDetail from './productDetail';
+import ProductDetailModal from './productDetailModal';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
@@ -21,7 +21,7 @@ export default function Recommend() {
       </Header>
       <Body>
         <ProductCardGroups />
-        <ProductDetail />
+        <ProductDetailModal />
         <ChoiceSummary />
       </Body>
       <Navigator />

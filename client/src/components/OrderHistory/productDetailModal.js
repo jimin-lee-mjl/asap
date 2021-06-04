@@ -17,7 +17,7 @@ import {
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
-export default function ProductDetail({ productInfo }) {
+export default function ProductDetailModal({ productInfo }) {
   const { Title } = Typography;
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
@@ -52,7 +52,7 @@ export default function ProductDetail({ productInfo }) {
 
   return (
     <DetailModal
-      title="상품 상세"
+      title="Details"
       centered
       visible={modal.key > 0}
       onCancel={() => dispatch(showModal(0))}
@@ -66,14 +66,14 @@ export default function ProductDetail({ productInfo }) {
           onClick={handleClickCheck}
           style={{ marginLeft: 30 }}
         >
-          이 상품 선택하기
+          ADD TO CART
         </Button>,
         <PushpinButton
           type="primary"
           productId={modal.data.id}
           onClick={handleClickPushpin}
         >
-          찜하기
+          ADD TO LIKES
         </PushpinButton>,
       ]}
     >
