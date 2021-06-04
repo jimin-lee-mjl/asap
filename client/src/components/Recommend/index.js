@@ -13,11 +13,9 @@ export default function Recommend() {
   return (
     <Container>
       <Header>
-        <Title>
-          These are recommended products within the budget of 100 dollars,
-          <br></br>
-          Reflecting your information and preference keywords.
-        </Title>
+        <p>
+          These are recommended items based on your information and keywords.
+        </p>
       </Header>
       <Body>
         <ProductCardGroups />
@@ -32,14 +30,16 @@ export default function Recommend() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 30px;
+  align-items: center;
+  width: 60vw;
+  margin: auto;
+  margin-top: 100px;
 `;
 
 const Header = styled.div`
-  margin: 50px;
+  align-self: start;
+  font-size: 2rem;
 `;
 
 const Body = styled.div`
