@@ -57,12 +57,14 @@ export const login = (username, password) => (dispatch) => {
   };
 
   // Request Body
-  const body = JSON.stringify({ username, password });
-  console.log(body);
+  const body = { username, password };
 
   axios
-    // .post('http://127.0.0.1:56537/rest-auth/login/', body, config)
-    .post('https://fakestoreapi.com/auth/login', body, config)
+    .post(
+      'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/login/',
+      body,
+      config,
+    )
     .then((res) => {
       console.log('OK');
       console.log(res.data);
@@ -81,31 +83,34 @@ export const login = (username, password) => (dispatch) => {
 
 // Register User
 export const register =
-  ({ username, email, password1, password2 }) =>
+  ({ id, email, password1, password2 }) =>
   (dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken, // 헤더에 csrf토큰 넣어서 같이 보내줌
+        'X-CSRFToken': csrftoken,
       },
     };
 
     // Request Body
-    const body = JSON.stringify({ username, email, password1, password2 });
-    console.log('!!!', username, email, password1, password2);
+    const body = JSON.stringify({ username: id, email, password1, password2 });
     console.log(body);
 
     axios
-      .post('http://127.0.0.1:56537/rest-auth/registration/', body, config)
+      .post(
+        'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/registration/',
+        body,
+        config,
+      )
       .then((res) => {
+        console.log(res);
         dispatch({
           type: REGISTER_SUCCESS,
           payload: res.data,
         });
       })
       .catch((err) => {
-        console.log(err);
-        dispatch({ type: REGISTER_FAIL });
+        console.log(err.response);
       });
   };
 
