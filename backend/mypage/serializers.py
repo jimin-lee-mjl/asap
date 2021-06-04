@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from recommend.models import Item
 from accounts.models import User
@@ -37,8 +36,9 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class NewOrderSerializer(serializers.Serializer):
-    items = serializers.ListField(
-        child=serializers.CharField(max_length=50)
-    )
-    price = serializers.FloatField()
+class NewOrderSerializer(serializers.ModelSerializer):
+    is_saving_address = serializers.BooleanField()
+
+    class Meta:
+        model = OrderDetail
+        exclude = ['user_id', 'ordered_at']

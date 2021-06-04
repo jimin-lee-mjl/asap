@@ -159,6 +159,6 @@ class TestOrderDetailListView(APITestCase):
         self.order.items.add(self.item)
 
     def test_get_order_detail(self):
-        url = reverse('mypage:order_history', kwargs={'user_id': 6})
+        url = reverse('mypage:order_detail', kwargs={'order_id': 1})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
