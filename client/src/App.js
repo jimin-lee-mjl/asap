@@ -12,7 +12,7 @@ import {
   ChangePassword,
   DeleteAccount,
 } from './components/Auth';
-import UserInfo from './components/UserInfo';
+import UserSelect from './components/UserSelect';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import AuthRoute from './components/AuthRoute';
@@ -31,14 +31,22 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <Route path="/changepassword" component={ChangePassword} />
-        <Route path="/deleteaccount" component={DeleteAccount} />
+        <AuthRoute
+          authenticated={isAuthenticated}
+          path="/changepassword"
+          component={ChangePassword}
+        />
+        <AuthRoute
+          authenticated={isAuthenticated}
+          path="/deleteaccount"
+          component={DeleteAccount}
+        />
         <AuthRoute
           authenticated={isAuthenticated}
           path="/mypage"
           render={(props) => <MyPage user={user} {...props} />}
         />
-        <Route path="/info" component={UserInfo} />
+        <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
         <Route path="/likes" component={Likes} />
