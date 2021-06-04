@@ -20,7 +20,6 @@ function getCookie(name) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
       if (cookie.substring(0, name.length + 1) === name + '=') {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
@@ -31,6 +30,16 @@ function getCookie(name) {
 }
 
 const csrftoken = getCookie('csrftoken');
+
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': csrftoken,
+  },
+};
+
+const baseUrl =
+  'http://elice-kdt-ai-track-vm-da-02.koreacentral.cloudapp.azure.com:5000';
 
 // CHECK TOKEN & LOAD USER
 export const loadUser = () => (dispatch, getState) => {
@@ -47,24 +56,12 @@ export const loadUser = () => (dispatch, getState) => {
     .catch((err) => console.log(err));
 };
 
-// LOGIN USER
+// LOGIN
 export const login = (username, password) => (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken,
-    },
-  };
-
-  // Request Body
   const body = { username, password };
 
   axios
-    .post(
-      'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/login/',
-      body,
-      config,
-    )
+    .post(baseUrl + '/rest-auth/login/', body, config)
     .then((res) => {
       console.log('OK');
       console.log(res.data);
@@ -81,10 +78,9 @@ export const login = (username, password) => (dispatch) => {
     });
 };
 
-// Register User
+// REGIESTER
 export const register =
-  ({ id, email, password1, password2 }) =>
-  (dispatch) => {
+  (username, email, password1, password2) => (dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -92,16 +88,10 @@ export const register =
       },
     };
 
-    // Request Body
-    const body = JSON.stringify({ username: id, email, password1, password2 });
-    console.log(body);
+    const body = { username, email, password1, password2 };
 
     axios
-      .post(
-        'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/registration/',
-        body,
-        config,
-      )
+      .post(baseUrl + '/rest-auth/registration/', body, config)
       .then((res) => {
         console.log(res);
         dispatch({
@@ -111,18 +101,20 @@ export const register =
       })
       .catch((err) => {
         console.log(err.response);
+        dispatch({ type: REGISTER_FAIL });
       });
   };
 
-// LOGOUT USER
+// LOGOUT
 export const logout = () => (dispatch, getState) => {
-  // axios
-  //   .post('/rest-auth/logout', null, tokenConfig(getState))
-  //   .then((res) => {
-  dispatch({ type: CLEAR_USER });
-  dispatch({ type: LOGOUT_SUCCESS });
-  // })
-  // .catch((err) => console.log(err));
+  axios
+    .post(baseUrl + '/rest-auth/logout/', null, tokenConfig(getState))
+    .then((res) => {
+      console.log(res);
+      dispatch({ type: CLEAR_USER });
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch((err) => console.log(err));
 };
 
 // Setup config with token - helper function
