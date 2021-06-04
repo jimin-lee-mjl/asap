@@ -9,26 +9,8 @@ export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [password1, setPassword] = useState('');
-  const [password2, setConfirmPasword] = useState('');
-  const [email, setEmail] = useState('');
-
-  const onEmailHandler = (e) => {
-    setEmail(e.currentTarget.value);
-  };
-
-  const onPasswordHanlder = (e) => {
-    setPassword(e.currentTarget.value);
-  };
-
-  const onConfirmPasswordHandler = (e) => {
-    setConfirmPasword(e.currentTarget.value);
-  };
-
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(email, password1, password2);
-    dispatch(register({ email, password1, password2 }));
     history.push('/login');
   };
 
@@ -37,10 +19,12 @@ export default function Register() {
       <Header />
       <Wrapper>
         <Form onSubmit={onSubmitHandler}>
-          <img
+          <Logo
             src="logo-circle.png"
             alt="logo"
-            style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
+            onClick={() => {
+              history.push('/');
+            }}
           />
           <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
             Are you sure delete your account?
@@ -58,9 +42,9 @@ export default function Register() {
           </div>
         </Form>
 
-        {/* <Link to="/login" style={{ color: '#fb8c00' }}>
-          Go back to Login
-        </Link> */}
+        <Link to="/login" style={{ color: '#fb8c00' }}>
+          Back to My Page
+        </Link>
       </Wrapper>
     </Container>
   );
@@ -72,6 +56,17 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 90vh;
+`;
+
+const Logo = styled.img`
+  width: 15rem;
+  height: 15rem;
+  margin: 3rem auto;
+  cursor: pointer;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
 `;
 
 const Wrapper = styled.div`
@@ -90,28 +85,6 @@ const Form = styled.form`
   flex-direction: column;
   padding: 3rem 4rem;
   text-align: left;
-`;
-
-const FormControl = styled.div`
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  position: relative;
-
-  label {
-    color: #33032d;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-
-  input {
-    border-radius: 0.5rem;
-    min-height: 2.618em;
-    border: gray solid 0.2rem;
-    display: block;
-    width: 100%;
-    font-size: 14px;
-    padding: 7px;
-  }
 `;
 
 const Button = styled.div`

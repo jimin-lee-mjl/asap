@@ -25,14 +25,16 @@ export default function Login() {
 
   return (
     <Container>
-      <Header />
+      <Header type="guest" />
       <Wrapper>
         <Form>
           {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>Login</h1> */}
-          <img
+          <Logo
             src="logo-circle.png"
             alt="logo"
-            style={{ width: '15rem', height: '15rem', margin: '3rem auto' }}
+            onClick={() => {
+              history.push('/');
+            }}
           />
           <FormControl>
             <label>ID</label>
@@ -71,6 +73,17 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 90vh;
+`;
+
+const Logo = styled.img`
+  width: 15rem;
+  height: 15rem;
+  margin: 3rem auto;
+  cursor: pointer;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
 `;
 
 const Wrapper = styled.div`

@@ -62,7 +62,12 @@ class SuccessCode(Enum):
         )
     )
     success_201 = (
-        None,
+        openapi.Response(
+            description=SuccessResponse.delivery_info_created.SUCCESS_MSG,
+            examples={
+                'application/json': SuccessResponseExample.update_delivery_info.EXAMPLE
+            }
+        ),
         openapi.Response(
             description=SuccessResponse.item_added.SUCCESS_MSG,
             examples={
@@ -84,9 +89,9 @@ class SuccessCode(Enum):
     )
     success_204 = (
         openapi.Response(
-            description=SuccessResponse.profile_updated.SUCCESS_MSG,
+            description=SuccessResponse.delivery_info_updated.SUCCESS_MSG,
             examples={
-                'application/json': SuccessResponseExample.update_profile.EXAMPLE
+                'application/json': SuccessResponseExample.update_delivery_info.EXAMPLE
             }
         ),
         openapi.Response(
@@ -118,7 +123,14 @@ class Swagger(Enum):
             '404': ErrorCode.error_404.RESPONSE
         }
     )
-    update_user_profile_response = (
+    create_delivery_info_response = (
+        {
+            '201': SuccessCode.success_201.USER_RESPONSE,
+            '400':ErrorCode.error_400.RESPONSE,
+            '404': ErrorCode.error_404.RESPONSE
+        }
+    )
+    update_delivery_info_response = (
         {
             '204': SuccessCode.success_204.USER_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
