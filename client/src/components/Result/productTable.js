@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 export default function ProductTable() {
   const { Title } = Typography;
-  const [checkedProduct, setSelectedProduct] = useState([]);
+  const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
 
@@ -62,7 +62,7 @@ export default function ProductTable() {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRows);
-      setSelectedProduct(selectedRows);
+      setCheckedProduct(selectedRows);
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
         'selectedRows: ',

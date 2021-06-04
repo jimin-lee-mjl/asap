@@ -14,7 +14,6 @@ import {
 // 1. dispatch 액션을 디스패치할 수 있고
 // 2. getState를 사용하여 현재 상태를 조회할 수 있다.
 
-// django 공식문서에 있는 쿠키 관련 코드 그대로 가져옴!
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -31,7 +30,7 @@ function getCookie(name) {
   return cookieValue;
 }
 
-const csrftoken = getCookie('csrftoken'); // django에 csrf 토큰 보내야함, 안보내면 오류 발생할 수 있음
+const csrftoken = getCookie('csrftoken');
 
 // CHECK TOKEN & LOAD USER
 export const loadUser = () => (dispatch, getState) => {
@@ -53,7 +52,7 @@ export const login = (username, password) => (dispatch) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken, // 헤더에 csrf토큰 넣어서 같이 보내줌
+      'X-CSRFToken': csrftoken,
     },
   };
 
