@@ -9,8 +9,8 @@ const Home = () => {
 
   return (
     <Container>
-      <Header />
-      <img src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
+      {isAuthenticated ? <Header /> : <Header type="guest" />}
+      <Logo src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
       <div
         style={{
           display: 'flex',
@@ -20,11 +20,11 @@ const Home = () => {
         }}
       >
         {isAuthenticated ? (
-          <Button to="/info">Start</Button>
+          <Button to="/select">Start</Button>
         ) : (
           <>
             <Button to="/login">Login</Button>
-            <Button to="/info">Guest</Button>
+            <Button to="/select">Guest</Button>
           </>
         )}
       </div>
@@ -35,7 +35,7 @@ const Home = () => {
 export default Home;
 
 const Container = styled.div`
-  width: 80vw;
+  width: 75vw;
   height: 100%;
   margin: auto;
   display: flex;
@@ -45,8 +45,16 @@ const Container = styled.div`
   background: url('calhartt.png') center;
 `;
 
+const Logo = styled.img`
+  z-index: 2;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
+  }
+`;
+
 const Button = styled(Link)`
-  background: #fb8c00;
+  background: #ff6f00;
   width: 12rem;
   height: 5rem;
   border-radius: 0.5rem;
@@ -60,7 +68,7 @@ const Button = styled(Link)`
   margin: 5px 0;
 
   :hover {
-    color: #fb8c00;
-    background: white;
+    color: white;
+    box-shadow: 2px 4px 8px #ffb300;
   }
 `;

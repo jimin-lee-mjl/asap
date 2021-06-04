@@ -14,13 +14,23 @@ class CustomUserAdmin(admin.ModelAdmin):
                     "is_superuser",
                     "email",
                     "password",
-                    "address",
                     "keywords",
                     "like_items",
                     "cart_items",
                 )
             },
         ),
+        (
+            "Delivery Info",
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "address",
+                    "postal_code",
+                )
+            },
+        )
     )
 
     list_display = (

@@ -10,14 +10,21 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'address', 'keywords',
-                  'like_items', 'cart_items', 'order_history']
+        fields = ['email', 'password', 'first_name', 'last_name',
+                  'address', 'postal_code', 'keywords', 'like_items', 
+                  'cart_items', 'order_history']
+
+
+class DeliveryInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'address', 'postal_code']
 
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['asin']
+        fields = ['asin', 'title', 'price']
         extra_kwargs = {
             'asin': {'validators': []},
         }
@@ -27,3 +34,11 @@ class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
         fields = '__all__'
+
+
+class NewOrderSerializer(serializers.ModelSerializer):
+    is_saving_address = serializers.BooleanField()
+
+    class Meta:
+        model = OrderDetail
+        exclude = ['user_id', 'ordered_at']

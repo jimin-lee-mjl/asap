@@ -1,12 +1,10 @@
 import { ProductActionTypes } from './types';
 import axios from 'axios';
-import ProductCardGroups from '../components/Recommend/productCardGroups';
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
-      const modalData = {};
       const productData = {
         outer: [],
         top: [],
@@ -16,7 +14,6 @@ export const setProducts = () => (dispatch, getstate) => {
 
       console.log(res.data);
       res.data.map((data) => {
-        modalData[data.id] = false;
         if (data.category == "women's clothing") {
           productData.outer.push(data);
         } else if (data.category == "men's clothing") {
@@ -27,7 +24,6 @@ export const setProducts = () => (dispatch, getstate) => {
       });
 
       console.log(productData);
-      console.log(modalData);
 
       Object.entries(productData).map(([category, productList]) => {
         console.log(category, productList);
@@ -42,7 +38,6 @@ export const setProducts = () => (dispatch, getstate) => {
         type: ProductActionTypes.SET_PRODUCTS,
         payload: productData,
       });
-      dispatch({ type: ProductActionTypes.SET_MODAL, payload: modalData });
       dispatch({
         type: ProductActionTypes.SET_CATEGORY,
         payload: [...categoryData],
@@ -147,16 +142,133 @@ export const likeProduct = (likeProductId) => (dispatch, getstate) => {
   });
 };
 
-export const controlModal = (productId, type) => (dispatch, getstate) => {
-  console.log('controlModal!!!!');
-  const currentModalState = getstate().setModalReducer.modals;
-  console.log('currentModalState:', currentModalState);
-  currentModalState[productId] = type;
-  var newModalState = { ...currentModalState };
-  console.log('newModalState:', newModalState);
+export const showModal = (productId) => (dispatch, getstate) => {
+  if (productId === 0) {
+    const resetModalState = {
+      key: '',
+      data: {},
+    };
+    dispatch({
+      type: ProductActionTypes.RESET_MODAL,
+      payload: resetModalState,
+    });
+  } else {
+    axios
+      .get(`https://fakestoreapi.com/products/${productId}`)
+      .then((res) => {
+        console.log(res.data);
+        const newModalState = {
+          key: productId,
+          data: res.data,
+        };
+        dispatch({
+          type: ProductActionTypes.SHOW_MODAL,
+          payload: newModalState,
+        });
+      })
+      .catch((err) => {
+        console.log('Err: ', err);
+      });
+  }
+};
 
-  dispatch({
-    type: ProductActionTypes.CONTROL_MODAL,
-    payload: newModalState,
-  });
+// cart
+export const setCart = () => (dispatch, getstate) => {
+  // 이 부분 url 을 user_id/cart 이런 식으로 바뀌어야 함.
+  // input: user_id
+  // output: 장바구니 데이터 {asin, imageURL, title, quantity, price}
+  console.log(getstate());
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_CART,
+        payload: res.data,
+      });
+      console.log(getstate());
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
+};
+
+//likes
+export const setLikes = () => (dispatch, getstate) => {
+  // 이 부분 url 을 user_id/Likes 이런 식으로 바뀌어야 함.
+  // input: user_id
+  // output: 찜 데이터 {asin, imageURL, title, quantity, price}
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_LIKES,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
+};
+
+//orderhistory
+export const setOrderDetails = (orderId) => (dispatch, getstate) => {
+  //fake api
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+      dispatch({
+        type: ProductActionTypes.SET_ORDER_DETAILS,
+        payload: res.data,
+      });
+      console.log(getstate());
+    })
+    .catch((err) => {
+      console.log('Err: ', err);
+    });
+
+  // api
+  // const sampleData = {
+  //   order_history_details: [
+  //     {
+  //       id: 3,
+  //       ordered_at: '2021-05-31T10:15:48.321923Z',
+  //       total_price: 50,
+  //       user_id: 2,
+  //       items: ['40599922', 'B0023446'],
+  //     },
+  //     {
+  //       id: 4,
+  //       ordered_at: '2021-05-31T10:21:17.013279Z',
+  //       total_price: 20,
+  //       user_id: 2,
+  //       items: ['100045442'],
+  //     },
+  //   ],
+  // };
+
+  // const orderDetailsApiUrl = '/api/user/<int:user_id>/order';
+
+  // axios
+  //   .get('https://fakestoreapi.com/products')
+  //   .then((res) => {
+  //     console.log(res.data);
+  //     const orderDetails = sampleData.order_history_details.find(
+  //       (order) => order.id === Number(orderId),
+  //     );
+  //     console.log(orderDetails);
+  //     dispatch({
+  //       type: ProductActionTypes.SET_ORDER_DETAILS,
+  //       payload: orderDetails,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('Err: ', err);
+  //   });
 };
