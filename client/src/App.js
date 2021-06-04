@@ -19,6 +19,7 @@ import AuthRoute from './components/AuthRoute';
 import Likes from './components/Likes';
 import Cart from './components/Cart';
 import Order from './components/Order';
+import Payment from './components/Payment';
 
 export default function App() {
   const [user, setUser] = useState(null); // 로그인 된 사용자 정보
@@ -52,6 +53,7 @@ export default function App() {
         <Route path="/likes" component={Likes} />
         <Route path="/cart" component={Cart} />
         <Route path="/order" component={Order} />
+        <Route path="/payment" component={Payment} />
         <Route component={NotFound} />
       </Switch>
     </Router>
