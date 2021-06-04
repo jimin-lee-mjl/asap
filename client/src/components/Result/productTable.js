@@ -11,6 +11,8 @@ import {
 import { Link } from 'react-router-dom';
 
 export default function ProductTable() {
+  const history = useHistory();
+
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -209,6 +211,7 @@ export default function ProductTable() {
             size="large"
             onClick={() => {
               handleClickPurchase();
+              history.push('/payment');
             }}
           >
             ORDER NOW

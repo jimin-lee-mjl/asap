@@ -70,8 +70,9 @@ class SuccessResponseExample(Enum):
             'like_items': ['1940280001', '8279996567'],
             'cart_items': ['B00005OTJ8', 'B000072X6P'],
             'order_history': [
-                '2021-05-31 10:15:48.321923+00:00, 30.00',
-                '2021-05-31 10:21:17.013279+00:00, 20.00'
+                'order_id, order_datetime, total_price',
+                '1, 2021-05-31 10:15:48.321923+00:00, 30.00',
+                '2, 2021-05-31 10:21:17.013279+00:00, 20.00'
             ]
         }
     )
@@ -127,40 +128,57 @@ class SuccessResponseExample(Enum):
     )
     list_order_detail = (
         {
-            "order_history_details": [
+            "order_detail": {
+                "id": 3,
+                "ordered_at": "2021-05-31T10:15:48.321923Z",
+                "total_price": 50.0,
+                "user_id": 2,
+                "items": [
+                    "40599922",
+                    "B0023446"
+                ],
+                "first_name": "Jimin",
+                "last_name": "Lee",
+                "address": "Tamatea, Napier",
+                "email": "jimin@elicce.io",
+                "postal_code": "04577"
+            },
+            "item_info": [
                 {
-                    "id": 3,
-                    "ordered_at": "2021-05-31T10:15:48.321923Z",
-                    "total_price": 50.0,
-                    "user_id": 2,
-                    "items": [
-                        "40599922",
-                        "B0023446"
-                    ]
+                    "asin": "B0023446",
+                    "title": "blue hoody",
+                    "price": 20.0
                 },
                 {
-                    "id": 4,
-                    "ordered_at": "2021-05-31T10:21:17.013279Z",
-                    "total_price": 20.0,
-                    "user_id": 2,
-                    "items": [
-                        "100045442"
-                    ]
+                    "asin": "40599922",
+                    "title": "gray jogger",
+                    "price": 30.0
                 }
             ]
         }
     )
     post_new_order = (
         {
-            'new_order_details': {
-                "id": 5,
-                "ordered_at": "2021-05-31T21:42:06.390138Z",
-                "total_price": 50.0,
+            "new_order": {
+                "id": 7,
+                "ordered_at": "2021-06-01T09:43:52.203983Z",
+                "total_price": 80.0,
+                "first_name": "Lilly",
+                "last_name": "Jordan",
+                "email": "lill@gmail.com",
+                "address": "Napier, NZ",
+                "postal_code": "1123",
                 "user_id": 2,
                 "items": [
                     "100045442",
-                    "B00123"
+                    "40599922"
                 ]
+            },
+            "delivery_info": {
+                "first_name": "Lilly",
+                "last_name": "Jordan",
+                "address": "Napier, NZ",
+                "postal_code": "1123"
             }
         }
     )
