@@ -20,11 +20,11 @@ const Home = () => {
         }}
       >
         {isAuthenticated ? (
-          <Button to="/info">Start</Button>
+          <Button to="/select">Start</Button>
         ) : (
           <>
             <Button to="/login">Login</Button>
-            <Button to="/info">Guest</Button>
+            <Button to="/select">Guest</Button>
           </>
         )}
       </div>
