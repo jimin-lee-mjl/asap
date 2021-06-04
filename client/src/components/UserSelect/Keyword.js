@@ -1,41 +1,78 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Checkbox } from 'antd';
+import styled from 'styled-components';
 
-const tagsData = [
-  'Modvies',
-  'Bodoks',
-  'Mussic',
-  'Spdorts',
-  'Movies',
-  'Modvies',
-  'Bodoks',
-];
+function onChange(checkedValues) {
+  console.log('checked = ', checkedValues);
+}
 
-export default function Keyword() {
-  const [selectedTags, setSelectedTags] = React.useState([]);
-
+export default function Category() {
+  const categories = [
+    'Outer',
+    'Top',
+    'Bottom',
+    'Set',
+    'Sports Wear',
+    'Underwear',
+    'Shoes',
+    'Bag',
+    'Accessories',
+    'Outer',
+    'Top',
+    'Bottom',
+    'Set',
+    'Sports Wear',
+    'Underwear',
+    'Shoes',
+    'Bag',
+    'Accessories',
+    'Outer',
+    'Top',
+    'Bottom',
+    'Set',
+    'Sports Wear',
+    'Underwear',
+    'Shoes',
+    'Bag',
+    'Accessories',
+  ];
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontFamily: 'Noto Sans KR',
-      }}
-    >
-      <h1>원하는 키워드를 선택해주세요</h1>
-      <div style={{ display: 'flex' }}>
-        {tagsData.map((tag) => (
-          <Button
-            key={tag}
-            checked={selectedTags.indexOf(tag) > -1}
-            onChange={(checked) => setSelectedTags(tag, checked)}
-          >
-            {tag}
-          </Button>
-        ))}
+    <>
+      <h1>Choose keywords!</h1>
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+        }}
+      >
+        <Checkboxes
+          options={categories}
+          defaultValue={[]}
+          onChange={onChange}
+        />
       </div>
-    </div>
+    </>
   );
 }
+
+const Checkboxes = styled(Checkbox.Group)`
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  .ant-checkbox-wrapper {
+    font-size: 1.5rem;
+    margin: 1rem;
+    padding: 0.5rem;
+    width: 15%;
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-checked::after {
+    border: 1px solid #ff6f00;
+  }
+`;

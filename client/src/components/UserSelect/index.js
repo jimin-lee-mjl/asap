@@ -49,7 +49,7 @@ function UserInfo() {
         <HeaderComponent type="logo guest" />
       )}
       <Wrapper>
-        <MySteps current={current} style={{ marginBottom: '50px' }}>
+        <MySteps current={current} style={{ marginBottom: '3rem' }}>
           {steps.map((item) => (
             <Step key={item.title} title={item.title} />
           ))}
@@ -59,7 +59,7 @@ function UserInfo() {
           className="steps-content"
           style={{
             width: '100%',
-            height: '100%',
+            height: '70vh',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
@@ -69,7 +69,8 @@ function UserInfo() {
         >
           {steps[current].content}
         </div>
-        <div className="steps-action">
+
+        <div className="steps-action" style={{ marginTop: '3rem' }}>
           {current < steps.length - 1 && (
             <Button onClick={() => next()}>Next</Button>
           )}
@@ -77,9 +78,9 @@ function UserInfo() {
             <Button onClick={() => history.push('/recommend')}>Done</Button>
           )}
           {current > 0 && (
-            <Button style={{ margin: 'auto' }} onClick={() => prev()}>
+            <OutLinedButton style={{ margin: 'auto' }} onClick={() => prev()}>
               Previous
-            </Button>
+            </OutLinedButton>
           )}
         </div>
       </Wrapper>
@@ -103,7 +104,7 @@ const Wrapper = styled.div`
   width: 40%;
   height: calc(100% - 25rem);
   margin: 20rem auto 5rem auto;
-  padding: 8rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,9 +114,9 @@ const Wrapper = styled.div`
 
 const Button = styled.button`
   background: #ff6f00;
-  width: 10rem;
+  width: 8rem;
   height: 4rem;
-  border: none;
+  border: 0.1rem solid #ff6f00;
   border-radius: 0.5rem;
   font-size: 1.7rem;
   color: white;
@@ -127,9 +128,13 @@ const Button = styled.button`
   margin: 5px 0;
 
   :hover {
-    color: white;
-    box-shadow: 2px 4px 8px #ffb300;
+    box-shadow: 2px 4px 8px #c4c4c4;
   }
+`;
+
+const OutLinedButton = styled(Button)`
+  background: #fff;
+  color: #ff6f00;
 `;
 
 const MySteps = styled(Steps)`
