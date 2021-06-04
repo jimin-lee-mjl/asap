@@ -47,6 +47,41 @@ export default function Payment() {
       title: 'gray jogger',
       price: 30,
     },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
+    {
+      asin: '40599922',
+      title: 'gray jogger',
+      price: 30,
+    },
   ];
 
   return (
@@ -103,9 +138,9 @@ export default function Payment() {
               ></input>
             </FormControl>
           </form>
-          <Checkbox onChange={onChange}>
-            <h2>Save this Delivery Info</h2>
-          </Checkbox>
+          <Check onChange={onChange}>
+            <h3>Save this Delivery Info</h3>
+          </Check>
         </DeliveryInfo>
         <OrderInfo>
           <div>
@@ -117,6 +152,7 @@ export default function Payment() {
               bordered
               footer={() => 'Total : $1000'}
               pagination={false}
+              scroll={{ y: 200 }}
             />
           </div>
           <br />
@@ -136,15 +172,11 @@ const Container = styled.div`
 `;
 
 const DeliveryInfo = styled.div`
-  /* border: solid 0.1rem #ff6f00;
-  border-radius: 0.8rem; */
   padding: 5rem;
   width: 35vw;
 `;
 
 const OrderInfo = styled.div`
-  /* border: solid 0.1rem #ff6f00;
-  border-radius: 0.8rem; */
   padding: 10rem 2rem;
   width: 35vw;
   display: flex;
@@ -191,5 +223,23 @@ const Button = styled.div`
   :hover {
     color: black;
     background: white;
+  }
+`;
+
+const Check = styled(Checkbox)`
+  .ant-checkbox-wrapper {
+    font-size: 2rem;
+    margin: 2rem;
+    padding: 1rem;
+    width: 25%;
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-checked::after {
+    border: 1px solid #ff6f00;
   }
 `;
