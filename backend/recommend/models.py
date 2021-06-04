@@ -22,7 +22,7 @@ class Item(models.Model):
         ('etc', 'etc'),
         ('shoes', 'shoes'),
         ('bag', 'bag'),
-        ('accessaries', 'accessaries')
+        ('accessories', 'accessories')
     )
     category = models.CharField(max_length=15, choices=CATEGORIES)
     keywords = models.ManyToManyField(Keyword, related_name='items')
