@@ -4,9 +4,11 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectProduct, likeProduct } from '../../actions/productsActions';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function ProductTable() {
+  const history = useHistory();
+
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -189,6 +191,7 @@ export default function ProductTable() {
             size="large"
             onClick={() => {
               handleClickPurchase();
+              history.push('/payment');
             }}
           >
             선택한 상품 구매하기
