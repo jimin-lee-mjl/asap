@@ -15,6 +15,9 @@ export default function ProductCard({ categoryKey }) {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
+  const selectedProductIdList = useSelector(
+    (state) => state.selectProductReducer.selectedProductId,
+  );
   const likeProducts = useSelector(
     (state) => state.likeProductReducer.likeProducts,
   );
@@ -22,10 +25,12 @@ export default function ProductCard({ categoryKey }) {
 
   const handleClickCheck = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
+    console.log(e.currentTarget.getAttribute('isSelected'));
+    console.log(selectedProductIdList);
     const selectedProductId = e.currentTarget.getAttribute('productId');
     dispatch(selectProduct(selectedProductId));
     message.success('상품이 선택되었습니다.', 0.5);
+    console.log(selectedProductIdList);
   };
 
   const handleClickPushpin = (e) => {
@@ -43,14 +48,21 @@ export default function ProductCard({ categoryKey }) {
   const renderProductCard = products[categoryKey].map((product) => {
     const { id, title, image, price, category } = product;
     return (
-      <CardContainer key={id}>
+      <CardContainer
+        key={id}
+        $colorbyselect={
+          selectedProductIdList.includes(String(id)) ? '#ff6f00' : '#f0f0f0'
+        }
+      >
         <Card
           hoverable
           style={{ width: 240 }}
           cover={
             <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
           }
-          onClick={() => dispatch(showModal(id))}
+          onClick={(e) => {
+            dispatch(showModal(id));
+          }}
         >
           <CardBody>
             <CardContent>
@@ -78,7 +90,8 @@ const CardContainer = styled.div`
   margin: 10px;
   .ant-card {
     height: 520px;
-    border: 5px solid #f0f0f0;
+    border: 5px solid;
+    border-color: ${(props) => props.$colorbyselect};
   }
   .ant-card-body {
     height: 210px;
