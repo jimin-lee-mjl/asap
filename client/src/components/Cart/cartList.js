@@ -137,9 +137,9 @@ export default function CartList() {
   };
 
   const CalTotalPrice = useEffect(() => {
-    var sumPrice = 0;
-    var price = 0;
-    var regex = /[^0-9]/g;
+    let sumPrice = 0;
+    let price = 0;
+    let regex = /[^0-9]/g;
 
     checkedProduct.map((product) => {
       price = Number(product.price);

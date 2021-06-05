@@ -16,7 +16,7 @@ export const setProducts = () => (dispatch, getstate) => {
         top: [],
         bottom: [],
       };
-      var categoryData = [];
+      const categoryData = [];
 
       console.log(res.data);
       res.data.map((data) => {
@@ -35,7 +35,7 @@ export const setProducts = () => (dispatch, getstate) => {
         console.log(category, productList);
         if (!productList) {
         } else if (productList.length !== 0) {
-          categoryData = [...categoryData, category];
+          categoryData.push(category);
         }
       });
 
@@ -93,7 +93,6 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
       payload: newSelectId,
     });
 
-    var newSelectState = {};
     console.log('curSelectedProducts:', curSelectedProducts);
 
     Object.entries(recommendProducts).map(([category, productList]) => {
