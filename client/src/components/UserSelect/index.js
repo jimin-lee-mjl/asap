@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Steps, message } from 'antd';
-import Personal from './Personal';
+import { Steps } from 'antd';
 import Category from './Category';
 import Keyword from './Keyword';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import HeaderComponent from '../Header';
 
 import Gender from './Gender';
@@ -89,16 +88,6 @@ function UserInfo() {
 }
 
 export default UserInfo;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-`;
 
 const Wrapper = styled.div`
   width: 40%;
