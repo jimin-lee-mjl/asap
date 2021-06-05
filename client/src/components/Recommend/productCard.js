@@ -22,21 +22,17 @@ export default function ProductCard({ categoryKey }) {
 
   const handleClickCheck = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const selectedProductId = e.currentTarget.getAttribute('productId');
+    const selectedProductId = e.currentTarget.getAttribute('asin');
+    console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
     message.success('상품이 선택되었습니다.', 0.5);
   };
 
-  const handleClickPushpin = (e) => {
+  const handleClickLikes = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const likeProductId = e.currentTarget.getAttribute('productId');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
@@ -59,11 +55,11 @@ export default function ProductCard({ categoryKey }) {
             </CardContent>
             <CardIcons>
               <CheckCircleOutlined
-                productId={id}
+                asin={id}
                 style={{ marginRight: 40 }}
                 onClick={handleClickCheck}
               />
-              <PushpinOutlined productId={id} onClick={handleClickPushpin} />
+              <PushpinOutlined asin={id} onClick={handleClickLikes} />
             </CardIcons>
           </CardBody>
         </Card>

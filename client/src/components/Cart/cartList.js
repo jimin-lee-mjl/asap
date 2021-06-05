@@ -3,7 +3,12 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCart, likeProduct, showModal } from '../../actions/productsActions';
+import {
+  setCart,
+  likeProduct,
+  showModal,
+  deleteCart,
+} from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
 export default function CartList() {
@@ -19,8 +24,35 @@ export default function CartList() {
     dispatch(setCart());
   }, []);
 
-  const likesApiUrl = '';
-  const purchaseApiUrl = '';
+  const handleClickDelete = (e) => {
+    e.stopPropagation();
+    const deleteProductId = e.currentTarget.getAttribute('asin');
+    console.log(deleteProductId);
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    dispatch(deleteCart(deleteProductId));
+    console.log(cartList);
+    // "Are you sure you want to delete?"alert 띄우기
+  };
+
+  const handleClickLikes = (e) => {
+    e.stopPropagation();
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickDeleteSelected = (e) => {
+    e.stopPropagation();
+    dispatch(deleteCart(checkedProduct));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickLikesSelected = (e) => {
+    e.stopPropagation();
+    dispatch(likeProduct(checkedProduct));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
 
   const columns = [
     {
@@ -58,22 +90,18 @@ export default function CartList() {
           }}
         >
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO LIKES!', record);
-            }}
+            onClick={handleClickLikes}
           >
             ADD TO LIKES
           </Button>
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'xx-small' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('DELETE!', record);
-            }}
+            onClick={handleClickDelete}
           >
             DELETE
           </Button>
@@ -107,22 +135,6 @@ export default function CartList() {
       );
     },
   };
-
-  const handleClickDelete = useCallback(async () => {
-    console.log('handleClickDelete');
-    console.log('deleteProduct: ', checkedProduct);
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
-    console.log(cartList);
-    // "Are you sure you want to delete?"alert 띄우기
-    // delete api 코드
-  }, [likesApiUrl, checkedProduct]);
-
-  const handleClickLikes = useCallback(async () => {
-    console.log('handleClickLikes');
-    console.log('checkedProduct: ', checkedProduct);
-    message.success('찜 목록에 저장되었습니다', 0.5);
-    // dispatch(selectProduct(checkedProduct));
-  }, [likesApiUrl, checkedProduct]);
 
   const CalTotalPrice = useEffect(() => {
     var sumPrice = 0;
@@ -167,21 +179,11 @@ export default function CartList() {
         </div>
         <ButtonGroup>
           <div style={{ float: 'left' }}>
-            <Button
-              size="large"
-              onClick={() => {
-                handleClickDelete();
-              }}
-            >
+            <Button size="large" onClick={handleClickDeleteSelected}>
               DELETE SELECTED
             </Button>
           </div>
-          <Button
-            size="large"
-            onClick={() => {
-              handleClickLikes();
-            }}
-          >
+          <Button size="large" onClick={handleClickLikesSelected}>
             ADD TO LIKES
           </Button>
           <Link to="/purchase">
@@ -211,11 +213,10 @@ const CartListTable = styled(Table)`
   .ant-table-thead tr th {
     color: white;
     background: #ff6f00;
-    text-align: center;
   }
 
   .ant-table table {
-    text-align: center;
+    text-align: left;
   }
 
   .ant-table-tbody td {

@@ -34,7 +34,7 @@ export default function ChoiceSummary() {
 
     console.log('totalPrice:', totalPrice);
     choiceSummaryArray.push(
-      <TotalSummary>
+      <TotalSummary key="total">
         <p>Total Price</p>
         <p>{totalPrice.toFixed(2)}</p>
       </TotalSummary>,
