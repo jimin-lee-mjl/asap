@@ -36,7 +36,7 @@ export default function OrderHistory() {
 
   return (
     <Container>
-      <h1>Order History</h1>
+      <h2>Order History</h2>
       <ScrollingList>
         {data.map((el) => {
           const [time, price] = el.split(',');
@@ -77,11 +77,11 @@ const HistoryCard = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   padding: 2rem;
 
   width: 90%;
-  height: 7rem;
+  height: 5rem;
   margin: 1rem auto;
 
   cursor: pointer;

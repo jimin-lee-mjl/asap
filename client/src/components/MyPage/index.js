@@ -26,8 +26,8 @@ export default function Mypage() {
 
 const Container = styled.div`
   width: 70vw;
-  height: calc(100% - 25rem);
-  margin: 18rem auto 5rem auto;
+  height: calc(100% - 15rem);
+  margin: 14rem auto 3rem auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr;

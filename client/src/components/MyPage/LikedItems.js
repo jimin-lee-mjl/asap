@@ -6,7 +6,7 @@ export default function LikedItems() {
   const asins = [2, 3, 4, 15, 17, 18, 2, 3, 4, 15, 17, 18];
   return (
     <Container>
-      <h1>Liked Items</h1>
+      <h2>Liked Items</h2>
       <ScrollingList>
         {asins.map((n) => {
           return <ItemCard productId={n}></ItemCard>;
@@ -43,11 +43,12 @@ const Button = styled.button`
   margin: 0 1rem;
   color: white;
   border: none;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
+  font-size: 1.2rem;
 
   :hover {
-    box-shadow: 2px 4px 8px #ffb300;
+    box-shadow: 2px 4px 8px #c4c4c4;
   }
 `;
