@@ -32,8 +32,7 @@ export default function Auth(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      console.log('token', action.payload.token);
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload.key);
       return {
         ...state,
         ...action.payload,

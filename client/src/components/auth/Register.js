@@ -53,19 +53,19 @@ export default function Register() {
     dispatch(register({ id, email, password1, password2 }));
     // history.push('/login');
 
-    fetch(
-      'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/registration/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify({ username: id, email, password1, password2 }),
-      },
-    )
-      .then((res) => res.json())
-      .then((json) => console.log(json));
+    //   fetch(
+    //     'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/rest-auth/registration/',
+    //     {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'X-CSRFToken': csrftoken,
+    //       },
+    //       body: JSON.stringify({ username: id, email, password1, password2 }),
+    //     },
+    //   )
+    //     .then((res) => res.json())
+    //     .then((json) => console.log(json));
   };
 
   return (

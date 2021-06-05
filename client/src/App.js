@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -22,8 +21,8 @@ import Order from './components/Order';
 import Payment from './components/Payment';
 
 export default function App() {
-  const [user, setUser] = useState(null); // 로그인 된 사용자 정보
-  const authenticated = user != null; // 로그인 된 사용자가 존재하는지, 인증 여부를 저장
+  // const [user, setUser] = useState(null); // 로그인 된 사용자 정보
+  // const authenticated = user != null; // 로그인 된 사용자가 존재하는지, 인증 여부를 저장
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
@@ -45,7 +44,7 @@ export default function App() {
         <AuthRoute
           authenticated={isAuthenticated}
           path="/mypage"
-          render={(props) => <MyPage user={user} {...props} />}
+          render={(props) => <MyPage />}
         />
         <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />

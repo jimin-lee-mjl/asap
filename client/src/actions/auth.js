@@ -39,7 +39,7 @@ const config = {
 };
 
 const baseUrl =
-  'http://elice-kdt-ai-track-vm-da-02.koreacentral.cloudapp.azure.com:5000';
+  'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/';
 
 // CHECK TOKEN & LOAD USER
 export const loadUser = () => (dispatch, getState) => {
@@ -64,7 +64,7 @@ export const login = (username, password) => (dispatch) => {
     .post(baseUrl + '/rest-auth/login/', body, config)
     .then((res) => {
       console.log('OK');
-      console.log(res.data);
+      console.log('res.data', res.data);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -80,7 +80,8 @@ export const login = (username, password) => (dispatch) => {
 
 // REGIESTER
 export const register =
-  (username, email, password1, password2) => (dispatch) => {
+  ({ id, email, password1, password2 }) =>
+  (dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -88,15 +89,16 @@ export const register =
       },
     };
 
-    const body = { username, email, password1, password2 };
+    const body = JSON.stringify({ username: id, email, password1, password2 });
+    console.log(body);
 
     axios
       .post(baseUrl + '/rest-auth/registration/', body, config)
       .then((res) => {
-        console.log(res);
+        console.log('res', res);
         dispatch({
           type: REGISTER_SUCCESS,
-          payload: res.data,
+          payload: res,
         });
       })
       .catch((err) => {
@@ -110,16 +112,15 @@ export const logout = () => (dispatch, getState) => {
   axios
     .post(baseUrl + '/rest-auth/logout/', null, tokenConfig(getState))
     .then((res) => {
-      console.log(res);
+      console.log(res.data.detail);
       dispatch({ type: CLEAR_USER });
       dispatch({ type: LOGOUT_SUCCESS });
     })
     .catch((err) => console.log(err));
 };
 
-// Setup config with token - helper function
+// GET USER'S TOKEN
 export const tokenConfig = (getState) => {
-  // Get token from state
   const token = getState().auth.token;
 
   const config = {
@@ -127,10 +128,9 @@ export const tokenConfig = (getState) => {
       'Content-Type': 'application/json',
     },
   };
-
-  // If token, add to headers config
   if (token) {
     config.headers['Authorization'] = `Token ${token}`;
+    console.log(`Token ${token}`);
   }
 
   return config;
