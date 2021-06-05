@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { setOrderDetails, showModal } from '../../actions/productsActions';
+import {
+  setOrderDetails,
+  showModal,
+  likeProduct,
+  addToCart,
+} from '../../actions/productsActions';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
@@ -24,6 +29,26 @@ export default function OrderHistory() {
   useEffect(() => {
     dispatch(setOrderDetails(orderId));
   }, []);
+
+  const handleClickCart = (e) => {
+    e.stopPropagation();
+    const addCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(addCartProductId);
+    try {
+      dispatch(addToCart(addCartProductId));
+      message.success('', 0.5);
+    } catch (e) {
+      message.success('Fail!!', 0.5);
+    }
+  };
+
+  const handleClickLikes = (e) => {
+    e.stopPropagation();
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
 
   const columns = [
     {
@@ -61,22 +86,18 @@ export default function OrderHistory() {
           }}
         >
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO CART!', record);
-            }}
+            onClick={handleClickCart}
           >
             ADD TO CART
           </Button>
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'xx-small' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO LIKES!', record);
-            }}
+            onClick={handleClickLikes}
           >
             ADD TO LIKES
           </Button>
@@ -183,11 +204,10 @@ const CartListTable = styled(Table)`
   .ant-table-thead tr th {
     color: white;
     background: #ff6f00;
-    text-align: center;
   }
 
   .ant-table table {
-    text-align: center;
+    text-align: left;
   }
 
   .ant-table-tbody td {

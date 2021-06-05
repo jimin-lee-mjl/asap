@@ -81,6 +81,8 @@ export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_CART:
       return { ...state, cartList: action.payload };
+    case ProductActionTypes.DELETE_CART:
+      return { ...state, cartList: action.payload };
     default:
       return state;
   }
