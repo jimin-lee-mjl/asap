@@ -33,7 +33,7 @@ export const setProducts = () => (dispatch, getstate) => {
 
       Object.entries(productData).map(([category, productList]) => {
         console.log(category, productList);
-        if (productList == undefined) {
+        if (!productList) {
         } else if (productList.length !== 0) {
           categoryData = [...categoryData, category];
         }
@@ -56,42 +56,65 @@ export const setProducts = () => (dispatch, getstate) => {
 
 export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
   const recommendProducts = getstate().setProductsReducer.products;
-  const currentSelectedProductsState =
-    getstate().selectProductReducer.selectedProducts;
+  const curSelectedProducts = getstate().selectProductReducer.selectedProducts;
+  const curSelectedId = getstate().selectProductReducer.selectedProductId;
 
-  var newSelectState = {};
-  Object.entries(recommendProducts).map((products) => {
-    const recommendProductList = products[1];
-    recommendProductList.map((recommendProduct) => {
-      if (selectedProductId == recommendProduct.id) {
-        console.log('recommendProduct:', recommendProduct);
-        const productCategory = recommendProduct.category;
+  // 선택 취소
+  if (curSelectedId.includes(selectedProductId)) {
+    console.log('already Selected!');
+    const afterUnselectId = curSelectedId.filter(
+      (id) => id !== selectedProductId,
+    );
+    dispatch({
+      type: ProductActionTypes.UNSELECT_PRODUCT_ID,
+      payload: afterUnselectId,
+    });
+    console.log('curSelectedProducts:', curSelectedProducts);
+    Object.entries(curSelectedProducts).map(([category, productList]) => {
+      const newProductList = productList.filter(
+        (product) => product.id !== Number(selectedProductId),
+      );
+      curSelectedProducts[category] = newProductList;
+    });
 
-        if (productCategory == "women's clothing") {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            outer: [...currentSelectedProductsState.outer, recommendProduct],
-          };
-        } else if (productCategory == "men's clothing") {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            top: [...currentSelectedProductsState.top, recommendProduct],
-          };
-        } else if (productCategory == 'jewelery') {
-          newSelectState = {
-            ...currentSelectedProductsState,
-            bottom: [...currentSelectedProductsState.bottom, recommendProduct],
-          };
-        }
+    const afterUnselectProducts = { ...curSelectedProducts };
+    console.log('afterUnselectProducts:', afterUnselectProducts);
+    dispatch({
+      type: ProductActionTypes.UNSELECT_PRODUCT,
+      payload: afterUnselectProducts,
+    });
+  } else {
+    // 선택
+    console.log('curSelectedId:', curSelectedId);
+    const newSelectId = [...curSelectedId, selectedProductId];
+    console.log(newSelectId);
+    dispatch({
+      type: ProductActionTypes.SELECT_PRODUCT_ID,
+      payload: newSelectId,
+    });
+
+    var newSelectState = {};
+    console.log('curSelectedProducts:', curSelectedProducts);
+
+    Object.entries(recommendProducts).map(([category, productList]) => {
+      const selectProduct = productList.find(
+        (product) => product.id === Number(selectedProductId),
+      );
+      if (selectProduct) {
+        curSelectedProducts[category] = [
+          ...curSelectedProducts[category],
+          selectProduct,
+        ];
       }
     });
-  });
-  console.log('newSelectState:', newSelectState);
+    const newSelectedProducts = { ...curSelectedProducts };
+    console.log('newSelectedProducts:', newSelectedProducts);
 
-  dispatch({
-    type: ProductActionTypes.SELECT_PRODUCT,
-    payload: newSelectState,
-  });
+    dispatch({
+      type: ProductActionTypes.SELECT_PRODUCT,
+      payload: newSelectedProducts,
+    });
+  }
 };
 
 export const likeProduct = (likeProduct) => (dispatch, getstate) => {
