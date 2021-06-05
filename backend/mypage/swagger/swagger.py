@@ -1,7 +1,8 @@
 from enum import Enum
-from logging import error
 from drf_yasg import openapi
-from .responses import ErrorResponse, SuccessResponse, SuccessResponseExample, ErrorResponseExample
+from .responses import (
+    ErrorResponse, SuccessResponse, SuccessResponseExample, ErrorResponseExample
+)
 
 
 class ErrorCode(Enum):
@@ -10,6 +11,14 @@ class ErrorCode(Enum):
             description=ErrorResponse.data_not_valid.ERROR_MSG,
             examples={
                 'application/json': ErrorResponseExample.data_not_valid.EXAMPLE
+            }
+        )
+    )
+    error_401 = (
+        openapi.Response(
+            description=ErrorResponse.unauthorized.ERROR_MSG,
+            examples={
+                'application/json': ErrorResponseExample.unauthorized.EXAMPLE
             }
         )
     )
@@ -62,12 +71,7 @@ class SuccessCode(Enum):
         )
     )
     success_201 = (
-        openapi.Response(
-            description=SuccessResponse.delivery_info_created.SUCCESS_MSG,
-            examples={
-                'application/json': SuccessResponseExample.update_delivery_info.EXAMPLE
-            }
-        ),
+        None,
         openapi.Response(
             description=SuccessResponse.item_added.SUCCESS_MSG,
             examples={
@@ -120,33 +124,27 @@ class Swagger(Enum):
     list_user_detail_response = (
         {
             '200': SuccessCode.success_200.USER_RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
-        }
-    )
-    create_delivery_info_response = (
-        {
-            '201': SuccessCode.success_201.USER_RESPONSE,
-            '400':ErrorCode.error_400.RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '401': ErrorCode.error_401.RESPONSE,
         }
     )
     update_delivery_info_response = (
         {
             '204': SuccessCode.success_204.USER_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '401': ErrorCode.error_401.RESPONSE,
         }
     )
     list_like_item_detail_response = (
         {
             '200': SuccessCode.success_200.LIKE_RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '401': ErrorCode.error_401.RESPONSE,
         }
     )
     add_like_item_response = (
         {
             '201': SuccessCode.success_201.LIKE_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
+            '401': ErrorCode.error_401.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE,
             '409': ErrorCode.error_409.RESPONSE
         }
@@ -155,19 +153,21 @@ class Swagger(Enum):
         {
             '204': SuccessCode.success_204.LIKE_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
+            '401': ErrorCode.error_401.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )
     list_cart_item_detail_response = (
         {
             '200': SuccessCode.success_200.CART_RESPONSE,
-            '404': ErrorCode.error_404.RESPONSE
+            '401': ErrorCode.error_401.RESPONSE,
         }
     )
     add_cart_item_response = (
         {
             '201': SuccessCode.success_201.CART_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
+            '401': ErrorCode.error_401.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE,
             '409': ErrorCode.error_409.RESPONSE
         }
@@ -176,6 +176,7 @@ class Swagger(Enum):
         {
             '204': SuccessCode.success_204.CART_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
+            '401': ErrorCode.error_401.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )
@@ -189,6 +190,7 @@ class Swagger(Enum):
         {
             '201': SuccessCode.success_201.ORDER_RESPONSE,
             '400':ErrorCode.error_400.RESPONSE,
+            '401': ErrorCode.error_401.RESPONSE,
             '404': ErrorCode.error_404.RESPONSE
         }
     )

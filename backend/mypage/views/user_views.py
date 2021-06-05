@@ -1,12 +1,10 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
-from accounts.models import User
 from ..serializers import UserSerializer, DeliveryInfoSerializer
-from ..responses import ErrorResponse, SuccessResponse
-from ..swagger import Swagger
-from ..req_params import RequestBody
+from ..swagger.responses import ErrorResponse, SuccessResponse
+from ..swagger.swagger import Swagger
+from ..swagger.req_params import RequestBody
 
 
 class UserDetailListView(APIView):
@@ -14,9 +12,7 @@ class UserDetailListView(APIView):
     사용자의 프로필, 키워드 및 찜 목록, 장바구니, 구매 내역 정보를 조회하는 API
 
     ---
-    ## `/api/user/<int:user_id>/`
-    ## 요청 패러미터
-       - user_id : 사용자의 id값
+    ## `/api/user/`
     ## 요청 형식
        - 'application/json'
     ## 응답 내용
@@ -32,8 +28,8 @@ class UserDetailListView(APIView):
        - order_history : 사용자의 구매 내역 (주문 일시, 총 금액)
     '''
     @swagger_auto_schema(responses=Swagger.list_user_detail_response.RESPONSE)
-    def get(self, request, user_id, format=None):
-        user = get_object_or_404(User, pk=user_id)
+    def get(self, request, format=None):
+        user = request.user
         serializer = UserSerializer(user)
         return Response(serializer.data, status=SuccessResponse.detail_listed.STATUS_CODE)
 
@@ -43,9 +39,8 @@ class DeliveryInfoSaveView(APIView):
     사용자 배송지 정보를 추가하거나 업데이트하는 API
 
     ---
-    ## `/api/user/<int:user_id>/profile`
+    ## `/api/user/delivery/`
     ## 요청 패러미터
-       - user_id : 사용자의 id값 (필수)
        - first_name : 사용자 이름 (선택)
        - last_name : 사용자 이름 (선택)
        - address : 사용자의 배송지 주소 (선택)
@@ -58,30 +53,13 @@ class DeliveryInfoSaveView(APIView):
        - address : 사용자의 배송지 주소
        - postal_code : 사용자 우편번호
     '''
-    @swagger_auto_schema(responses=Swagger.create_delivery_info_response.RESPONSE,
-                         request_body=RequestBody.update_delivery_info_request.PARAMS)
-    def post(self, request, user_id, format=None):
-        serializer = DeliveryInfoSerializer(data=request.data)
-
-        if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
-            user.first_name = serializer.validated_data['first_name']
-            user.last_name = serializer.validated_data['last_name']
-            user.address = serializer.validated_data['address']
-            user.postal_code = serializer.validated_data['postal_code']
-            user.save()
-            response_serial = DeliveryInfoSerializer(user)
-            return Response(response_serial.data, status=SuccessResponse.delivery_info_created.STATUS_CODE)
-
-        return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
-
     @swagger_auto_schema(responses=Swagger.update_delivery_info_response.RESPONSE, 
                          request_body=RequestBody.update_delivery_info_request.PARAMS)
-    def patch(self, request, user_id, format=None):
+    def patch(self, request, format=None):
         serializer = DeliveryInfoSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
+            user = request.user
 
             if 'first_name' in serializer.validated_data:
                 user.first_name = serializer.validated_data['first_name']

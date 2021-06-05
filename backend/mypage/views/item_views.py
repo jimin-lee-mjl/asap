@@ -3,11 +3,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
-from accounts.models import User
 from ..serializers import ItemSerializer
-from ..responses import ErrorResponse, SuccessResponse
-from ..swagger import Swagger
-from ..req_params import RequestBody
+from ..swagger.responses import ErrorResponse, SuccessResponse
+from ..swagger.swagger import Swagger
+from ..swagger.req_params import RequestBody
 
 
 class LikeItemDetailView(APIView):
@@ -15,7 +14,7 @@ class LikeItemDetailView(APIView):
     사용자의 찜 목록 아이템의 상세정보를 조회하고 찜 목록에 아이템을 추가하거나 삭제하는 API
 
     ---
-    ## `api/user/<int:user_id>/like/`
+    ## `api/user/like/`
     ## 요청 패러미터
        - user_id : 사용자의 id값
        - asin : 요청할 아이템의 asin 넘버
@@ -25,8 +24,8 @@ class LikeItemDetailView(APIView):
        - like_items : 사용자의 찜 목록  
     '''
     @swagger_auto_schema(responses=Swagger.list_like_item_detail_response.RESPONSE)
-    def get(self, request, user_id, format=None):
-        user = get_object_or_404(User, pk=user_id)
+    def get(self, request, format=None):
+        user = request.user
         items = user.like_items.all()
         data = []
         for item in items:
@@ -36,11 +35,11 @@ class LikeItemDetailView(APIView):
 
     @swagger_auto_schema(responses=Swagger.add_like_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
-    def post(self, request, user_id, format=None):
+    def post(self, request, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
+            user = request.user
             item = get_object_or_404(
                 Item, pk=serializer.validated_data['asin'])
             if item not in user.like_items.all():
@@ -53,11 +52,11 @@ class LikeItemDetailView(APIView):
 
     @swagger_auto_schema(responses=Swagger.del_like_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
-    def delete(self, request, user_id, format=None):
+    def delete(self, request, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
+            user = request.user
             item = get_object_or_404(
                 Item, pk=serializer.validated_data['asin'])
             user.like_items.remove(item)
@@ -71,7 +70,7 @@ class CartItemDetailView(APIView):
     사용자의 장바구니 아이템의 상세 정보를 조회하고 장바구니에 아이템을 추가하거나 삭제하는 API
 
     ---
-    ## `api/user/<int:user_id>/cart/`
+    ## `api/user/cart/`
     ## 요청 패러미터
        - user_id : 사용자의 id값
        - asin : 요청할 아이템의 asin 넘버
@@ -81,8 +80,8 @@ class CartItemDetailView(APIView):
        - cart_items : 사용자의 장바구니 목록 
     '''
     @swagger_auto_schema(responses=Swagger.list_cart_item_detail_response.RESPONSE)
-    def get(self, request, user_id, format=None):
-        user = get_object_or_404(User, pk=user_id)
+    def get(self, request, format=None):
+        user = request.user
         items = user.cart_items.all()
         data = []
         for item in items:
@@ -92,11 +91,11 @@ class CartItemDetailView(APIView):
 
     @swagger_auto_schema(responses=Swagger.add_cart_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
-    def post(self, request, user_id, format=None):
+    def post(self, request, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
+            user = request.user
             item = get_object_or_404(
                 Item, pk=serializer.validated_data['asin'])
             if item not in user.cart_items.all():
@@ -109,11 +108,11 @@ class CartItemDetailView(APIView):
 
     @swagger_auto_schema(responses=Swagger.del_cart_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
-    def delete(self, request, user_id, format=None):
+    def delete(self, request, format=None):
         serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=user_id)
+            user = request.user
             item = get_object_or_404(
                 Item, pk=serializer.validated_data['asin'])
             user.cart_items.remove(item)
