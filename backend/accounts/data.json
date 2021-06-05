@@ -1,0 +1,58 @@
+[
+{
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$NUX4XblR1uVua5UXNq86hz$ErSVq0ssK/B7kpdO3RjcoIAZnyqFDdDhnEEY9kqxaQg=",
+        "last_login": "2021-05-31T09:33:49.314Z",
+        "is_superuser": true,
+        "username": "elice",
+        "first_name": "",
+        "last_name": "",
+        "email": "elice@elice.io",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-05-31T09:33:33.824Z",
+        "address": "",
+        "postal_code": "",
+        "groups": [],
+        "user_permissions": [],
+        "keywords": [],
+        "like_items": [],
+        "cart_items": []
+    }
+},
+{
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+        "password": "hello123",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "",
+        "first_name": "Lilly",
+        "last_name": "Jordan",
+        "email": "lill@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-05-31T10:10:35.065Z",
+        "address": "Napier, NZ",
+        "postal_code": "3345",
+        "groups": [],
+        "user_permissions": [],
+        "keywords": [
+            1,
+            2
+        ],
+        "like_items": [
+            "100045442",
+            "40599922",
+            "B00123"
+        ],
+        "cart_items": [
+            "40599922",
+            "B00123"
+        ]
+    }
+}
+]
