@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { userinfo } from '../../actions/mypage';
 
 import Header from '../Header';
 
@@ -9,7 +12,29 @@ import Keywords from './Keywords';
 import OrderHistory from './OrderHistory';
 import LikedItems from './LikedItems';
 
+import baseUrl from '../../url';
+
 export default function Mypage() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    console.log('at mypage token', token);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    axios
+      .get(baseUrl + '/api/user/', config)
+      .then((res) => {
+        console.log('GET USER INFO', res.data);
+        dispatch(userinfo(res.data));
+      })
+      .catch((err) => console.log(err.response));
+  }, []);
+
   return (
     <>
       <Header type="logo" />

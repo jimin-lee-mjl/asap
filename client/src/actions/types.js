@@ -20,3 +20,5 @@ export const ProductActionTypes = {
   SET_LIKES: 'SET_LIKES',
   SET_ORDER_DETAILS: 'SET_ORDER_DETAILS',
 };
+
+export const SET_USERINFO = 'SET_USERINFO';
