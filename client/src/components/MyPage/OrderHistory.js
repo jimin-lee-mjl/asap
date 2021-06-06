@@ -2,30 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { userinfo } from '../../actions/mypage';
 
 export default function OrderHistory() {
   const history = useHistory();
-  const [data, setData] = useState([]);
+  const data = useSelector((state) => state.mypage.order_history);
 
   // redux store에서 useSelector로 받아오기
-
-  // const fakeDataUrl =
-  //   'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
-
-  // useEffect(() => {
-  //   axios.get(fakeDataUrl).then((res) => {
-  //     console.log('!!!', res.data.results);
-  //     setData(user.order_history);
-  //   });
-  // }, []);
-
-  const user = {
-    order_history: [
-      'order_id, order_datetime, total_price',
-      '1, 2021-05-31 10:15:48.321923+00:00, 30.00',
-      '2, 2021-05-31 10:21:17.013279+00:00, 20.00',
-    ],
-  };
 
   return (
     <Container>
