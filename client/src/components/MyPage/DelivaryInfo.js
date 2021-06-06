@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import baseUrl from '../../url';
 
 export default function DeliveryInfo() {
   const [delivery, setDelivery] = useState({
@@ -10,7 +12,29 @@ export default function DeliveryInfo() {
   });
 
   const onClickHandler = () => {
-    // click한 시점의 delivery를 dispatch로 store에 보내야함, 유저 정보 변경
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    const body = {
+      first_name: delivery.firstName,
+      last_name: delivery.lastName,
+      address: delivery.address,
+      postal_code: delivery.post,
+    };
+    axios
+      .patch(baseUrl + '/api/user/delivery/', body, config)
+      .then((res) => {
+        console.log('change delivery info SUCCESSED', res);
+        alert('Delivery Information successfully updated.');
+      })
+      .catch((err) => {
+        console.log(err.response);
+        alert('Update failed. Please try again.');
+      });
   };
 
   return (
