@@ -63,9 +63,8 @@ const Button = styled(Link)`
 `;
 
 const IconButton = styled(Button)`
-  width: 5rem;
-  height: 5rem;
-  font-size: '300%';
+  width: 4rem;
+  height: 4rem;
   color: 'black';
   margin: 0 0.5rem;
   background: '#fb8c00';

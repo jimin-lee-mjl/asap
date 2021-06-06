@@ -42,7 +42,7 @@ export default function Keywords() {
   ];
   return (
     <Container>
-      <h1>Keywords</h1>
+      <h2>Keywords</h2>
       <ScrollingList>
         {keywords.map((word) => {
           return <KeywordCard>{word}</KeywordCard>;
@@ -65,8 +65,8 @@ const Container = styled.div`
 `;
 
 const ScrollingList = styled.div`
-  width: 80%;
-  height: 30rem;
+  width: 90%;
+  height: 30vh;
   overflow: auto;
   margin: 2rem auto;
 
@@ -80,9 +80,9 @@ const ScrollingList = styled.div`
 const KeywordCard = styled.div`
   background-color: rgba(196, 196, 196, 0.4);
   border-radius: 0.5rem;
-  width: 40%;
-  height: 5rem;
-  font-size: 2rem;
+  width: 45%;
+  height: 3rem;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
