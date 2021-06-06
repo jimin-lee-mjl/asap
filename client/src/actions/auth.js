@@ -9,6 +9,7 @@ import {
   REGISTER_FAIL,
   CLEAR_USER,
 } from './types';
+import baseUrl from '../url';
 
 // redux-thunk
 // 1. dispatch 액션을 디스패치할 수 있고
@@ -34,12 +35,8 @@ const csrftoken = getCookie('csrftoken');
 const config = {
   headers: {
     'Content-Type': 'application/json',
-    'X-CSRFToken': csrftoken,
   },
 };
-
-const baseUrl =
-  'http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/';
 
 // CHECK TOKEN & LOAD USER
 export const loadUser = () => (dispatch, getState) => {
@@ -59,7 +56,6 @@ export const loadUser = () => (dispatch, getState) => {
 // LOGIN
 export const login = (username, password) => (dispatch) => {
   const body = { username, password };
-
   axios
     .post(baseUrl + '/rest-auth/login/', body, config)
     .then((res) => {
@@ -71,7 +67,7 @@ export const login = (username, password) => (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response);
       dispatch({
         type: LOGIN_FAIL,
       });

@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import baseUrl from '../../url';
+import { useSelector, useDispatch } from 'react-redux';
+import { userinfo } from '../../actions/mypage';
 
 export default function DeliveryInfo() {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.mypage);
+
   const [delivery, setDelivery] = useState({
-    firstName: 'Harry',
-    lastName: 'Potter',
-    address: '77 N Kainalu Dr, Kailua, HI 96734',
-    post: 96734,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    address: user.address,
+    post: user.postal_code,
   });
 
   const onClickHandler = () => {
@@ -30,6 +36,7 @@ export default function DeliveryInfo() {
       .then((res) => {
         console.log('change delivery info SUCCESSED', res);
         alert('Delivery Information successfully updated.');
+        dispatch(userinfo(body));
       })
       .catch((err) => {
         console.log(err.response);

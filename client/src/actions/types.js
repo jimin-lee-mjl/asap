@@ -24,3 +24,5 @@ export const ProductActionTypes = {
   SHOW_MODAL: 'SHOW_MODAL',
   RESET_MODAL: 'RESET_MODAL',
 };
+
+export const SET_USERINFO = 'SET_USERINFO';
