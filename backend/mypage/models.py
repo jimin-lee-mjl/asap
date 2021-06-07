@@ -16,4 +16,4 @@ class OrderDetail(models.Model):
     postal_code = models.CharField(max_length=50, default='')
 
     def __str__(self):
-        return '%d, %s, %.2f' % (self.pk, self.ordered_at, self.total_price)
+        return f'{self.pk}, {self.ordered_at}, {round(self.total_price, 2)}'

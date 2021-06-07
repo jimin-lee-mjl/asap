@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'accounts',
+    'payment',
 ]
 
 SITE_ID = 1

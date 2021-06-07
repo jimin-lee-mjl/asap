@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'accounts',
+    'payment',
 ]
 
 SITE_ID = 1
@@ -177,3 +178,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # staticfile 관련 설정
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# paypal 관련 설정
+PAYPAL_CLIENT_ID  = env('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET_ID  =  env('PAYPAL_SECRET_ID')

@@ -9,7 +9,7 @@ from .factory import UserFactory, ItemFactory, OrderFactory
 class TestUserDetailListView(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()
-        token = Token.objects.get(user__email='testuser@test.com')
+        token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_get_detail(self):
@@ -23,7 +23,7 @@ class TestUserDetailListView(APITestCase):
 class TestDeliveryInfoSaveView(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()
-        token = Token.objects.get(user__email='testuser@test.com')
+        token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_patch_delivery_info(self):
@@ -39,9 +39,9 @@ class TestLikeItemUpdateView(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()
         self.item = ItemFactory.create()
-        self.item2 = ItemFactory.create(asin='BB0091')
+        self.item2 = ItemFactory.create()
         self.user.like_items.add(self.item)
-        token = Token.objects.get(user__email='testuser@test.com')
+        token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_post_like_item(self):
@@ -65,9 +65,9 @@ class TestCartItemUpdateView(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()
         self.item = ItemFactory.create()
-        self.item2 = ItemFactory.create(asin='BB0091')
+        self.item2 = ItemFactory.create()
         self.user.cart_items.add(self.item)
-        token = Token.objects.get(user__email='testuser@test.com')
+        token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_post_cart_item(self):
@@ -93,7 +93,7 @@ class TestOrderDetailListView(APITestCase):
         self.item = ItemFactory.create()
         self.order = OrderFactory.create(user_id=self.user)
         self.order.items.add(self.item)
-        token = Token.objects.get(user__email='testuser@test.com')
+        token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_get_order_detail(self):

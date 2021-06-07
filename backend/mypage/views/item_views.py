@@ -9,7 +9,7 @@ from ..swagger.swagger import Swagger
 from ..swagger.req_params import RequestBody
 
 
-class LikeItemDetailView(APIView):
+class LikeItemDetailsView(APIView):
     '''
     사용자의 찜 목록 아이템의 상세정보를 조회하고 찜 목록에 아이템을 추가하거나 삭제하는 API
 
@@ -25,8 +25,7 @@ class LikeItemDetailView(APIView):
     '''
     @swagger_auto_schema(responses=Swagger.list_like_item_detail_response.RESPONSE)
     def get(self, request, format=None):
-        user = request.user
-        items = user.like_items.all()
+        items = request.user.like_items.all()
         data = []
         for item in items:
             Serializer = ItemSerializer(item)
@@ -65,7 +64,7 @@ class LikeItemDetailView(APIView):
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
 
-class CartItemDetailView(APIView):
+class CartItemDetailsView(APIView):
     '''
     사용자의 장바구니 아이템의 상세 정보를 조회하고 장바구니에 아이템을 추가하거나 삭제하는 API
 
@@ -81,8 +80,7 @@ class CartItemDetailView(APIView):
     '''
     @swagger_auto_schema(responses=Swagger.list_cart_item_detail_response.RESPONSE)
     def get(self, request, format=None):
-        user = request.user
-        items = user.cart_items.all()
+        items = request.user.cart_items.all()
         data = []
         for item in items:
             Serializer = ItemSerializer(item)

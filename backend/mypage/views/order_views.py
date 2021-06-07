@@ -15,7 +15,7 @@ from ..swagger.req_params import RequestBody
 
 @swagger_auto_schema(method='get', responses=Swagger.list_order_detail_response.RESPONSE)
 @api_view(['GET'])
-def ListOrderDetailView(request, order_id):
+def show_order_details(request, order_id):
     '''
     사용자의 구매 내역 상세 정보를 조회하고 구매 내역을 추가하는 API
 
@@ -49,7 +49,7 @@ def ListOrderDetailView(request, order_id):
                      responses=Swagger.post_new_order_response.RESPONSE,
                      request_body=RequestBody.post_new_order_request.PARAMS)
 @api_view(['POST'])
-def CreateNewOrderView(request):
+def create_new_order(request):
     '''
     사용자의 구매 내역 상세 정보를 조회하고 구매 내역을 추가하는 API
 
@@ -74,7 +74,6 @@ def CreateNewOrderView(request):
     serializer = NewOrderSerializer(data=request.data)
 
     if serializer.is_valid():
-        print(serializer.validated_data)
         user = request.user
         new_order = OrderDetail.objects.create(
             user_id=user,
