@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function UserInfo() {
   const history = useHistory();
 
-  const user = {
-    id: 'asap2021',
-    email: 'elice@elice.com',
-    password: '123456',
-  };
+  const user = useSelector((state) => state.mypage);
 
   return (
     <Container>
@@ -25,7 +22,7 @@ export default function UserInfo() {
         </FormControl>
         <FormControl>
           <label>Password</label>
-          <input type="password" value={user.password}></input>
+          <input type="password" value="********"></input>
         </FormControl>
       </form>
       <div
@@ -34,13 +31,13 @@ export default function UserInfo() {
         }}
       >
         <Button
-          onClick={() => history.push('/changepassword')}
+          onClick={() => history.push('/password/change')}
           style={{ margin: '0 1rem' }}
         >
           Change Password
         </Button>
         <Button
-          onClick={() => history.push('/deleteaccount')}
+          onClick={() => history.push('/user/delete')}
           style={{ margin: '0 0.5rem' }}
         >
           Delete Account
