@@ -5,6 +5,10 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Header from '../Header';
 
+import axios from 'axios';
+import { userinfo } from '../../actions/mypage';
+import baseUrl from '../../url';
+
 export default function Login() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -16,11 +20,30 @@ export default function Login() {
     try {
       dispatch(login(id, password));
       history.push('/');
+      getUser();
     } catch (e) {
       alert('Failed to login');
       setId('');
       setPassword('');
     }
+  };
+
+  const getUser = () => {
+    const token = localStorage.getItem('token');
+    console.log('at mypage token', token);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    axios
+      .get(baseUrl + '/api/user/', config)
+      .then((res) => {
+        console.log('GET USER INFO', res.data);
+        dispatch(userinfo(res.data));
+      })
+      .catch((err) => console.log(err.response));
   };
 
   return (
