@@ -68,6 +68,11 @@ export const login = (username, password) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err.response);
+      console.log(Object.keys(err.response.data));
+      const errors = Object.keys(err.response.data);
+      errors.forEach((x) => {
+        alert(err.response.data[x]);
+      });
       dispatch({
         type: LOGIN_FAIL,
       });
