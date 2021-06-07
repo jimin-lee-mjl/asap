@@ -42,7 +42,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: url('calhartt.png') center;
+  background: url('/calhartt.png') center;
 `;
 
 const Logo = styled.img`
