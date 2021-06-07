@@ -54,6 +54,7 @@ export default function Keywords() {
 }
 
 const Container = styled.div`
+  height: 35rem;
   border: solid 0.1rem #ff6f00;
   border-radius: 0.8rem;
   padding: 3rem 2rem;
@@ -66,15 +67,13 @@ const Container = styled.div`
 
 const ScrollingList = styled.div`
   width: 90%;
-  height: 30vh;
+  height: 80%;
   overflow: auto;
-  margin: 2rem auto;
-
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   align-items: start;
   justify-content: center;
-  /* width: 35rem */
 `;
 
 const KeywordCard = styled.div`

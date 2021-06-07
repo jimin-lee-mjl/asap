@@ -7,8 +7,8 @@ import { userinfo } from '../../actions/mypage';
 
 export default function OrderHistory() {
   const history = useHistory();
-  const data = useSelector((state) => state.mypage.order_history);
-
+  // const data = useSelector((state) => state.mypage.order_history);
+  const data = [];
   // redux store에서 useSelector로 받아오기
 
   return (
@@ -34,6 +34,7 @@ export default function OrderHistory() {
 }
 
 const Container = styled.div`
+  height: 40rem;
   border: solid 0.1rem #ff6f00;
   border-radius: 0.8rem;
   padding: 2rem 1rem;
