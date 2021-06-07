@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { register } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
+import axios from 'axios';
 import baseUrl from '../../url';
 
 export default function Register() {
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const [old, setOld] = useState('');
@@ -31,7 +29,6 @@ export default function Register() {
     e.preventDefault();
     console.log(old, password1, password2);
     changePassword();
-    history.push('/login');
   };
 
   const changePassword = () => {
@@ -52,10 +49,15 @@ export default function Register() {
       .then((res) => {
         console.log('change password SUCCESSED', res);
         alert('Your password successfully changed.');
+        history.push('/mypage');
       })
       .catch((err) => {
         console.log(err.response);
-        alert('Update failed. Please try again.');
+        console.log(Object.keys(err.response.data));
+        const errors = Object.keys(err.response.data);
+        errors.forEach((x) => {
+          alert(err.response.data[x]);
+        });
       });
   };
 
@@ -64,11 +66,8 @@ export default function Register() {
       <Header />
       <Wrapper>
         <Form onSubmit={onSubmitHandler}>
-          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
-            Create Account
-          </h1> */}
           <Logo
-            src="logo-circle.png"
+            src="/logo-circle.png"
             alt="logo"
             onClick={() => {
               history.push('/');
