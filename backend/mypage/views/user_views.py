@@ -7,7 +7,7 @@ from ..swagger.swagger import Swagger
 from ..swagger.req_params import RequestBody
 
 
-class UserDetailListView(APIView):
+class ShowUserDetailsView(APIView):
     '''
     사용자의 프로필, 키워드 및 찜 목록, 장바구니, 구매 내역 정보를 조회하는 API
 
@@ -30,12 +30,11 @@ class UserDetailListView(APIView):
     '''
     @swagger_auto_schema(responses=Swagger.list_user_detail_response.RESPONSE)
     def get(self, request, format=None):
-        user = request.user
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(request.user)
         return Response(serializer.data, status=SuccessResponse.detail_listed.STATUS_CODE)
 
 
-class DeliveryInfoSaveView(APIView):
+class SaveDeliveryInfoView(APIView):
     '''
     사용자 배송지 정보를 추가하거나 업데이트하는 API
 
