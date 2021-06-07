@@ -65,6 +65,7 @@ class ErrorResponseExample(Enum):
 class SuccessResponseExample(Enum):
     list_user_detail = (
         {
+            'username': 'elice',
             'email': 'elice123@elice.io',
             'password': 'somepassword123',
             'address': 'Seongdong-gu, Seoul, Korea',

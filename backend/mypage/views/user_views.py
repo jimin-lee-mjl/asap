@@ -16,6 +16,7 @@ class UserDetailListView(APIView):
     ## 요청 형식
        - 'application/json'
     ## 응답 내용
+       - username : 사용자 id 
        - email : 사용자 이메일
        - password : 사용자 비밀번호
        - first_name : 사용자 이름
