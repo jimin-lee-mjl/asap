@@ -26,6 +26,7 @@ export default function ProductTable() {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
+
   const modal = useSelector((state) => state.showModalReducer.modal);
   const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 

@@ -23,9 +23,7 @@ export default function ProductDetailModal({ productInfo }) {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
-  const likeProducts = useSelector(
-    (state) => state.likeProductReducer.likeProducts,
-  );
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
 
   const dispatch = useDispatch();
@@ -106,11 +104,15 @@ const DetailModal = styled(Modal)`
   .ant-modal-content .ant-modal-footer {
     text-align: left;
     padding-left: 90px;
+    display: flex;
+    align-items: center;
   }
 
   .ant-modal-footer .ant-btn {
     width: 150px;
     height: 50px;
+    margin-left: 30px;
+    margin-right: 30px;
   }
 `;
 
