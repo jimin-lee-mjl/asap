@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { register } from '../../actions/auth';
+import { deleteUser } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
 
@@ -9,18 +9,23 @@ export default function Register() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    history.push('/login');
+  const yesHandler = () => {
+    alert('Successfully delete your account!');
+    dispatch(deleteUser());
+    history.push('/');
+  };
+
+  const noHandler = () => {
+    history.push('/mypage');
   };
 
   return (
     <Container>
       <Header />
       <Wrapper>
-        <Form onSubmit={onSubmitHandler}>
+        <Form>
           <Logo
-            src="logo-circle.png"
+            src="/logo-circle.png"
             alt="logo"
             onClick={() => {
               history.push('/');
@@ -37,12 +42,12 @@ export default function Register() {
               justifyContent: 'space-evenly',
             }}
           >
-            <Button onClick={onSubmitHandler}>Yes</Button>
-            <Button onClick={onSubmitHandler}>No</Button>
+            <Button onClick={yesHandler}>Yes</Button>
+            <Button onClick={noHandler}>No</Button>
           </div>
         </Form>
 
-        <Link to="/login" style={{ color: '#fb8c00' }}>
+        <Link to="/mypage" style={{ color: '#fb8c00' }}>
           Back to My Page
         </Link>
       </Wrapper>

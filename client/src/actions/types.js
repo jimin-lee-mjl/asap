@@ -6,6 +6,7 @@ export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const CLEAR_USER = 'CLEAR_USER';
+export const DELETE_USER = 'DELETE_USER';
 
 export const ProductActionTypes = {
   SET_PRODUCTS: 'SET_PRODUCTS',

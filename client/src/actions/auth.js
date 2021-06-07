@@ -8,6 +8,7 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   CLEAR_USER,
+  DELETE_USER,
 } from './types';
 import baseUrl from '../url';
 
@@ -90,7 +91,7 @@ export const register =
       },
     };
 
-    const body = JSON.stringify({ username: id, email, password1, password2 });
+    const body = { username: id, email, password1, password2 };
     console.log(body);
 
     axios
@@ -140,4 +141,18 @@ export const tokenConfig = (getState) => {
   }
 
   return config;
+};
+
+// DELETE USER
+export const deleteUser = () => (dispatch, getState) => {
+  console.log('delete user action working', tokenConfig(getState));
+  axios
+    .delete(baseUrl + '/api/account/delete/', tokenConfig(getState))
+    .then((res) => {
+      console.log('delete account', res);
+      dispatch({ type: DELETE_USER });
+      dispatch({ type: CLEAR_USER });
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch((err) => console.log(err.response));
 };
