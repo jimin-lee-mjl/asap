@@ -165,9 +165,10 @@ export default function Payment() {
 }
 
 const Container = styled.div`
+  flex: 1;
   width: 70vw;
-  height: calc(100% - 25rem);
-  margin: 18rem auto 5rem auto;
+  height: 80%;
+  margin: 10rem auto 1rem auto;
   display: flex;
 `;
 
