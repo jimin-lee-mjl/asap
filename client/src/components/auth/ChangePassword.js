@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { register } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
+import baseUrl from '../../url';
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -28,8 +30,33 @@ export default function Register() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     console.log(old, password1, password2);
-    dispatch(register({ old, password1, password2 }));
+    changePassword();
     history.push('/login');
+  };
+
+  const changePassword = () => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    const body = {
+      old_password: old,
+      new_password1: password1,
+      new_password2: password2,
+    };
+    axios
+      .post(baseUrl + '/rest-auth/password/change/', body, config)
+      .then((res) => {
+        console.log('change password SUCCESSED', res);
+        alert('Your password successfully changed.');
+      })
+      .catch((err) => {
+        console.log(err.response);
+        alert('Update failed. Please try again.');
+      });
   };
 
   return (
@@ -73,7 +100,7 @@ export default function Register() {
 
           <Button onClick={onSubmitHandler}>Change Password</Button>
         </Form>
-        <Link to="/login" style={{ color: '#fb8c00' }}>
+        <Link to="/mypage" style={{ color: '#fb8c00' }}>
           Back to My Page
         </Link>
       </Wrapper>
