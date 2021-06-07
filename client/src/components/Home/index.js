@@ -35,8 +35,8 @@ const Home = () => {
 export default Home;
 
 const Container = styled.div`
+  flex: 1;
   width: 75vw;
-  height: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
