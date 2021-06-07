@@ -119,13 +119,13 @@ export default function ProductTable() {
           </Button>
           {likeProducts.includes(record.key) ? (
             <HeartFilled
-              style={{ fontSize: '30px' }}
+              style={{ fontSize: '30px', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoLikes}
             />
           ) : (
             <HeartOutlined
-              style={{ fontSize: '30px' }}
+              style={{ fontSize: '30px', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickLikes}
             />

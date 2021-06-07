@@ -50,7 +50,7 @@ export default function ProductDetailModal({ productInfo }) {
       return (
         <HeartFilled
           asin={id}
-          style={{ fontSize: '30px' }}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickUndoLikes}
         />
       );
@@ -58,7 +58,7 @@ export default function ProductDetailModal({ productInfo }) {
       return (
         <HeartOutlined
           asin={id}
-          style={{ fontSize: '30px' }}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickLikes}
         />
       );
@@ -72,18 +72,7 @@ export default function ProductDetailModal({ productInfo }) {
       onCancel={() => dispatch(showModal(0))}
       width={1200}
       maskStyle={{ background: 'white' }}
-      footer={[
-        <Button
-          id="check-btn"
-          type="primary"
-          asin={modal.data.id}
-          onClick={handleClickLikes}
-          style={{ marginLeft: 30 }}
-        >
-          찜하기
-        </Button>,
-        <div>{likesOrNot(modal.data.id)}</div>,
-      ]}
+      footer={[<div>{likesOrNot(modal.data.id)}</div>]}
     >
       <ProductDetailDiv>
         <Col span={11}>

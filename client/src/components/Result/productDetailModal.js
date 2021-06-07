@@ -59,7 +59,7 @@ export default function ProductDetailModal({ productInfo }) {
       return (
         <HeartFilled
           asin={id}
-          style={{ fontSize: '30px' }}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickUndoLikes}
         />
       );
@@ -67,7 +67,7 @@ export default function ProductDetailModal({ productInfo }) {
       return (
         <HeartOutlined
           asin={id}
-          style={{ fontSize: '30px' }}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickLikes}
         />
       );

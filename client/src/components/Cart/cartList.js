@@ -11,7 +11,7 @@ import {
   orderRequest,
   addToLikes,
   undoLikes,
-  loadLikes
+  loadLikes,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -116,13 +116,13 @@ export default function CartList() {
         >
           {likeProducts.includes(record.key) ? (
             <HeartFilled
-              style={{ fontSize: '30px' }}
+              style={{ fontSize: '30px', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoLikes}
             />
           ) : (
             <HeartOutlined
-              style={{ fontSize: '30px' }}
+              style={{ fontSize: '30px', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickLikes}
             />

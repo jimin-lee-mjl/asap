@@ -4,7 +4,6 @@ import mypage from './mypage';
 import {
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
   mypage,
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,

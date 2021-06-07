@@ -56,9 +56,21 @@ export default function ProductCard({ categoryKey }) {
 
   const likesOrNot = (id) => {
     if (likeProducts.includes(id)) {
-      return <HeartFilled asin={id} onClick={handleClickUndoLikes} />;
+      return (
+        <HeartFilled
+          asin={id}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
+          onClick={handleClickUndoLikes}
+        />
+      );
     } else {
-      return <HeartOutlined asin={id} onClick={handleClickLikes} />;
+      return (
+        <HeartOutlined
+          asin={id}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
+          onClick={handleClickLikes}
+        />
+      );
     }
   };
 

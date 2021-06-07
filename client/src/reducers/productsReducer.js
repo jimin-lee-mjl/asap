@@ -68,16 +68,6 @@ export const showModalReducer = (state = initialState, action) => {
   }
 };
 
-export const likeProductReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ProductActionTypes.LIKE_PRODUCT:
-      return { ...state, likeProducts: action.payload };
-    case ProductActionTypes.LIKE_ALREADY:
-    default:
-      return state;
-  }
-};
-
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_CART:

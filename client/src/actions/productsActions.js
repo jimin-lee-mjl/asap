@@ -142,6 +142,33 @@ export const setLikes = () => (dispatch, getstate) => {
     });
 };
 
+export const deleteLikes = (deleteLikesProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: deleteLikesProductList,
+  });
+
+  axios
+    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  const curLikesState = getstate().likesReducer.likesList;
+  console.log('curLikesState:', curLikesState);
+  const newLikesState = curLikesState.filter(
+    (product) => deleteLikesProductList.includes(product.id) === false,
+  );
+  console.log('newLikesState:', newLikesState);
+
+  dispatch({
+    type: ProductActionTypes.DELETE_LIKES,
+    payload: newLikesState,
+  });
+};
+
 export const loadLikes = () => (dispatch, getstate) => {
   axios
     .get(likesApiUrl, tokenConfig(getstate))
@@ -230,59 +257,6 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
 
   dispatch({
     type: ProductActionTypes.UNDO_LIKES,
-    payload: newLikesState,
-  });
-};
-
-export const likeProduct = (likeProductList) => (dispatch, getstate) => {
-  // asap api
-  const body = JSON.stringify({
-    asin: likeProductList,
-  });
-
-  axios
-    .post(likesApiUrl, body, tokenConfig(getstate))
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  const curLikesState = getstate().likeProductReducer.likeProducts;
-  console.log('curLikesState:', curLikesState);
-  const newLikesState = [...curLikesState, likeProductList];
-  console.log('newLikesState:', newLikesState);
-
-  dispatch({
-    type: ProductActionTypes.LIKE_PRODUCT,
-    payload: newLikesState,
-  });
-};
-
-export const deleteLikes = (deleteLikesProductList) => (dispatch, getstate) => {
-  const body = JSON.stringify({
-    asin: deleteLikesProductList,
-  });
-
-  axios
-    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  const curLikesState = getstate().likesReducer.likesList;
-  console.log('curLikesState:', curLikesState);
-  const newLikesState = curLikesState.filter(
-    (product) => deleteLikesProductList.includes(product.id) === false,
-  );
-  console.log('newLikesState:', newLikesState);
-
-  dispatch({
-    type: ProductActionTypes.DELETE_LIKES,
     payload: newLikesState,
   });
 };
