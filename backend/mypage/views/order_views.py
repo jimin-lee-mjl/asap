@@ -74,7 +74,6 @@ def CreateNewOrderView(request):
     serializer = NewOrderSerializer(data=request.data)
 
     if serializer.is_valid():
-        print(serializer.validated_data)
         user = request.user
         new_order = OrderDetail.objects.create(
             user_id=user,
