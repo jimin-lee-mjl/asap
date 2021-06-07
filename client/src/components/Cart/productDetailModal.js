@@ -8,12 +8,14 @@ import {
   Button,
   Tag,
 } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectProduct,
-  likeProduct,
   showModal,
+  addToLikes,
+  undoLikes,
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
@@ -22,9 +24,7 @@ export default function ProductDetailModal({ productInfo }) {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
-  const likeProducts = useSelector(
-    (state) => state.likeProductReducer.likeProducts,
-  );
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
 
   const dispatch = useDispatch();
@@ -33,10 +33,37 @@ export default function ProductDetailModal({ productInfo }) {
     e.stopPropagation();
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
-    dispatch(likeProduct(likeProductId));
+    dispatch(addToLikes([likeProductId]));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const likesOrNot = (id) => {
+    if (likeProducts.includes(id)) {
+      return (
+        <HeartFilled
+          asin={id}
+          style={{ fontSize: '30px' }}
+          onClick={handleClickUndoLikes}
+        />
+      );
+    } else {
+      return (
+        <HeartOutlined
+          asin={id}
+          style={{ fontSize: '30px' }}
+          onClick={handleClickLikes}
+        />
+      );
+    }
+  };
   return (
     <DetailModal
       title="Details"
@@ -55,6 +82,7 @@ export default function ProductDetailModal({ productInfo }) {
         >
           찜하기
         </Button>,
+        <div>{likesOrNot(modal.data.id)}</div>,
       ]}
     >
       <ProductDetailDiv>

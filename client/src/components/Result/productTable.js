@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,6 +10,8 @@ import {
   showModal,
   addToCart,
   orderRequest,
+  addToLikes,
+  undoLikes,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -24,6 +27,7 @@ export default function ProductTable() {
     (state) => state.selectProductReducer.selectedProducts,
   );
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 
   const handleClickCart = (e) => {
     e.stopPropagation();
@@ -31,14 +35,6 @@ export default function ProductTable() {
     console.log(addCartProductId);
     dispatch(addToCart(addCartProductId));
     message.success('add to cart', 0.5);
-  };
-
-  const handleClickLikes = (e) => {
-    e.stopPropagation();
-    const likeProductId = e.currentTarget.getAttribute('asin');
-    console.log(likeProductId);
-    dispatch(likeProduct(likeProductId));
-    message.success('add to likes', 0.5);
   };
 
   const handleClickCartSelected = (e) => {
@@ -49,11 +45,27 @@ export default function ProductTable() {
     message.success('add to cart', 0.5);
   };
 
+  const handleClickLikes = (e) => {
+    e.stopPropagation();
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(addToLikes([likeProductId]));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
   const handleClickLikesSelected = (e) => {
     e.stopPropagation();
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
-    dispatch(likeProduct(checkedIdList));
+    dispatch(addToLikes(checkedIdList));
     message.success('add to likes', 0.5);
   };
 
@@ -105,14 +117,19 @@ export default function ProductTable() {
           >
             ADD TO CART
           </Button>
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'xx-small' }}
-            onClick={handleClickLikes}
-          >
-            ADD TO LIKES
-          </Button>
+          {likeProducts.includes(record.key) ? (
+            <HeartFilled
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickUndoLikes}
+            />
+          ) : (
+            <HeartOutlined
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickLikes}
+            />
+          )}
         </div>
       ),
       width: '10%',

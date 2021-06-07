@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setCart,
-  likeProduct,
   showModal,
   deleteCart,
   orderRequest,
+  addToLikes,
+  undoLikes,
+  loadLikes
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -19,19 +22,38 @@ export default function CartList() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   const cartList = useSelector((state) => state.cartReducer.cartList);
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
+
   const modal = useSelector((state) => state.showModalReducer.modal);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setCart());
+    dispatch(loadLikes());
   }, []);
 
   const handleClickLikes = (e) => {
     e.stopPropagation();
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
-    dispatch(likeProduct(likeProductId));
+    dispatch(addToLikes([likeProductId]));
     message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const handleClickLikesSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(addToLikes(checkedIdList));
+    message.success('add to likes', 0.5);
   };
 
   const handleClickDelete = (e) => {
@@ -41,14 +63,6 @@ export default function CartList() {
     dispatch(deleteCart(deleteProductId));
     message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
     // "Are you sure you want to delete?"alert 띄우기
-  };
-
-  const handleClickLikesSelected = (e) => {
-    e.stopPropagation();
-    const checkedIdList = checkedProduct.map((product) => product.key);
-    console.log(checkedIdList);
-    dispatch(likeProduct(checkedIdList));
-    message.success('add to likes', 0.5);
   };
 
   const handleClickDeleteSelected = (e) => {
@@ -100,14 +114,19 @@ export default function CartList() {
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickLikes}
-          >
-            ADD TO LIKES
-          </Button>
+          {likeProducts.includes(record.key) ? (
+            <HeartFilled
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickUndoLikes}
+            />
+          ) : (
+            <HeartOutlined
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickLikes}
+            />
+          )}
           <Button
             asin={record.key}
             size="small"

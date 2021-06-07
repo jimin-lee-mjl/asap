@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Card, message } from 'antd';
-import { CheckCircleOutlined, PushpinOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  PushpinOutlined,
+  HeartOutlined,
+  HeartFilled,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -8,6 +13,8 @@ import {
   likeProduct,
   controlModal,
   showModal,
+  addToLikes,
+  undoLikes,
 } from '../../actions/productsActions';
 
 export default function ProductCard({ categoryKey }) {
@@ -18,9 +25,8 @@ export default function ProductCard({ categoryKey }) {
   const selectedProductIdList = useSelector(
     (state) => state.selectProductReducer.selectedProductId,
   );
-  const likeProducts = useSelector(
-    (state) => state.likeProductReducer.likeProducts,
-  );
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
+
   const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
@@ -36,8 +42,24 @@ export default function ProductCard({ categoryKey }) {
     e.stopPropagation();
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
-    dispatch(likeProduct(likeProductId));
+    dispatch(addToLikes([likeProductId]));
     message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const likesOrNot = (id) => {
+    if (likeProducts.includes(id)) {
+      return <HeartFilled asin={id} onClick={handleClickUndoLikes} />;
+    } else {
+      return <HeartOutlined asin={id} onClick={handleClickLikes} />;
+    }
   };
 
   const renderProductCard = products[categoryKey].map((product) => {
@@ -70,7 +92,7 @@ export default function ProductCard({ categoryKey }) {
                 style={{ marginRight: 40 }}
                 onClick={handleClickCheck}
               />
-              <PushpinOutlined asin={id} onClick={handleClickLikes} />
+              {likesOrNot(id)}
             </CardIcons>
           </CardBody>
         </Card>

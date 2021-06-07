@@ -4,7 +4,7 @@ import ProductCard from './productCard';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setProducts } from '../../actions/productsActions';
+import { setProducts, loadLikes } from '../../actions/productsActions';
 
 export default function ProductCardGroups() {
   const { Title } = Typography;
@@ -14,6 +14,7 @@ export default function ProductCardGroups() {
 
   useEffect(() => {
     dispatch(setProducts());
+    dispatch(loadLikes());
   }, []);
 
   console.log('Products :', products);

@@ -6,9 +6,13 @@ import {
   showModal,
   likeProduct,
   addToCart,
+  addToLikes,
+  undoLikes,
+  loadLikes,
 } from '../../actions/productsActions';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductDetailModal from './productDetailModal';
@@ -22,12 +26,14 @@ export default function OrderHistory() {
   const orderDetails = useSelector(
     (state) => state.setOrderDetailsReducer.orderDetails,
   );
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setOrderDetails(orderId));
+    dispatch(loadLikes());
   }, []);
 
   const handleClickCart = (e) => {
@@ -46,8 +52,16 @@ export default function OrderHistory() {
     e.stopPropagation();
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
-    dispatch(likeProduct(likeProductId));
+    dispatch(addToLikes([likeProductId]));
     message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
   };
 
   const columns = [
@@ -93,14 +107,19 @@ export default function OrderHistory() {
           >
             ADD TO CART
           </Button>
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'xx-small' }}
-            onClick={handleClickLikes}
-          >
-            ADD TO LIKES
-          </Button>
+          {likeProducts.includes(record.key) ? (
+            <HeartFilled
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickUndoLikes}
+            />
+          ) : (
+            <HeartOutlined
+              style={{ fontSize: '30px' }}
+              asin={record.key}
+              onClick={handleClickLikes}
+            />
+          )}
         </div>
       ),
       width: '10%',

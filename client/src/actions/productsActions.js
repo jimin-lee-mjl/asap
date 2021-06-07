@@ -116,6 +116,124 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
   }
 };
 
+//likes
+export const setLikes = () => (dispatch, getstate) => {
+  axios
+    .get(likesApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_LIKES,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const loadLikes = () => (dispatch, getstate) => {
+  axios
+    .get(likesApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+      const loadedLikesProduct = res.data;
+      const loadedLikes = [];
+      loadedLikesProduct.map((product) => {
+        loadedLikes.push(product.id);
+      });
+
+      // dispatch({
+      //   type: ProductActionTypes.LOAD_LIKES,
+      //   payload: loadedLikes,
+      // });
+      dispatch({
+        type: ProductActionTypes.LOAD_LIKES,
+        payload: [1, 2, 3, 4],
+      });
+      console.log('loadLikes!!:', getstate().likesReducer.likeProducts);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const addToLikes = (likeProductList) => (dispatch, getstate) => {
+  const curLikesState = getstate().likesReducer.likeProducts;
+  console.log('curLikesState:', curLikesState);
+
+  const addToLikesList = likeProductList.filter(
+    (product) => curLikesState.includes(Number(product)) === false,
+  );
+
+  const body = JSON.stringify({
+    asin: addToLikesList,
+  });
+
+  axios
+    .post(likesApiUrl, body, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  const newLikesState = [...curLikesState, ...addToLikesList.map(Number)];
+  console.log('newLikesState:', newLikesState);
+
+  dispatch({
+    type: ProductActionTypes.ADD_TO_LIKES,
+    payload: newLikesState,
+  });
+};
+
+export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: undoLikesProductList,
+  });
+
+  // axios
+  //   .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+  //   .then((res) => {
+  //     console.log(res.data);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err.response);
+  //   });
+
+  const curLikesState = getstate().likesReducer.likeProducts;
+  console.log('curLikesState:', curLikesState);
+  const newLikesState = curLikesState.filter(
+    (product) => undoLikesProductList.includes(String(product)) === false,
+  );
+  console.log('newLikesState:', newLikesState);
+
+  dispatch({
+    type: ProductActionTypes.UNDO_LIKES,
+    payload: newLikesState,
+  });
+};
+
 export const likeProduct = (likeProductList) => (dispatch, getstate) => {
   // asap api
   const body = JSON.stringify({
@@ -270,32 +388,6 @@ export const setCart = () => (dispatch, getstate) => {
         payload: res.data,
       });
       console.log(getstate());
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-};
-
-//likes
-export const setLikes = () => (dispatch, getstate) => {
-  axios
-    .get(likesApiUrl, tokenConfig(getstate))
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
-
-      dispatch({
-        type: ProductActionTypes.SET_LIKES,
-        payload: res.data,
-      });
     })
     .catch((err) => {
       console.log(err.response);

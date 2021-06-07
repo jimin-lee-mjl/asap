@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import GuestHeader from './GuestHeader';
+// import GuestHeader from './GuestHeader';
 
 export default function LogoHeaderComponent() {
   const history = useHistory();
@@ -18,7 +18,7 @@ export default function LogoHeaderComponent() {
         />
       </LogoWrapper>
 
-      <GuestHeader />
+      {/* <GuestHeader /> */}
     </Container>
   );
 }
