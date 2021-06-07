@@ -20,6 +20,7 @@ import Cart from './components/Cart';
 import OrderHistory from './components/OrderHistory';
 import Order from './components/Order';
 import Payment from './components/Payment';
+import Footer from './components/Footer';
 
 export default function App() {
   // const [user, setUser] = useState(null); // 로그인 된 사용자 정보
@@ -57,6 +58,7 @@ export default function App() {
         <Route path="/payment" component={Payment} />
         <Route component={NotFound} />
       </Switch>
+      <Footer />
     </Router>
   );
 }
