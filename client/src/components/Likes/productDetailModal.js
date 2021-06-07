@@ -14,6 +14,7 @@ import {
   selectProduct,
   likeProduct,
   showModal,
+  addToCart,
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
@@ -29,25 +30,12 @@ export default function ProductDetailModal({ productInfo }) {
 
   const dispatch = useDispatch();
 
-  const handleClickCheck = (e) => {
-    console.log(productInfo);
+  const handleClickCart = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const selectedProductId = e.currentTarget.getAttribute('productId');
-    dispatch(selectProduct(selectedProductId));
-    message.success('상품이 선택되었습니다.', 0.5);
-  };
-
-  const handleClickPushpin = (e) => {
-    e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const likeProductId = e.currentTarget.getAttribute('productId');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    const addCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(addCartProductId);
+    dispatch(addToCart(addCartProductId));
+    message.success('add to cart', 0.5);
   };
 
   return (
@@ -62,8 +50,8 @@ export default function ProductDetailModal({ productInfo }) {
         <Button
           id="check-btn"
           type="primary"
-          productId={modal.data.id}
-          onClick={handleClickCheck}
+          asin={modal.data.id}
+          onClick={handleClickCart}
           style={{ marginLeft: 30 }}
         >
           ADD TO CART

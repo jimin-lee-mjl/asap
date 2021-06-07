@@ -8,12 +8,14 @@ import {
   Button,
   Tag,
 } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectProduct,
-  likeProduct,
   showModal,
+  addToLikes,
+  undoLikes,
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
@@ -22,32 +24,54 @@ export default function ProductDetailModal({ productInfo }) {
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
   );
-  const likeProducts = useSelector(
-    (state) => state.likeProductReducer.likeProducts,
-  );
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
 
   const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
-    console.log(productInfo);
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('asin'));
     const selectedProductId = e.currentTarget.getAttribute('asin');
+    console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
     message.success('상품이 선택되었습니다.', 0.5);
+    console.log(selectedProductId);
   };
 
-  const handleClickPushpin = (e) => {
+  const handleClickLikes = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('asin'));
     const likeProductId = e.currentTarget.getAttribute('asin');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
+    console.log(likeProductId);
+    dispatch(addToLikes([likeProductId]));
     message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const likesOrNot = (id) => {
+    if (likeProducts.includes(id)) {
+      return (
+        <HeartFilled
+          asin={id}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
+          onClick={handleClickUndoLikes}
+        />
+      );
+    } else {
+      return (
+        <HeartOutlined
+          asin={id}
+          style={{ fontSize: '30px', color: '#ff6f00' }}
+          onClick={handleClickLikes}
+        />
+      );
+    }
   };
 
   return (
@@ -68,13 +92,7 @@ export default function ProductDetailModal({ productInfo }) {
         >
           이 상품 선택하기
         </Button>,
-        <PushpinButton
-          type="primary"
-          asin={modal.data.id}
-          onClick={handleClickPushpin}
-        >
-          찜하기
-        </PushpinButton>,
+        <div>{likesOrNot(modal.data.id)}</div>,
       ]}
     >
       <ProductDetailDiv>

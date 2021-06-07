@@ -4,12 +4,12 @@ import mypage from './mypage';
 import {
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,
   setOrderDetailsReducer,
   showModalReducer,
+  orderReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -17,12 +17,12 @@ const rootReducer = combineReducers({
   mypage,
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
   setCategoryReducer,
   cartReducer,
   likesReducer,
   setOrderDetailsReducer,
   showModalReducer,
+  orderReducer,
 });
 
 export default rootReducer;

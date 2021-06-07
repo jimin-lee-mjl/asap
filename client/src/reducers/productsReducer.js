@@ -14,13 +14,14 @@ const initialState = {
   },
   selectedProductId: [],
   likeProducts: [],
-  cartList: [],
   likesList: [],
+  cartList: [],
   orderDetails: [],
   modal: {
     key: '',
     data: {},
   },
+  orderList: [],
 };
 
 export const setProductsReducer = (state = initialState, action) => {
@@ -67,16 +68,6 @@ export const showModalReducer = (state = initialState, action) => {
   }
 };
 
-export const likeProductReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ProductActionTypes.LIKE_PRODUCT:
-      return { ...state, likeProducts: action.payload };
-    case ProductActionTypes.LIKE_ALREADY:
-    default:
-      return state;
-  }
-};
-
 export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_CART:
@@ -92,6 +83,23 @@ export const likesReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_LIKES:
       return { ...state, likesList: action.payload };
+    case ProductActionTypes.DELETE_LIKES:
+      return { ...state, likesList: action.payload };
+    case ProductActionTypes.LOAD_LIKES:
+      return { ...state, likeProducts: action.payload };
+    case ProductActionTypes.ADD_TO_LIKES:
+      return { ...state, likeProducts: action.payload };
+    case ProductActionTypes.UNDO_LIKES:
+      return { ...state, likeProducts: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const orderReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ProductActionTypes.ORDER_REQUEST:
+      return { ...state, orderList: action.payload };
     default:
       return state;
   }

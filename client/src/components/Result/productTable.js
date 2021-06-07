@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,6 +8,10 @@ import {
   selectProduct,
   likeProduct,
   showModal,
+  addToCart,
+  orderRequest,
+  addToLikes,
+  undoLikes,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -22,10 +27,52 @@ export default function ProductTable() {
     (state) => state.selectProductReducer.selectedProducts,
   );
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 
-  const likesApiUrl = '';
-  const basketApiUrl = '';
-  const purchaseApiUrl = '';
+  const handleClickCart = (e) => {
+    e.stopPropagation();
+    const addCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(addCartProductId);
+    dispatch(addToCart(addCartProductId));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickCartSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(addToCart(checkedIdList));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickLikes = (e) => {
+    e.stopPropagation();
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(addToLikes([likeProductId]));
+    message.success('찜 목록에 저장되었습니다', 0.5);
+  };
+
+  const handleClickUndoLikes = (e) => {
+    e.stopPropagation();
+    const undoLikesProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoLikesProductId);
+    dispatch(undoLikes([undoLikesProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const handleClickLikesSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(addToLikes(checkedIdList));
+    message.success('add to likes', 0.5);
+  };
+
+  const handleClickOrder = useCallback(async () => {
+    console.log('checkedProduct: ', checkedProduct);
+    dispatch(orderRequest(checkedProduct));
+  }, [checkedProduct, dispatch]);
 
   const columns = [
     {
@@ -63,25 +110,26 @@ export default function ProductTable() {
           }}
         >
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO CART!', record);
-            }}
+            onClick={handleClickCart}
           >
             ADD TO CART
           </Button>
-          <Button
-            size="small"
-            style={{ fontSize: 'xx-small' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO LIKES!', record);
-            }}
-          >
-            ADD TO LIKES
-          </Button>
+          {likeProducts.includes(record.key) ? (
+            <HeartFilled
+              style={{ fontSize: '30px', color: '#ff6f00' }}
+              asin={record.key}
+              onClick={handleClickUndoLikes}
+            />
+          ) : (
+            <HeartOutlined
+              style={{ fontSize: '30px', color: '#ff6f00' }}
+              asin={record.key}
+              onClick={handleClickLikes}
+            />
+          )}
         </div>
       ),
       width: '10%',
@@ -114,31 +162,6 @@ export default function ProductTable() {
     },
   };
 
-  const handleClickLikes = useCallback(async () => {
-    console.log('handleClickLikes');
-    console.log('checkedProduct: ', checkedProduct);
-    // try {
-    //   dispatch(likeProduct(checkedProduct));
-    // } catch (e) {
-    //   alert('이미 찜한 상품입니다.');
-    // }
-    message.success('찜 목록에 저장되었습니다', 0.5);
-    // dispatch(selectProduct(checkedProduct));
-  }, [likesApiUrl, checkedProduct]);
-
-  const handleClickBasket = useCallback(async () => {
-    console.log('handleClickBasket');
-    console.log('checkedProduct: ', checkedProduct);
-    message.success('상품을 장바구니에 담았습니다.', 0.5);
-  }, [basketApiUrl, checkedProduct]);
-
-  const handleClickPurchase = useCallback(async () => {
-    console.log('handleClickPurchase');
-    console.log('checkedProduct: ', checkedProduct);
-
-    // 구매 api post 코드 추가
-  }, [purchaseApiUrl, checkedProduct]);
-
   const CalTotalPrice = useEffect(() => {
     let sumPrice = 0;
     let price = 0;
@@ -163,7 +186,6 @@ export default function ProductTable() {
         scroll={{ y: 720 }}
         onRow={(record, index) => ({
           onClick: () => {
-            console.log(record, index, 'clicked!!');
             dispatch(showModal(record.key));
           },
         })}
@@ -182,27 +204,17 @@ export default function ProductTable() {
               Previous
             </Button>
           </Link>
-          <Button
-            size="large"
-            onClick={() => {
-              handleClickLikes();
-            }}
-          >
+          <Button size="large" onClick={handleClickLikesSelected}>
             ADD TO LIKES
           </Button>
-          <Button
-            size="large"
-            onClick={() => {
-              handleClickBasket();
-            }}
-          >
+          <Button size="large" onClick={handleClickCartSelected}>
             ADD TO CART
           </Button>
           <Button
             type="primary"
             size="large"
             onClick={() => {
-              handleClickPurchase();
+              handleClickOrder();
               history.push('/payment');
             }}
           >
