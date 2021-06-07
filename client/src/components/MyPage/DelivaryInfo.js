@@ -95,6 +95,7 @@ export default function DeliveryInfo() {
 }
 
 const Container = styled.div`
+  height: 40rem;
   border: solid 0.1rem #ff6f00;
   border-radius: 0.8rem;
   padding: 3rem 2rem;

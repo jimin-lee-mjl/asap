@@ -90,9 +90,10 @@ function UserInfo() {
 export default UserInfo;
 
 const Wrapper = styled.div`
+  flex: 1;
   width: 40%;
-  height: calc(100% - 25rem);
-  margin: 20rem auto 5rem auto;
+  height: 70vh;
+  margin: 15rem auto 5rem auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;

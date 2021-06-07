@@ -50,8 +50,9 @@ export default function Mypage() {
 }
 
 const Container = styled.div`
+  flex: 1;
   width: 70vw;
-  height: calc(100% - 15rem);
+  height: 75rem;
   margin: 14rem auto 3rem auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

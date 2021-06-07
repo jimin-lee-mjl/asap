@@ -40,7 +40,7 @@ const LogoWrapper = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 15rem;
+  width: 10rem;
   margin: 2rem 0px;
   cursor: pointer;
   z-index: 5;
