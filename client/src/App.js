@@ -35,12 +35,12 @@ export default function App() {
         <Route path="/register" component={Register} />
         <AuthRoute
           authenticated={isAuthenticated}
-          path="/changepassword"
+          path="/password/change"
           component={ChangePassword}
         />
         <AuthRoute
           authenticated={isAuthenticated}
-          path="/deleteaccount"
+          path="/user/delete"
           component={DeleteAccount}
         />
         <AuthRoute

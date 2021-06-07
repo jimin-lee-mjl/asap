@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { register } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
+import axios from 'axios';
+import baseUrl from '../../url';
 
 export default function Register() {
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const [old, setOld] = useState('');
@@ -28,8 +28,37 @@ export default function Register() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     console.log(old, password1, password2);
-    dispatch(register({ old, password1, password2 }));
-    history.push('/login');
+    changePassword();
+  };
+
+  const changePassword = () => {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+    const body = {
+      old_password: old,
+      new_password1: password1,
+      new_password2: password2,
+    };
+    axios
+      .post(baseUrl + '/rest-auth/password/change/', body, config)
+      .then((res) => {
+        console.log('change password SUCCESSED', res);
+        alert('Your password successfully changed.');
+        history.push('/mypage');
+      })
+      .catch((err) => {
+        console.log(err.response);
+        console.log(Object.keys(err.response.data));
+        const errors = Object.keys(err.response.data);
+        errors.forEach((x) => {
+          alert(err.response.data[x]);
+        });
+      });
   };
 
   return (
@@ -37,11 +66,8 @@ export default function Register() {
       <Header />
       <Wrapper>
         <Form onSubmit={onSubmitHandler}>
-          {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>
-            Create Account
-          </h1> */}
           <Logo
-            src="logo-circle.png"
+            src="/logo-circle.png"
             alt="logo"
             onClick={() => {
               history.push('/');
@@ -73,7 +99,7 @@ export default function Register() {
 
           <Button onClick={onSubmitHandler}>Change Password</Button>
         </Form>
-        <Link to="/login" style={{ color: '#fb8c00' }}>
+        <Link to="/mypage" style={{ color: '#fb8c00' }}>
           Back to My Page
         </Link>
       </Wrapper>
