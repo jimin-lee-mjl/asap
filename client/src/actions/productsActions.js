@@ -1,8 +1,8 @@
 import { ProductActionTypes } from './types';
 import axios from 'axios';
 import { tokenConfig } from './auth';
+import baseUrl from '../url';
 
-const baseUrl = `http://elice-kdt-ai-track-vm-ai-22.koreacentral.cloudapp.azure.com/`;
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
@@ -116,10 +116,10 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
   }
 };
 
-export const likeProduct = (likeProduct) => (dispatch, getstate) => {
+export const likeProduct = (likeProductList) => (dispatch, getstate) => {
   // asap api
   const body = JSON.stringify({
-    asin: likeProduct,
+    asin: likeProductList,
   });
 
   axios
@@ -133,7 +133,7 @@ export const likeProduct = (likeProduct) => (dispatch, getstate) => {
 
   const curLikesState = getstate().likeProductReducer.likeProducts;
   console.log('curLikesState:', curLikesState);
-  const newLikesState = [...curLikesState, likeProduct];
+  const newLikesState = [...curLikesState, likeProductList];
   console.log('newLikesState:', newLikesState);
 
   dispatch({
@@ -142,9 +142,36 @@ export const likeProduct = (likeProduct) => (dispatch, getstate) => {
   });
 };
 
-export const addToCart = (addCartProduct) => (dispatch, getstate) => {
+export const deleteLikes = (deleteLikesProductList) => (dispatch, getstate) => {
   const body = JSON.stringify({
-    asin: addCartProduct,
+    asin: deleteLikesProductList,
+  });
+
+  axios
+    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  const curLikesState = getstate().likesReducer.likesList;
+  console.log('curLikesState:', curLikesState);
+  const newLikesState = curLikesState.filter(
+    (product) => deleteLikesProductList.includes(product.id) === false,
+  );
+  console.log('newLikesState:', newLikesState);
+
+  dispatch({
+    type: ProductActionTypes.DELETE_LIKES,
+    payload: newLikesState,
+  });
+};
+
+export const addToCart = (addCartProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: addCartProductList,
   });
 
   axios
@@ -157,24 +184,24 @@ export const addToCart = (addCartProduct) => (dispatch, getstate) => {
     });
 };
 
-export const deleteCart = (deleteCartProduct) => (dispatch, getstate) => {
-  // const body = JSON.stringify({
-  //   asin: '0039487',
-  // });
+export const deleteCart = (deleteCartProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: deleteCartProductList,
+  });
 
-  // axios
-  //   .delete(cartApiUrl, body, tokenConfig(getstate))
-  //   .then((res) => {
-  //     console.log(res.data);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.response);
-  //   });
+  axios
+    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
 
   const curCartState = getstate().cartReducer.cartList;
-  console.log('curLikesState:', curCartState);
+  console.log('curCartState:', curCartState);
   const newCartState = curCartState.filter(
-    (product) => product.id !== Number(deleteCartProduct),
+    (product) => deleteCartProductList.includes(product.id) === false,
   );
   console.log('newCartState:', newCartState);
 
@@ -183,6 +210,14 @@ export const deleteCart = (deleteCartProduct) => (dispatch, getstate) => {
     payload: newCartState,
   });
 };
+
+export const orderRequest =
+  (orderRequestProductList) => (dispatch, getstate) => {
+    dispatch({
+      type: ProductActionTypes.ORDER_REQUEST,
+      payload: orderRequestProductList,
+    });
+  };
 
 export const showModal = (productId) => (dispatch, getstate) => {
   if (productId === 0) {

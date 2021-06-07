@@ -21,6 +21,7 @@ const initialState = {
     key: '',
     data: {},
   },
+  orderList: [],
 };
 
 export const setProductsReducer = (state = initialState, action) => {
@@ -92,6 +93,17 @@ export const likesReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProductActionTypes.SET_LIKES:
       return { ...state, likesList: action.payload };
+    case ProductActionTypes.DELETE_LIKES:
+      return { ...state, likesList: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const orderReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ProductActionTypes.ORDER_REQUEST:
+      return { ...state, orderList: action.payload };
     default:
       return state;
   }

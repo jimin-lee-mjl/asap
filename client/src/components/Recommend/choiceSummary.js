@@ -78,6 +78,6 @@ const ChosenCategory = styled.p`
 
 const TotalSummary = styled.div`
   font-weight: bold;
-  border: solid 1px #1890ff;
+  border: solid 1px #ff6f00;
   padding-top: 10px;
 `;

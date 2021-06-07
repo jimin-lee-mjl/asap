@@ -3,7 +3,12 @@ import { Table, Button, Typography, message } from 'antd';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLikes, showModal } from '../../actions/productsActions';
+import {
+  setLikes,
+  showModal,
+  addToCart,
+  deleteLikes,
+} from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
 export default function CartList() {
@@ -18,8 +23,46 @@ export default function CartList() {
     dispatch(setLikes());
   }, []);
 
-  const likesApiUrl = '';
-  const purchaseApiUrl = '';
+  const handleClickCart = (e) => {
+    e.stopPropagation();
+    const addCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(addCartProductId);
+    dispatch(addToCart(addCartProductId));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickDelete = (e) => {
+    e.stopPropagation();
+    const deleteProductId = e.currentTarget.getAttribute('asin');
+    console.log(deleteProductId);
+    dispatch(deleteLikes(deleteProductId));
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    // "Are you sure you want to delete?"alert 띄우기
+  };
+
+  const handleClickCartSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(addToCart(checkedIdList));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickDeleteSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(deleteLikes(checkedIdList));
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+  };
+
+  // const handleClickDelete = useCallback(async () => {
+  //   console.log('handleClickDelete');
+  //   console.log('deleteProduct: ', checkedProduct);
+  //   message.success('선택한 상품이 찜 목록에서 삭제되었습니다. ', 0.5);
+  //   // "Are you sure you want to delete?"alert 띄우기
+  //   // delete api 코드
+  // }, [likesApiUrl, checkedProduct]);
 
   const columns = [
     {
@@ -57,22 +100,18 @@ export default function CartList() {
           }}
         >
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('ADD TO CART!', record);
-            }}
+            onClick={handleClickCart}
           >
             ADD TO CART
           </Button>
           <Button
+            asin={record.key}
             size="small"
             style={{ fontSize: 'xx-small' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('DELETE!', record);
-            }}
+            onClick={handleClickDelete}
           >
             DELETE
           </Button>
@@ -106,21 +145,6 @@ export default function CartList() {
     },
   };
 
-  const handleClickDelete = useCallback(async () => {
-    console.log('handleClickDelete');
-    console.log('deleteProduct: ', checkedProduct);
-    message.success('선택한 상품이 찜 목록에서 삭제되었습니다. ', 0.5);
-    // "Are you sure you want to delete?"alert 띄우기
-    // delete api 코드
-  }, [likesApiUrl, checkedProduct]);
-
-  const handleClickCart = useCallback(async () => {
-    console.log('handleClickCart');
-    console.log('checkedProduct: ', checkedProduct);
-    message.success('ADD TO CART', 0.5);
-    // dispatch(selectProduct(checkedProduct));
-  }, [likesApiUrl, checkedProduct]);
-
   return (
     <div>
       <LikesListTable
@@ -142,28 +166,13 @@ export default function CartList() {
       <TableFooter>
         <ButtonGroup>
           <div style={{ float: 'left' }}>
-            <Button
-              size="large"
-              onClick={() => {
-                handleClickDelete();
-              }}
-            >
+            <Button size="large" onClick={handleClickDeleteSelected}>
               DELETE SELECTED
             </Button>
           </div>
-          <Button
-            size="large"
-            onClick={() => {
-              handleClickCart();
-            }}
-          >
+          <Button size="large" onClick={handleClickCartSelected}>
             ADD TO CART
           </Button>
-          <Link to="/order">
-            <Button type="primary" size="large">
-              ORDER NOW
-            </Button>
-          </Link>
         </ButtonGroup>
       </TableFooter>
     </div>

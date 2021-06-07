@@ -30,23 +30,19 @@ export default function ProductDetailModal({ productInfo }) {
   const dispatch = useDispatch();
 
   const handleClickCheck = (e) => {
-    console.log(productInfo);
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('asin'));
     const selectedProductId = e.currentTarget.getAttribute('asin');
+    console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
     message.success('상품이 선택되었습니다.', 0.5);
+    console.log(selectedProductId);
   };
 
-  const handleClickPushpin = (e) => {
+  const handleClickLikes = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('asin'));
     const likeProductId = e.currentTarget.getAttribute('asin');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
@@ -71,7 +67,7 @@ export default function ProductDetailModal({ productInfo }) {
         <PushpinButton
           type="primary"
           asin={modal.data.id}
-          onClick={handleClickPushpin}
+          onClick={handleClickLikes}
         >
           찜하기
         </PushpinButton>,

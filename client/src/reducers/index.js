@@ -10,6 +10,7 @@ import {
   likesReducer,
   setOrderDetailsReducer,
   showModalReducer,
+  orderReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   likesReducer,
   setOrderDetailsReducer,
   showModalReducer,
+  orderReducer,
 });
 
 export default rootReducer;

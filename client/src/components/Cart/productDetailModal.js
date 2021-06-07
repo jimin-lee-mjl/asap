@@ -29,24 +29,11 @@ export default function ProductDetailModal({ productInfo }) {
 
   const dispatch = useDispatch();
 
-  const handleClickCheck = (e) => {
-    console.log(productInfo);
+  const handleClickLikes = (e) => {
     e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const selectedProductId = e.currentTarget.getAttribute('productId');
-    dispatch(selectProduct(selectedProductId));
-    message.success('상품이 선택되었습니다.', 0.5);
-  };
-
-  const handleClickPushpin = (e) => {
-    e.stopPropagation();
-    console.log(e.currentTarget.getAttribute('productId'));
-    const likeProductId = e.currentTarget.getAttribute('productId');
-    try {
-      dispatch(likeProduct(likeProductId));
-    } catch (e) {
-      alert('이미 찜한 상품입니다.');
-    }
+    const likeProductId = e.currentTarget.getAttribute('asin');
+    console.log(likeProductId);
+    dispatch(likeProduct(likeProductId));
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
@@ -62,19 +49,12 @@ export default function ProductDetailModal({ productInfo }) {
         <Button
           id="check-btn"
           type="primary"
-          productId={modal.data.id}
-          onClick={handleClickCheck}
+          asin={modal.data.id}
+          onClick={handleClickLikes}
           style={{ marginLeft: 30 }}
         >
-          이 상품 선택하기
-        </Button>,
-        <PushpinButton
-          type="primary"
-          productId={modal.data.id}
-          onClick={handleClickPushpin}
-        >
           찜하기
-        </PushpinButton>,
+        </Button>,
       ]}
     >
       <ProductDetailDiv>
@@ -121,8 +101,15 @@ const DetailModal = styled(Modal)`
   .ant-modal-content {
     height: 800px;
   }
-  .ant-modal-footer {
-    display: none;
+
+  .ant-modal-content .ant-modal-footer {
+    text-align: left;
+    padding-left: 90px;
+  }
+
+  .ant-modal-footer .ant-btn {
+    width: 150px;
+    height: 50px;
   }
 `;
 

@@ -8,10 +8,12 @@ import {
   likeProduct,
   showModal,
   deleteCart,
+  orderRequest,
 } from '../../actions/productsActions';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 export default function CartList() {
+  const history = useHistory();
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -24,16 +26,6 @@ export default function CartList() {
     dispatch(setCart());
   }, []);
 
-  const handleClickDelete = (e) => {
-    e.stopPropagation();
-    const deleteProductId = e.currentTarget.getAttribute('asin');
-    console.log(deleteProductId);
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
-    dispatch(deleteCart(deleteProductId));
-    console.log(cartList);
-    // "Are you sure you want to delete?"alert 띄우기
-  };
-
   const handleClickLikes = (e) => {
     e.stopPropagation();
     const likeProductId = e.currentTarget.getAttribute('asin');
@@ -42,17 +34,35 @@ export default function CartList() {
     message.success('찜 목록에 저장되었습니다', 0.5);
   };
 
-  const handleClickDeleteSelected = (e) => {
+  const handleClickDelete = (e) => {
     e.stopPropagation();
-    dispatch(deleteCart(checkedProduct));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    const deleteProductId = e.currentTarget.getAttribute('asin');
+    console.log(deleteProductId);
+    dispatch(deleteCart(deleteProductId));
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    // "Are you sure you want to delete?"alert 띄우기
   };
 
   const handleClickLikesSelected = (e) => {
     e.stopPropagation();
-    dispatch(likeProduct(checkedProduct));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(likeProduct(checkedIdList));
+    message.success('add to likes', 0.5);
   };
+
+  const handleClickDeleteSelected = (e) => {
+    e.stopPropagation();
+    const checkedIdList = checkedProduct.map((product) => product.key);
+    console.log(checkedIdList);
+    dispatch(deleteCart(checkedIdList));
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+  };
+
+  const handleClickOrder = useCallback(async () => {
+    console.log('checkedProduct: ', checkedProduct);
+    dispatch(orderRequest(checkedProduct));
+  }, [checkedProduct, dispatch]);
 
   const columns = [
     {
@@ -82,6 +92,7 @@ export default function CartList() {
       dataIndex: 'action',
       render: (text, record) => (
         <div
+          key={record.key}
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
@@ -115,7 +126,6 @@ export default function CartList() {
 
   Object.entries(cartList).map((cart) => {
     const cartProduct = cart[1];
-    console.log('cartProduct', cartProduct);
     CartListTableData.push({
       key: cartProduct.id,
       ImageURL: cartProduct.image,
@@ -186,11 +196,16 @@ export default function CartList() {
           <Button size="large" onClick={handleClickLikesSelected}>
             ADD TO LIKES
           </Button>
-          <Link to="/purchase">
-            <Button type="primary" size="large">
-              ORDER NOW
-            </Button>
-          </Link>
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => {
+              handleClickOrder();
+              history.push('/payment');
+            }}
+          >
+            ORDER NOW
+          </Button>
         </ButtonGroup>
       </TableFooter>
     </div>
@@ -223,6 +238,7 @@ const CartListTable = styled(Table)`
     font-size: 20px;
   }
 `;
+
 const TableFooter = styled.div`
   text-align: right;
   margin: 20px;
