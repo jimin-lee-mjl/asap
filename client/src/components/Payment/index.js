@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Checkbox } from 'antd';
-import { Table } from 'antd';
 import HeaderComponent from '../Header';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 import baseUrl from '../../url';
+import DeliveryInfo from './DeliveryInfo';
+import OrderTable from './OrderTable';
 
 export default function Payment() {
   const user = useSelector((state) => state.mypage);
@@ -33,33 +33,6 @@ export default function Payment() {
   console.log('totalItems', totalItems);
 
   const [check, setCheck] = useState(false);
-
-  const columns = [
-    {
-      title: 'Code',
-      dataIndex: 'key',
-      width: '20%',
-    },
-    {
-      title: 'Image',
-      dataIndex: 'ImageURL',
-      render: (url) => (
-        <img alt={url} src={url} style={{ width: '80%', height: 'auto' }} />
-      ),
-      width: '20%',
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-    },
-    {
-      title: 'Price',
-      className: 'column-price',
-      dataIndex: 'price',
-      align: 'right',
-      width: '15%',
-    },
-  ];
 
   const tokenConfig = () => {
     const config = {
@@ -132,82 +105,15 @@ export default function Payment() {
         <HeaderComponent type="logo guest" />
       )}
       <Container>
-        <DeliveryInfo>
-          <h1>Delivery Info</h1>
-          <form style={{ width: '70%', margin: 'auto' }}>
-            <FormControl>
-              <label>First Name</label>
-              <input
-                type="text"
-                value={delivery.firstName}
-                onChange={({ target: { value } }) => {
-                  setDelivery({ ...delivery, firstName: value });
-                }}
-              ></input>
-            </FormControl>
-            <FormControl>
-              <label>Last Name</label>
-              <input
-                type="text"
-                value={delivery.lastName}
-                onChange={({ target: { value } }) => {
-                  setDelivery({ ...delivery, lastName: value });
-                }}
-              ></input>
-            </FormControl>
-            <FormControl>
-              <label>Email</label>
-              <input
-                type="text"
-                value={delivery.email}
-                onChange={({ target: { value } }) => {
-                  setDelivery({ ...delivery, email: value });
-                }}
-              ></input>
-            </FormControl>
-            <FormControl>
-              <label>Shipping Address </label>
-              <input
-                type="text"
-                value={delivery.address}
-                onChange={({ target: { value } }) => {
-                  setDelivery({ ...delivery, address: value });
-                }}
-              ></input>
-            </FormControl>
-            <FormControl>
-              <label>Postal Code</label>
-              <input
-                type="text"
-                value={delivery.post}
-                onChange={({ target: { value } }) => {
-                  setDelivery({ ...delivery, post: value });
-                }}
-              ></input>
-            </FormControl>
-          </form>
-          <Check
-            onChange={() => {
-              setCheck(!check);
-            }}
-          >
-            <h3>Save this Delivery Info</h3>
-          </Check>
-        </DeliveryInfo>
+        <DeliveryInfo
+          delivery={delivery}
+          setDelivery={setDelivery}
+          check={check}
+          setCheck={setCheck}
+        />
+
         <OrderInfo>
-          <div>
-            <h1>Your Order</h1>
-            <br />
-            <Table
-              columns={columns}
-              dataSource={order}
-              bordered
-              footer={() => `Total : $${totalPrice}`}
-              pagination={false}
-              scroll={{ y: 200 }}
-              style={{ marginBottom: '5rem' }}
-            />
-          </div>
+          <OrderTable totalPrice={totalPrice} />
           <PayPalButton
             createOrder={(data, actions) => createOrder(data, actions)}
             onApprove={(data, actions) => onApprove(data, actions)}
@@ -233,56 +139,9 @@ const Container = styled.div`
   display: flex;
 `;
 
-const DeliveryInfo = styled.div`
-  padding: 10rem 2rem;
-  width: 35vw;
-`;
-
 const OrderInfo = styled.div`
   padding: 10rem 2rem;
   width: 35vw;
   display: flex;
   flex-direction: column;
-`;
-
-const FormControl = styled.div`
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  position: relative;
-
-  label {
-    color: #33032d;
-    display: block;
-    margin-bottom: 0.5rem;
-    text-align: left;
-    font-size: 1.2rem;
-  }
-
-  input {
-    border-radius: 0.5rem;
-    border: gray solid 0.2rem;
-    display: block;
-    width: 100%;
-    font-size: 1.5rem;
-    padding: 0.5rem 1rem;
-    margin-bottom: 0.5rem;
-  }
-`;
-
-const Check = styled(Checkbox)`
-  .ant-checkbox-wrapper {
-    font-size: 2rem;
-    margin: 2rem;
-    padding: 1rem;
-    width: 25%;
-  }
-
-  .ant-checkbox-checked .ant-checkbox-inner {
-    background-color: #ff6f00;
-    border-color: #ff6f00;
-  }
-
-  .ant-checkbox-checked::after {
-    border: 1px solid #ff6f00;
-  }
 `;
