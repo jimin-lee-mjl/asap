@@ -6,16 +6,23 @@ import baseUrl from '../url';
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
+const categories = [
+  'outer',
+  'top',
+  'bottom',
+  'set',
+  'sports',
+  'etc',
+  'shoes',
+  'bag',
+  'accessories',
+];
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
-      const productData = {
-        outer: [],
-        top: [],
-        bottom: [],
-      };
+      const productData = getstate().setProductsReducer.products;
       const categoryData = [];
 
       console.log(res.data);
@@ -28,6 +35,10 @@ export const setProducts = () => (dispatch, getstate) => {
           productData.bottom.push(data);
         }
       });
+
+      // res.data.map((data)=>{
+      //   productData[data.category] = [...productData[data.category], data]
+      // });
 
       console.log(productData);
 

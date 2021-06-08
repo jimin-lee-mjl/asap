@@ -1,17 +1,28 @@
 import { ProductActionTypes } from '../actions/types';
 
+// products: {
+//   outer: [],
+//   top: [],
+//   bottom: [],
+//   set: [],
+//   sports: [],
+//   etc: [],
+//   shoes: [],
+//   bag: [],
+//   accessories: [],
+// },
 const initialState = {
   products: {
     outer: [],
     top: [],
     bottom: [],
   },
-  category: [],
   selectedProducts: {
     outer: [],
     top: [],
     bottom: [],
   },
+  category: [],
   selectedProductId: [],
   likeProducts: [],
   likesList: [],
