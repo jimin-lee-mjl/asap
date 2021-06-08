@@ -1,0 +1,56 @@
+[
+{
+    "model": "recommend.keyword",
+    "pk": 1,
+    "fields": {
+        "name": "sporty"
+    }
+},
+{
+    "model": "recommend.keyword",
+    "pk": 2,
+    "fields": {
+        "name": "cozy"
+    }
+},
+{
+    "model": "recommend.item",
+    "pk": "100045442",
+    "fields": {
+        "title": "blue hoody",
+        "price": 20.0,
+        "is_women": true,
+        "category": "top",
+        "keywords": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "recommend.item",
+    "pk": "40599922",
+    "fields": {
+        "title": "gray jogger",
+        "price": 30.0,
+        "is_women": false,
+        "category": "bottom",
+        "keywords": [
+            1
+        ]
+    }
+},
+{
+    "model": "recommend.item",
+    "pk": "B00123",
+    "fields": {
+        "title": "pink cap",
+        "price": 10.5,
+        "is_women": false,
+        "category": "accessaries",
+        "keywords": [
+            1
+        ]
+    }
+}
+]

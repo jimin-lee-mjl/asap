@@ -1,26 +1,35 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework.views import status
-from .models import TestProduct, TestUser
-from .serializers import UserSerializer
+from rest_framework.authtoken.models import Token
+from .serializers import UserSerializer, NewOrderSerializer
+from .factory import UserFactory, ItemFactory, OrderFactory
 
 
 class TestUserProfileView(APITestCase):
     def setUp(self):
-        self.user = TestUser.objects.create(name='marina')
+        self.user = UserFactory.create()
+        token = Token.objects.get(user__username=self.user.username)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_get_profile(self):
-        url = reverse('mypage:profile', kwargs={'user_id': 2})
+    def test_get_detail(self):
+        url = reverse('mypage:detail')
         serializer = UserSerializer(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
 
-    def test_update_profile(self):
-        url = reverse('mypage:profile', kwargs={'user_id': 3})
+
+class TestDeliveryInfoSaveView(APITestCase):
+    def setUp(self):
+        self.user = UserFactory.create()
+        token = Token.objects.get(user__username=self.user.username)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+    def test_patch_delivery_info(self):
+        url = reverse('mypage:delivery')
         data = {
-            'name': 'marisol'
+            'postal_code': '04222'
         }
         response = self.client.patch(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -28,12 +37,23 @@ class TestUserProfileView(APITestCase):
 
 class TestUserWishView(APITestCase):
     def setUp(self):
-        self.user = TestUser.objects.create(name='marina')
-        self.shirt = TestProduct.objects.create(name='shirt')
-        self.user.wish.add(self.shirt)
+        self.user = UserFactory.create()
+        self.item = ItemFactory.create()
+        self.item2 = ItemFactory.create()
+        self.user.like_items.add(self.item)
+        token = Token.objects.get(user__username=self.user.username)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_delete_wish(self):
-        url = reverse('mypage:wishlist', kwargs={'user_id': 4})
+    def test_post_like_item(self):
+        url = reverse('mypage:like')
+        data = {
+            'asin': self.item2.asin
+        }
+        response = self.client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_del_like_item(self):
+        url = reverse('mypage:like')
         data = {
             'name': 'shirt'
         }
@@ -43,14 +63,47 @@ class TestUserWishView(APITestCase):
 
 class TestUserBagView(APITestCase):
     def setUp(self):
-        self.user = TestUser.objects.create(name='marina')
-        self.shirt = TestProduct.objects.create(name='shirt')
-        self.user.bag.add(self.shirt)
+        self.user = UserFactory.create()
+        self.item = ItemFactory.create()
+        self.item2 = ItemFactory.create()
+        self.user.cart_items.add(self.item)
+        token = Token.objects.get(user__username=self.user.username)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
-    def test_delete_bag(self):
-        url = reverse('mypage:bag', kwargs={'user_id': 1})
+    def test_post_cart_item(self):
+        url = reverse('mypage:cart')
         data = {
-            'name': 'shirt'
+            'asin': self.item2.asin
+        }
+        response = self.client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_del_cart_item(self):
+        url = reverse('mypage:cart')
+        data = {
+            'asin': self.item.asin
         }
         response = self.client.delete(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class TestOrderDetailListView(APITestCase):
+    def setUp(self):
+        self.user = UserFactory.create()
+        self.item = ItemFactory.create()
+        self.order = OrderFactory.create(user_id=self.user)
+        self.order.items.add(self.item)
+        token = Token.objects.get(user__username=self.user.username)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
+    def test_get_order_detail(self):
+        url = reverse('mypage:order_detail', kwargs={'order_id':1})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    # def  test_post_new_order(self):
+    #     url = reverse('mypage:new_order')
+    #     new_order = OrderFactory.create(user_id=self.user)
+    #     serializer = NewOrderSerializer(new_order)
+    #     response = self.client.post(url, data=serializer.data, format='json')
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)

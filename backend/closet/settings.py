@@ -49,9 +49,13 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'recommend',
     'mypage',
     'drf_yasg',
     'corsheaders',
+    'accounts',
+    'payment',
 ]
 
 SITE_ID = 1
@@ -87,11 +91,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'closet.wsgi.application'
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"\w*\W*localhost\W*\w*",
-    r"\w*\W*127.0.0.1\W*\w*",
-]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"\w*\W*localhost\W*\w*",
+#     r"\w*\W*127.0.0.1\W*\w*",
+# ]
 
+CORS_ALLOW_ALL_ORIGINS = True  
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -103,7 +108,7 @@ DATABASES = {
         'USER': env('DATABASE_USER'),
         'HOST': env('DATABASE_HOST'),
         'PASSWORD': env('DATABASE_PW'),
-        'PORT': '5432',
+        'PORT': env('DATABASE_PORT'),
     }
 }
 
@@ -154,5 +159,25 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
 }
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = True
+OLD_PASSWORD_FIELD_ENABLED = True
+
+AUTH_USER_MODEL = 'accounts.User'
+
+# staticfile 관련 설정
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# paypal 관련 설정
+PAYPAL_CLIENT_ID  = env('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET_ID  =  env('PAYPAL_SECRET_ID')

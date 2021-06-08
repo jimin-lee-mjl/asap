@@ -3,6 +3,7 @@ import { Card, Typography, Col, Row } from 'antd';
 import ProductCardGroups from './productCardGroups';
 import ChoiceSummary from './choiceSummary';
 import Navigator from './navigator';
+import ProductDetailModal from './productDetailModal';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
 
@@ -12,13 +13,13 @@ export default function Recommend() {
   return (
     <Container>
       <Header>
-        <Title>
-          사용자님의 정보와 취향 키워드를 반영한<br></br>예산 10만원 내 추천
-          제품입니다
-        </Title>
+        <p>
+          These are recommended items based on your information and keywords.
+        </p>
       </Header>
       <Body>
         <ProductCardGroups />
+        <ProductDetailModal />
         <ChoiceSummary />
       </Body>
       <Navigator />
@@ -29,14 +30,16 @@ export default function Recommend() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 30px;
+  align-items: center;
+  width: 60vw;
+  margin: auto;
+  margin-top: 100px;
 `;
 
 const Header = styled.div`
-  margin: 50px;
+  align-self: start;
+  font-size: 2rem;
 `;
 
 const Body = styled.div`

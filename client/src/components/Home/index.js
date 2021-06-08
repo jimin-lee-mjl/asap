@@ -6,33 +6,9 @@ export default function Home() {
   let history = useHistory();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        height: '100vh',
-        width: '100vw',
-        // background: "#F3EAD9"
-        // background: 'ivory',
-      }}
-    >
-      <Button
-        style={{
-          position: 'absolute',
-          top: '1rem',
-          right: '10vw',
-          margin: '0',
-        }}
-        onClick={() => {
-          history.push('/mypage');
-        }}
-      >
-        My Page
-      </Button>
-      <Logo>ASAP</Logo>
-      <Photo></Photo>
+    <Container>
+      {isAuthenticated ? <Header /> : <Header type="guest" />}
+      <Logo src="/logo-circle.png" alt="logo" style={{ zIndex: 2 }} />
       <div
         style={{
           display: 'flex',
@@ -42,20 +18,14 @@ export default function Home() {
           alignItems: 'space-between',
         }}
       >
-        <Button
-          onClick={() => {
-            history.push('/login');
-          }}
-        >
-          Login
-        </Button>
-        <Button
-          onClick={() => {
-            history.push('/info');
-          }}
-        >
-          Guest
-        </Button>
+        {isAuthenticated ? (
+          <Button to="/select">Start</Button>
+        ) : (
+          <>
+            <Button to="/login">Login</Button>
+            <Button to="/select">Guest</Button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -76,29 +46,32 @@ const Photo = styled.div`
   }
 `;
 
-const Logo = styled.h1`
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-  font-family: 'Pacifico', cursive;
-  font-size: 5rem;
-  font-weight: 900;
-  letter-spacing: 0.1rem;
-  position: absolute;
-  top: 12%;
-  z-index: 10;
+const Container = styled.div`
+  flex: 1;
+  width: 75vw;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url('/calhartt.png') center;
+`;
 
-  @media only screen and (max-width: 600px) {
-    font-size: 2rem;
+const Logo = styled.img`
+  z-index: 2;
+
+  :hover {
+    filter: drop-shadow(2px 4px 8px #ffb300);
   }
 `;
 
-const Button = styled.div`
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-  font-family: 'Pacifico', cursive;
-  background: black;
-  width: 120px;
-  height: 50px;
-  font-size: 1.3rem;
-  color: white;
+const Button = styled(Link)`
+  background: #ff6f00;
+  width: 10rem;
+  height: 4rem;
+  border-radius: 0.5rem;
+  font-size: 1.7rem;
+  color: black;
   margin: 0 3vw;
   text-align: center;
   vertical-align: middle;
@@ -106,8 +79,7 @@ const Button = styled.div`
   line-height: 2.5;
 
   :hover {
-    color: black;
-    background: white;
-    border: solid black 2px;
+    color: white;
+    box-shadow: 2px 4px 8px #ffb300;
   }
 `;

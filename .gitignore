@@ -3,3 +3,5 @@ __pycache__/
 backend/closet/.env
 .vscode/
 backend/.env.prod
+backend/static/
+backend/data/db

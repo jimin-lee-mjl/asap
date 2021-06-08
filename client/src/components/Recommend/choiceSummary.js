@@ -14,13 +14,15 @@ export default function ChoiceSummary() {
   const choiceSummaryArray = [];
   const choiceSummary = () => {
     console.log('categoryList:', categoryList);
-    var totalPrice = 0;
+    let totalPrice = 0;
 
     categoryList.map((category) => {
-      var priceSumPerCategory = 0;
-      selectedProducts[category].map((product) => {
-        priceSumPerCategory += Number(product.price);
-      });
+      let priceSumPerCategory = 0;
+      if (selectedProducts[category]) {
+        selectedProducts[category].map((product) => {
+          priceSumPerCategory += Number(product.price);
+        });
+      }
       console.log('priceSumPerCategory:', priceSumPerCategory);
       const categoryName = category.toUpperCase();
       choiceSummaryArray.push(
@@ -34,8 +36,8 @@ export default function ChoiceSummary() {
 
     console.log('totalPrice:', totalPrice);
     choiceSummaryArray.push(
-      <TotalSummary>
-        <p>합계</p>
+      <TotalSummary key="total">
+        <p>Total Price</p>
         <p>{totalPrice.toFixed(2)}</p>
       </TotalSummary>,
     );
@@ -46,7 +48,7 @@ export default function ChoiceSummary() {
   return (
     <ChoiceSummaryContainer>
       <Card
-        title="가격 정보"
+        title="Price Info"
         style={{ width: 200 }}
         headStyle={{
           fontSize: 30,
@@ -76,6 +78,6 @@ const ChosenCategory = styled.p`
 
 const TotalSummary = styled.div`
   font-weight: bold;
-  border: solid 1px #1890ff;
+  border: solid 1px #ff6f00;
   padding-top: 10px;
 `;

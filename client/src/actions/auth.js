@@ -8,20 +8,20 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   CLEAR_USER,
+  DELETE_USER,
 } from './types';
+import baseUrl from '../url';
 
 // redux-thunk
 // 1. dispatch 액션을 디스패치할 수 있고
 // 2. getState를 사용하여 현재 상태를 조회할 수 있다.
 
-// django 공식문서에 있는 쿠키 관련 코드 그대로 가져옴!
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
       if (cookie.substring(0, name.length + 1) === name + '=') {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
@@ -31,7 +31,13 @@ function getCookie(name) {
   return cookieValue;
 }
 
-const csrftoken = getCookie('csrftoken'); // django에 csrf 토큰 보내야함, 안보내면 오류 발생할 수 있음
+const csrftoken = getCookie('csrftoken');
+
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
 
 // CHECK TOKEN & LOAD USER
 export const loadUser = () => (dispatch, getState) => {
@@ -48,82 +54,80 @@ export const loadUser = () => (dispatch, getState) => {
     .catch((err) => console.log(err));
 };
 
-// LOGIN USER
+// LOGIN
 export const login = (username, password) => (dispatch) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': csrftoken, // 헤더에 csrf토큰 넣어서 같이 보내줌
-    },
-  };
-
-  // Request Body
-  const body = JSON.stringify({ username, password });
-  console.log(body);
-
+  const body = { username, password };
   axios
-    // .post('http://127.0.0.1:56537/rest-auth/login/', body, config)
-    .post('https://fakestoreapi.com/auth/login', body, config)
+    .post(baseUrl + '/rest-auth/login/', body, config)
     .then((res) => {
       console.log('OK');
-      console.log(res.data);
+      console.log('res.data', res.data);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err.response);
+      console.log(Object.keys(err.response.data));
+      const errors = Object.keys(err.response.data);
+      errors.forEach((x) => {
+        alert(err.response.data[x]);
+      });
       dispatch({
         type: LOGIN_FAIL,
       });
     });
 };
 
-// Register User
+// REGIESTER
 export const register =
-  ({ username, email, password1, password2 }) =>
+  ({ id, email, password1, password2 }) =>
   (dispatch) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken, // 헤더에 csrf토큰 넣어서 같이 보내줌
+        'X-CSRFToken': csrftoken,
       },
     };
 
-    // Request Body
-    const body = JSON.stringify({ username, email, password1, password2 });
-    console.log('!!!', username, email, password1, password2);
+    const body = { username: id, email, password1, password2 };
     console.log(body);
 
     axios
-      .post('http://127.0.0.1:56537/rest-auth/registration/', body, config)
+      .post(baseUrl + '/rest-auth/registration/', body, config)
       .then((res) => {
+        console.log('res', res);
         dispatch({
           type: REGISTER_SUCCESS,
-          payload: res.data,
+          payload: res,
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
+        console.log(Object.keys(err.response.data));
+        const errors = Object.keys(err.response.data);
+        errors.forEach((x) => {
+          alert(err.response.data[x]);
+        });
         dispatch({ type: REGISTER_FAIL });
       });
   };
 
-// LOGOUT USER
+// LOGOUT
 export const logout = () => (dispatch, getState) => {
-  // axios
-  //   .post('/rest-auth/logout', null, tokenConfig(getState))
-  //   .then((res) => {
-  dispatch({ type: CLEAR_USER });
-  dispatch({ type: LOGOUT_SUCCESS });
-  // })
-  // .catch((err) => console.log(err));
+  axios
+    .post(baseUrl + '/rest-auth/logout/', null, tokenConfig(getState))
+    .then((res) => {
+      console.log(res.data.detail);
+      dispatch({ type: CLEAR_USER });
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch((err) => console.log(err));
 };
 
-// Setup config with token - helper function
+// GET USER'S TOKEN
 export const tokenConfig = (getState) => {
-  // Get token from state
   const token = getState().auth.token;
 
   const config = {
@@ -131,11 +135,24 @@ export const tokenConfig = (getState) => {
       'Content-Type': 'application/json',
     },
   };
-
-  // If token, add to headers config
   if (token) {
     config.headers['Authorization'] = `Token ${token}`;
+    console.log(`Token ${token}`);
   }
 
   return config;
+};
+
+// DELETE USER
+export const deleteUser = () => (dispatch, getState) => {
+  console.log('delete user action working', tokenConfig(getState));
+  axios
+    .delete(baseUrl + '/api/account/delete/', tokenConfig(getState))
+    .then((res) => {
+      console.log('delete account', res);
+      dispatch({ type: DELETE_USER });
+      dispatch({ type: CLEAR_USER });
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch((err) => console.log(err.response));
 };

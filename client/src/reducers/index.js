@@ -1,20 +1,28 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
+import mypage from './mypage';
 import {
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
-  setModalReducer,
   setCategoryReducer,
+  cartReducer,
+  likesReducer,
+  setOrderDetailsReducer,
+  showModalReducer,
+  orderReducer,
 } from './productsReducer';
 
 const rootReducer = combineReducers({
   auth,
+  mypage,
   setProductsReducer,
   selectProductReducer,
-  likeProductReducer,
-  setModalReducer,
   setCategoryReducer,
+  cartReducer,
+  likesReducer,
+  setOrderDetailsReducer,
+  showModalReducer,
+  orderReducer,
 });
 
 export default rootReducer;
