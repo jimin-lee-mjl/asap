@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import HeaderComponent from '../Header';
@@ -9,9 +10,9 @@ import DeliveryInfo from './DeliveryInfo';
 import OrderTable from './OrderTable';
 
 export default function Payment() {
+  const history = useHistory();
   const user = useSelector((state) => state.mypage);
   const authToken = localStorage.getItem('token');
-  console.log('authToken', authToken);
   const order = useSelector((state) => state.orderReducer.orderList);
 
   const [delivery, setDelivery] = useState({
@@ -24,7 +25,6 @@ export default function Payment() {
 
   let totalPrice = 0;
   order.forEach((el) => {
-    console.log(el.price);
     totalPrice += el.price;
   });
   console.log('total price', totalPrice);
@@ -55,7 +55,6 @@ export default function Payment() {
     return axios
       .post(baseUrl + 'api/payment/', body, tokenConfig())
       .then((res) => {
-        console.log('createOrder orderID', res.data.order_id);
         return res.data.order_id;
       })
       .catch((err) => console.log(err.response));
@@ -72,7 +71,6 @@ export default function Payment() {
       postal_code: delivery.post,
       is_saving_address: check,
     };
-    console.log('order history add ', body);
     axios
       .post(baseUrl + 'api/order/', body, tokenConfig())
       .then((res) => {
@@ -83,17 +81,16 @@ export default function Payment() {
 
   // Call your server to finalize the transaction with Paypal
   function onApprove(data, actions) {
-    console.log('onApprove orderID', data.orderID);
-
     return axios
       .post(baseUrl + 'api/payment/' + data.orderID + '/', null, tokenConfig())
       .then((res) => {
-        console.log('onApprove response', res);
         if (authToken) {
           AddOrderHistory();
         }
+        alert('order completed');
         return res;
       })
+      .then(history.push('/'))
       .catch((err) => console.log(err.response));
   }
 
