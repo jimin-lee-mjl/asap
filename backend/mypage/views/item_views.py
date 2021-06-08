@@ -110,6 +110,7 @@ class CartItemDetailsView(APIView):
         serializer = ItemSerializer(data=request.data, partial=True)
 
         if serializer.is_valid():
+            print('v_data: ', serializer.validated_data['asin'])
             user = request.user
             item = get_object_or_404(
                 Item, pk=serializer.validated_data['asin'])
