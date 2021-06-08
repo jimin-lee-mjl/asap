@@ -8,15 +8,20 @@ import {
   Button,
   Tag,
 } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   selectProduct,
   showModal,
-  addToCart,
   addToLikes,
   undoLikes,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
 
@@ -27,6 +32,7 @@ export default function ProductDetailModal({ productInfo }) {
   );
 
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
   const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 
   const dispatch = useDispatch();
@@ -35,7 +41,16 @@ export default function ProductDetailModal({ productInfo }) {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    dispatch(addToCart(addCartProductId));
+    dispatch(addToCart([addCartProductId]));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickUndoCart = (e) => {
+    e.stopPropagation();
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -52,6 +67,26 @@ export default function ProductDetailModal({ productInfo }) {
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
     message.success('찜이 해제되었습니다', 0.5);
+  };
+
+  const InCartOrNot = (id) => {
+    if (cartProducts.includes(id)) {
+      return (
+        <ShoppingCartOutlined
+          style={{ fontSize: '4rem', color: '#ff6f00' }}
+          asin={id}
+          onClick={handleClickUndoCart}
+        />
+      );
+    } else {
+      return (
+        <ShoppingCartOutlined
+          style={{ fontSize: '4rem', color: 'grey' }}
+          asin={id}
+          onClick={handleClickCart}
+        />
+      );
+    }
   };
 
   const likesOrNot = (id) => {
@@ -83,15 +118,7 @@ export default function ProductDetailModal({ productInfo }) {
       width={1200}
       maskStyle={{ background: 'white' }}
       footer={[
-        <Button
-          id="check-btn"
-          type="primary"
-          asin={modal.data.id}
-          onClick={handleClickCart}
-          style={{ marginLeft: 30 }}
-        >
-          ADD TO CART
-        </Button>,
+        <div>{InCartOrNot(modal.data.id)}</div>,
         <div>{likesOrNot(modal.data.id)}</div>,
       ]}
     >

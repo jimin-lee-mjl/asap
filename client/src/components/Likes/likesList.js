@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLikes,
   showModal,
-  addToCart,
   deleteLikes,
+  loadCart,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
 
@@ -15,29 +18,32 @@ export default function CartList() {
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const likesList = useSelector((state) => state.likesReducer.likesList);
+
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
+  const likesList = useSelector((state) => state.likesReducer.likesList);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLikes());
+    dispatch(loadCart());
   }, []);
 
   const handleClickCart = (e) => {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    dispatch(addToCart(addCartProductId));
+    dispatch(addToCart([addCartProductId]));
     message.success('add to cart', 0.5);
   };
 
-  const handleClickDelete = (e) => {
+  const handleClickUndoCart = (e) => {
     e.stopPropagation();
-    const deleteProductId = e.currentTarget.getAttribute('asin');
-    console.log(deleteProductId);
-    dispatch(deleteLikes(deleteProductId));
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
-    // "Are you sure you want to delete?"alert 띄우기
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
   };
 
   const handleClickCartSelected = (e) => {
@@ -46,6 +52,15 @@ export default function CartList() {
     console.log(checkedIdList);
     dispatch(addToCart(checkedIdList));
     message.success('add to cart', 0.5);
+  };
+
+  const handleClickDelete = (e) => {
+    e.stopPropagation();
+    const deleteProductId = e.currentTarget.getAttribute('asin');
+    console.log([deleteProductId]);
+    dispatch(deleteLikes([deleteProductId]));
+    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    // "Are you sure you want to delete?"alert 띄우기
   };
 
   const handleClickDeleteSelected = (e) => {
@@ -99,14 +114,19 @@ export default function CartList() {
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickCart}
-          >
-            ADD TO CART
-          </Button>
+          {cartProducts.includes(record.key) ? (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              asin={record.key}
+              onClick={handleClickUndoCart}
+            />
+          ) : (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: 'grey' }}
+              asin={record.key}
+              onClick={handleClickCart}
+            />
+          )}
           <Button
             asin={record.key}
             size="small"

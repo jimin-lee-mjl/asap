@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,10 +12,12 @@ import {
   selectProduct,
   likeProduct,
   showModal,
-  addToCart,
   orderRequest,
   addToLikes,
   undoLikes,
+  loadCart,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -28,14 +34,27 @@ export default function ProductTable() {
   );
 
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
   const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
+
+  useEffect(() => {
+    dispatch(loadCart());
+  }, []);
 
   const handleClickCart = (e) => {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    dispatch(addToCart(addCartProductId));
+    dispatch(addToCart([addCartProductId]));
     message.success('add to cart', 0.5);
+  };
+
+  const handleClickUndoCart = (e) => {
+    e.stopPropagation();
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
   };
 
   const handleClickCartSelected = (e) => {
@@ -110,14 +129,19 @@ export default function ProductTable() {
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickCart}
-          >
-            ADD TO CART
-          </Button>
+          {cartProducts.includes(record.key) ? (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              asin={record.key}
+              onClick={handleClickUndoCart}
+            />
+          ) : (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: 'grey' }}
+              asin={record.key}
+              onClick={handleClickCart}
+            />
+          )}
           {likeProducts.includes(record.key) ? (
             <HeartFilled
               style={{ fontSize: '30px', color: '#ff6f00' }}
@@ -140,7 +164,6 @@ export default function ProductTable() {
   const data = [];
 
   Object.entries(selectedProducts).map(([category, productList]) => {
-    console.log('selectedProductsList', productList);
     productList.map((product) => {
       data.push({
         key: product.id,

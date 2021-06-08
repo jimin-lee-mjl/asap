@@ -1,20 +1,32 @@
 import { ProductActionTypes } from '../actions/types';
 
+// products: {
+//   outer: [],
+//   top: [],
+//   bottom: [],
+//   set: [],
+//   sports: [],
+//   etc: [],
+//   shoes: [],
+//   bag: [],
+//   accessories: [],
+// },
 const initialState = {
   products: {
     outer: [],
     top: [],
     bottom: [],
   },
-  category: [],
   selectedProducts: {
     outer: [],
     top: [],
     bottom: [],
   },
+  category: [],
   selectedProductId: [],
   likeProducts: [],
   likesList: [],
+  cartProducts: [],
   cartList: [],
   orderDetails: [],
   modal: {
@@ -74,6 +86,12 @@ export const cartReducer = (state = initialState, action) => {
       return { ...state, cartList: action.payload };
     case ProductActionTypes.DELETE_CART:
       return { ...state, cartList: action.payload };
+    case ProductActionTypes.LOAD_CART:
+      return { ...state, cartProducts: action.payload };
+    case ProductActionTypes.ADD_TO_CART:
+      return { ...state, cartProducts: action.payload };
+    case ProductActionTypes.UNDO_CART:
+      return { ...state, cartProducts: action.payload };
     default:
       return state;
   }

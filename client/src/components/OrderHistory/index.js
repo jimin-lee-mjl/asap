@@ -4,15 +4,20 @@ import { useParams } from 'react-router-dom';
 import {
   setOrderDetails,
   showModal,
-  likeProduct,
-  addToCart,
   addToLikes,
   undoLikes,
   loadLikes,
+  loadCart,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductDetailModal from './productDetailModal';
@@ -26,13 +31,15 @@ export default function OrderHistory() {
   const orderDetails = useSelector(
     (state) => state.setOrderDetailsReducer.orderDetails,
   );
-  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setOrderDetails(orderId));
+    dispatch(loadCart());
     dispatch(loadLikes());
   }, []);
 
@@ -40,12 +47,16 @@ export default function OrderHistory() {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    try {
-      dispatch(addToCart(addCartProductId));
-      message.success('', 0.5);
-    } catch (e) {
-      message.success('Fail!!', 0.5);
-    }
+    dispatch(addToCart([addCartProductId]));
+    message.success('add to cart', 0.5);
+  };
+
+  const handleClickUndoCart = (e) => {
+    e.stopPropagation();
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.success('찜이 해제되었습니다', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -99,14 +110,19 @@ export default function OrderHistory() {
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickCart}
-          >
-            ADD TO CART
-          </Button>
+          {cartProducts.includes(record.key) ? (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              asin={record.key}
+              onClick={handleClickUndoCart}
+            />
+          ) : (
+            <ShoppingCartOutlined
+              style={{ fontSize: '4rem', color: 'grey' }}
+              asin={record.key}
+              onClick={handleClickCart}
+            />
+          )}
           {likeProducts.includes(record.key) ? (
             <HeartFilled
               style={{ fontSize: '30px', color: '#ff6f00' }}
