@@ -6,17 +6,17 @@ import baseUrl from '../url';
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
-const categories = [
-  'outer',
-  'top',
-  'bottom',
-  'set',
-  'sports',
-  'etc',
-  'shoes',
-  'bag',
-  'accessories',
-];
+// const categories = [
+//   'outer',
+//   'top',
+//   'bottom',
+//   'set',
+//   'sports',
+//   'etc',
+//   'shoes',
+//   'bag',
+//   'accessories',
+// ];
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
@@ -53,7 +53,7 @@ export const setProducts = () => (dispatch, getstate) => {
       console.log('categoryData:', categoryData);
       dispatch({
         type: ProductActionTypes.SET_PRODUCTS,
-        payload: productData,
+        payload: { ...productData },
       });
       dispatch({
         type: ProductActionTypes.SET_CATEGORY,
