@@ -1,8 +1,9 @@
+import faker
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework.views import status
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, NewOrderSerializer
+from .serializers import UserSerializer
 from .factory import UserFactory, ItemFactory, OrderFactory
 
 
@@ -47,6 +48,11 @@ class TestLikeItemUpdateView(APITestCase):
         token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
+    def test_get_like_item(self):
+        url = reverse('mypage:like')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_post_like_item(self):
         url = reverse('mypage:like')
         data = {
@@ -76,6 +82,11 @@ class TestCartItemUpdateView(APITestCase):
         token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
+    def test_get_cart_item(self):
+        url = reverse('mypage:cart')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_post_cart_item(self):
         url = reverse('mypage:cart')
         data = {
@@ -97,8 +108,10 @@ class TestOrderDetailListView(APITestCase):
     def setUp(self):
         self.user = UserFactory.create()
         self.item = ItemFactory.create()
+        self.item2 = ItemFactory.create()
         self.order = OrderFactory.create(user_id=self.user)
         self.order.items.add(self.item)
+        self.order.items.add(self.item2)
         token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
@@ -107,9 +120,18 @@ class TestOrderDetailListView(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def  test_post_new_order(self):
-    #     url = reverse('mypage:new_order')
-    #     new_order = OrderFactory.create(user_id=self.user)
-    #     serializer = NewOrderSerializer(new_order)
-    #     response = self.client.post(url, data=serializer.data, format='json')
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def  test_post_new_order(self):
+        url = reverse('mypage:new_order')
+        fake = faker.Faker()
+        data = {
+            'items': [self.item.asin, self.item2.asin],
+            'total_price': fake.pydecimal(positive=True),
+            'first_name': fake.first_name(),
+            'last_name': fake.last_name(),
+            'email': fake.email(),
+            'address': fake.address(),
+            'postal_code': fake.zipcode(),
+            'is_saving_address': fake.pybool()
+        }
+        response = self.client.post(url, data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
