@@ -7,15 +7,19 @@ import HeaderComponent from '../Header';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 import baseUrl from '../../url';
+import DeliveryInfoComponent from '../MyPage/DelivaryInfo';
 
 export default function Payment() {
+  const user = useSelector((state) => state.mypage);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const order = useSelector((state) => state.orderReducer.orderList);
+  console.log('order data at payment', order);
 
   const [delivery, setDelivery] = useState({
-    firstName: 'Harry',
-    lastName: 'Potter',
-    address: '77 N Kainalu Dr, Kailua, HI 96734',
-    post: 96734,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    address: user.address,
+    post: user.postal_code,
   });
 
   function onChange(e) {
@@ -24,66 +28,32 @@ export default function Payment() {
 
   const columns = [
     {
-      title: 'Item code',
-      dataIndex: 'asin',
+      title: 'Code',
+      dataIndex: 'key',
+      width: '20%',
     },
     {
-      title: 'Item Name',
-      dataIndex: 'title',
+      title: 'Image',
+      dataIndex: 'ImageURL',
+      render: (theImageURL) => (
+        <img
+          alt={theImageURL}
+          src={theImageURL}
+          style={{ width: '80%', height: 'auto' }}
+        />
+      ),
+      width: '20%',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
     },
     {
       title: 'Price',
       className: 'column-price',
       dataIndex: 'price',
       align: 'right',
-    },
-  ];
-
-  const data = [
-    {
-      asin: '100045442',
-      title: 'blue hoody',
-      price: 20,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
-    },
-    {
-      asin: '40599922',
-      title: 'gray jogger',
-      price: 30,
+      width: '15%',
     },
   ];
 
@@ -128,23 +98,6 @@ export default function Payment() {
     const body = {
       total_price: 1,
     };
-
-    // fetch(baseUrl + 'api/payment/', {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Authorization: `Token ${token}`,
-    //   },
-    //   body: {
-    //     total_price: 1000,
-    //   },
-    // })
-    //   .then(function (res) {
-    //     return res.json();
-    //   })
-    //   .then(function (orderData) {
-    //     return orderData.id;
-    //   });
 
     return axios
       .post(baseUrl + 'api/payment/', body, config)
@@ -266,7 +219,7 @@ export default function Payment() {
             <br />
             <Table
               columns={columns}
-              dataSource={data}
+              dataSource={order}
               bordered
               footer={() => 'Total : $1000'}
               pagination={false}
@@ -276,13 +229,12 @@ export default function Payment() {
           </div>
           <PayPalButton
             createOrder={(data, actions) => createOrder(data, actions)}
-            onApprove={(orderId, actions) => onApprove(orderId, actions)}
+            onApprove={(data, actions) => onApprove(data, actions)}
             style={{
               layout: 'horizontal',
               color: 'gold',
               shape: 'pill',
               size: 'responsive',
-              locale: 'en_KR',
               tagline: 'false',
             }}
           />
