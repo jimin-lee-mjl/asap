@@ -239,19 +239,19 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
     asin: undoLikesProductList,
   });
 
-  // axios
-  //   .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
-  //   .then((res) => {
-  //     console.log(res.data);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.response);
-  //   });
+  axios
+    .delete(likesApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log('undoLikes:', err.response);
+    });
 
   const curLikesState = getstate().likesReducer.likeProducts;
   console.log('curLikesState:', curLikesState);
   const newLikesState = curLikesState.filter(
-    (product) => undoLikesProductList.includes(String(product)) === false,
+    (product) => undoLikesProductList.includes(product) === false,
   );
   console.log('newLikesState:', newLikesState);
 
@@ -261,15 +261,27 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
   });
 };
 
-export const addToCart = (addCartProductList) => (dispatch, getstate) => {
-  const body = JSON.stringify({
-    asin: addCartProductList,
-  });
-
+// cart
+export const setCart = () => (dispatch, getstate) => {
   axios
-    .post(cartApiUrl, body, tokenConfig(getstate))
+    .get(cartApiUrl, tokenConfig(getstate))
     .then((res) => {
       console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+
+      dispatch({
+        type: ProductActionTypes.SET_CART,
+        payload: res.data,
+      });
+      console.log(getstate());
     })
     .catch((err) => {
       console.log(err.response);
@@ -299,6 +311,100 @@ export const deleteCart = (deleteCartProductList) => (dispatch, getstate) => {
 
   dispatch({
     type: ProductActionTypes.DELETE_CART,
+    payload: newCartState,
+  });
+};
+
+export const loadCart = () => (dispatch, getstate) => {
+  axios
+    .get(cartApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log('loadCart:', err.response);
+    });
+
+  axios
+    .get('https://fakestoreapi.com/products')
+    .then((res) => {
+      console.log(res.data);
+      const loadedCartProduct = res.data;
+      const loadedcart = [];
+      loadedCartProduct.map((product) => {
+        loadedcart.push(product.id);
+      });
+
+      // dispatch({
+      //   type: ProductActionTypes.LOAD_CART,
+      //   payload: loadedLikes,
+      // });
+
+      dispatch({
+        type: ProductActionTypes.LOAD_CART,
+        payload: [5, 6, 7, 8],
+      });
+      console.log('loadCart!!:', getstate().cartReducer.cartProducts);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};
+
+export const addToCart = (cartProductList) => (dispatch, getstate) => {
+  const curCartState = getstate().cartReducer.cartProducts;
+  console.log('curCartState:', curCartState);
+
+  const addToCartList = cartProductList.filter(
+    (product) => curCartState.includes(Number(product)) === false,
+  );
+
+  console.log('addToCartList:', addToCartList);
+  const body = JSON.stringify({
+    asin: cartProductList,
+  });
+
+  axios
+    .post(cartApiUrl, body, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  const newCartState = [...curCartState, ...addToCartList.map(Number)];
+  console.log('newCartState:', newCartState);
+
+  dispatch({
+    type: ProductActionTypes.ADD_TO_CART,
+    payload: newCartState,
+  });
+};
+
+export const undoCart = (removeCartProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: removeCartProductList,
+  });
+
+  axios
+    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log('undoCart:', res.data);
+    })
+    .catch((err) => {
+      console.log('undoCart:', err.response);
+    });
+
+  const curCartState = getstate().cartReducer.cartProducts;
+  console.log('curCartState:', curCartState);
+  const newCartState = curCartState.filter(
+    (product) => removeCartProductList.includes(String(product)) === false,
+  );
+  console.log('newCartState:', newCartState);
+
+  dispatch({
+    type: ProductActionTypes.UNDO_CART,
     payload: newCartState,
   });
 };
@@ -339,33 +445,6 @@ export const showModal = (productId) => (dispatch, getstate) => {
         console.log(err.response);
       });
   }
-};
-
-// cart
-export const setCart = () => (dispatch, getstate) => {
-  axios
-    .get(cartApiUrl, tokenConfig(getstate))
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
-
-      dispatch({
-        type: ProductActionTypes.SET_CART,
-        payload: res.data,
-      });
-      console.log(getstate());
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
 };
 
 //orderhistory

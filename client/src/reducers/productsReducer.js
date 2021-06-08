@@ -15,6 +15,7 @@ const initialState = {
   selectedProductId: [],
   likeProducts: [],
   likesList: [],
+  cartProducts: [],
   cartList: [],
   orderDetails: [],
   modal: {
@@ -74,6 +75,12 @@ export const cartReducer = (state = initialState, action) => {
       return { ...state, cartList: action.payload };
     case ProductActionTypes.DELETE_CART:
       return { ...state, cartList: action.payload };
+    case ProductActionTypes.LOAD_CART:
+      return { ...state, cartProducts: action.payload };
+    case ProductActionTypes.ADD_TO_CART:
+      return { ...state, cartProducts: action.payload };
+    case ProductActionTypes.UNDO_CART:
+      return { ...state, cartProducts: action.payload };
     default:
       return state;
   }

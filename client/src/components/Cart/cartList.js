@@ -60,7 +60,7 @@ export default function CartList() {
     e.stopPropagation();
     const deleteProductId = e.currentTarget.getAttribute('asin');
     console.log(deleteProductId);
-    dispatch(deleteCart(deleteProductId));
+    dispatch(deleteCart([deleteProductId]));
     message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
     // "Are you sure you want to delete?"alert 띄우기
   };
