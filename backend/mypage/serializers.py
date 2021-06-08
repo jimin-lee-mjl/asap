@@ -21,6 +21,12 @@ class DeliveryInfoSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'address', 'postal_code']
 
 
+class AsinSerializer(serializers.Serializer):
+    asin = serializers.ListField(
+        child=serializers.CharField()
+    )
+
+
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item

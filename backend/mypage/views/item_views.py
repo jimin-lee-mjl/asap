@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from recommend.models import Item
-from ..serializers import ItemSerializer
+from ..serializers import ItemSerializer, AsinSerializer
 from ..swagger.responses import ErrorResponse, SuccessResponse
 from ..swagger.swagger import Swagger
 from ..swagger.req_params import RequestBody
@@ -35,32 +35,31 @@ class LikeItemDetailsView(APIView):
     @swagger_auto_schema(responses=Swagger.add_like_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
     def post(self, request, format=None):
-        serializer = ItemSerializer(data=request.data, partial=True)
+        serializer = AsinSerializer(data=request.data)
 
         if serializer.is_valid():
             user = request.user
-            item = get_object_or_404(
-                Item, pk=serializer.validated_data['asin'])
-            if item not in user.like_items.all():
-                user.like_items.add(item)
-                return Response({'like_items': user.get_like_items()}, status=SuccessResponse.item_added.STATUS_CODE)
 
-            error_msg = ErrorResponse.item_exists.ERROR_MSG
-            return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
+            for asin in serializer.validated_data['asin']:
+                item = get_object_or_404(Item, pk=asin)
+                user.like_items.add(item)
+            
+            return Response({'like_items': user.get_like_items()}, status=SuccessResponse.item_added.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
     @swagger_auto_schema(responses=Swagger.del_like_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
     def delete(self, request, format=None):
-        serializer = ItemSerializer(data=request.data, partial=True)
+        serializer = AsinSerializer(data=request.data['data'])
 
         if serializer.is_valid():
             user = request.user
-            item = get_object_or_404(
-                Item, pk=serializer.validated_data['asin'])
-            user.like_items.remove(item)
-            return Response({'like_items': user.get_like_items()}, status=SuccessResponse.item_removed.STATUS_CODE)
 
+            for asin in serializer.validated_data['asin']:
+                item = get_object_or_404(Item, pk=asin)
+                user.like_items.remove(item)
+            
+            return Response({'like_items': user.get_like_items()}, status=SuccessResponse.item_removed.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
 
@@ -90,31 +89,29 @@ class CartItemDetailsView(APIView):
     @swagger_auto_schema(responses=Swagger.add_cart_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
     def post(self, request, format=None):
-        serializer = ItemSerializer(data=request.data, partial=True)
+        serializer = AsinSerializer(data=request.data)
 
         if serializer.is_valid():
             user = request.user
-            item = get_object_or_404(
-                Item, pk=serializer.validated_data['asin'])
-            if item not in user.cart_items.all():
-                user.cart_items.add(item)
-                return Response({'cart_items': user.get_cart_items()}, status=SuccessResponse.item_added.STATUS_CODE)
 
-            error_msg = ErrorResponse.item_exists.ERROR_MSG
-            return Response(error_msg, status=ErrorResponse.item_exists.STATUS_CODE)
+            for asin in serializer.validated_data['asin']:
+                item = get_object_or_404(Item, pk=asin)
+                user.cart_items.add(item)
+            
+            return Response({'cart_items': user.get_cart_items()}, status=SuccessResponse.item_added.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)
 
     @swagger_auto_schema(responses=Swagger.del_cart_item_response.RESPONSE,
                          request_body=RequestBody.update_item_request.PARAMS)
     def delete(self, request, format=None):
-        serializer = ItemSerializer(data=request.data, partial=True)
+        serializer = AsinSerializer(data=request.data['data'])
 
         if serializer.is_valid():
-            print('v_data: ', serializer.validated_data['asin'])
             user = request.user
-            item = get_object_or_404(
-                Item, pk=serializer.validated_data['asin'])
-            user.cart_items.remove(item)
-            return Response({'cart_items': user.get_cart_items()}, status=SuccessResponse.item_removed.STATUS_CODE)
 
+            for asin in serializer.validated_data['asin']:
+                item = get_object_or_404(Item, pk=asin)
+                user.cart_items.remove(item)
+            
+            return Response({'cart_items': user.get_cart_items()}, status=SuccessResponse.item_removed.STATUS_CODE)
         return Response(serializer.errors, status=ErrorResponse.data_not_valid.STATUS_CODE)

@@ -40,14 +40,17 @@ class TestLikeItemUpdateView(APITestCase):
         self.user = UserFactory.create()
         self.item = ItemFactory.create()
         self.item2 = ItemFactory.create()
-        self.user.like_items.add(self.item)
+        self.item3 = ItemFactory.create()
+        self.item4 = ItemFactory.create()
+        self.user.like_items.add(self.item3)
+        self.user.like_items.add(self.item4)
         token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_post_like_item(self):
         url = reverse('mypage:like')
         data = {
-            'asin': self.item2.asin
+            'asin': [self.item.asin, self.item2.asin]
         }
         response = self.client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -55,7 +58,7 @@ class TestLikeItemUpdateView(APITestCase):
     def test_del_like_item(self):
         url = reverse('mypage:like')
         data = {
-            'asin': self.item.asin
+            'data': {'asin': [self.item3.asin, self.item4.asin]}
         }
         response = self.client.delete(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -66,14 +69,17 @@ class TestCartItemUpdateView(APITestCase):
         self.user = UserFactory.create()
         self.item = ItemFactory.create()
         self.item2 = ItemFactory.create()
-        self.user.cart_items.add(self.item)
+        self.item3 = ItemFactory.create()
+        self.item4 = ItemFactory.create()
+        self.user.like_items.add(self.item3)
+        self.user.like_items.add(self.item4)
         token = Token.objects.get(user__username=self.user.username)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
     def test_post_cart_item(self):
         url = reverse('mypage:cart')
         data = {
-            'asin': self.item2.asin
+            'asin': [self.item.asin, self.item2.asin]
         }
         response = self.client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -81,7 +87,7 @@ class TestCartItemUpdateView(APITestCase):
     def test_del_cart_item(self):
         url = reverse('mypage:cart')
         data = {
-            'asin': self.item.asin
+            'data': {'asin': [self.item3.asin, self.item4.asin]}
         }
         response = self.client.delete(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
