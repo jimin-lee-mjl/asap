@@ -7,24 +7,32 @@ import HeaderComponent from '../Header';
 import { PayPalButton } from 'react-paypal-button-v2';
 import axios from 'axios';
 import baseUrl from '../../url';
-import DeliveryInfoComponent from '../MyPage/DelivaryInfo';
 
 export default function Payment() {
   const user = useSelector((state) => state.mypage);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const authToken = localStorage.getItem('token');
+  console.log('authToken', authToken);
   const order = useSelector((state) => state.orderReducer.orderList);
-  console.log('order data at payment', order);
 
   const [delivery, setDelivery] = useState({
     firstName: user.first_name,
     lastName: user.last_name,
+    email: user.email,
     address: user.address,
     post: user.postal_code,
   });
 
-  function onChange(e) {
-    console.log(`checked = ${e.target.checked}`);
-  }
+  let totalPrice = 0;
+  order.forEach((el) => {
+    console.log(el.price);
+    totalPrice += el.price;
+  });
+  console.log('total price', totalPrice);
+
+  const totalItems = order.map((el) => el.key);
+  console.log('totalItems', totalItems);
+
+  const [check, setCheck] = useState(false);
 
   const columns = [
     {
@@ -35,12 +43,8 @@ export default function Payment() {
     {
       title: 'Image',
       dataIndex: 'ImageURL',
-      render: (theImageURL) => (
-        <img
-          alt={theImageURL}
-          src={theImageURL}
-          style={{ width: '80%', height: 'auto' }}
-        />
+      render: (url) => (
+        <img alt={url} src={url} style={{ width: '80%', height: 'auto' }} />
       ),
       width: '20%',
     },
@@ -57,123 +61,79 @@ export default function Payment() {
     },
   ];
 
-  let totalPrice = 0;
-  const total = order.forEach((el) => {
-    console.log(el.price);
-    totalPrice += el.price;
-  });
-  console.log('total price', totalPrice);
-
-  const [orderId, setOrderId] = useState('');
-
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === name + '=') {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
-  const csrftoken = getCookie('csrftoken'); // django에 csrf 토큰 보내야함, 안보내면 오류 발생할 수 있음
-
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token ${token}`,
-    },
-  };
-
-  // Call your server to set up the transaction
-  function createOrder(data, actions) {
-    const token = localStorage.getItem('token');
+  const tokenConfig = () => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
       },
     };
+    if (authToken) {
+      config.headers['Authorization'] = `Token ${authToken}`;
+      console.log(`Token ${authToken}`);
+    }
+    return config;
+  };
 
+  // Call your server to set up the transaction with Paypal
+  function createOrder(data, actions) {
     const body = {
       total_price: totalPrice,
     };
-
     return axios
-      .post(baseUrl + 'api/payment/', body, config)
+      .post(baseUrl + 'api/payment/', body, tokenConfig())
       .then((res) => {
-        console.log(res);
-        console.log(res.data.order_id);
-        setOrderId(res.data.order_id);
+        console.log('createOrder orderID', res.data.order_id);
         return res.data.order_id;
       })
       .catch((err) => console.log(err.response));
   }
 
-  // Call your server to finalize the transaction
-  function onApprove(data, actions) {
-    console.log('onApprove', data.orderID);
-    const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
+  function AddOrderHistory() {
+    const body = {
+      items: totalItems,
+      total_price: totalPrice,
+      first_name: delivery.firstName,
+      last_name: delivery.lastName,
+      email: delivery.email,
+      address: delivery.address,
+      postal_code: delivery.post,
+      is_saving_address: check,
     };
+    console.log('order history add ', body);
+    axios
+      .post(baseUrl + 'api/order/', body, tokenConfig())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.log(err.response));
+  }
+
+  // Call your server to finalize the transaction with Paypal
+  function onApprove(data, actions) {
+    console.log('onApprove orderID', data.orderID);
 
     return axios
-      .post(baseUrl + 'api/payment/' + data.orderID + '/', null, config)
+      .post(baseUrl + 'api/payment/' + data.orderID + '/', null, tokenConfig())
       .then((res) => {
         console.log('onApprove response', res);
+        if (authToken) {
+          AddOrderHistory();
+        }
         return res;
       })
-      .then((orderData) => {
-        // Three cases to handle:
-        //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-        //   (2) Other non-recoverable errors -> Show a failure message
-        //   (3) Successful transaction -> Show confirmation or thank you
-
-        // This example reads a v2/checkout/orders capture response, propagated from the server
-        // You could use a different API or structure for your 'orderData'
-        const errorDetail =
-          Array.isArray(orderData.details) && orderData.details[0];
-
-        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
-          return actions.restart(); // Recoverable state, per:
-          // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
-        }
-
-        if (errorDetail) {
-          var msg = 'Sorry, your transaction could not be processed.';
-          if (errorDetail.description) msg += '\n\n' + errorDetail.description;
-          if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
-          return alert(msg); // Show a failure message
-        }
-
-        // Show a success message
-        alert('Transaction completed by ' + orderData.payer.name.given_name);
-      });
+      .catch((err) => console.log(err.response));
   }
 
   return (
     <>
-      {/* {true ? (
+      {authToken ? (
         <HeaderComponent type="logo" />
       ) : (
         <HeaderComponent type="logo guest" />
-      )} */}
-      <HeaderComponent type="logo" />
+      )}
       <Container>
         <DeliveryInfo>
           <h1>Delivery Info</h1>
-          <br />
           <form style={{ width: '70%', margin: 'auto' }}>
             <FormControl>
               <label>First Name</label>
@@ -192,6 +152,16 @@ export default function Payment() {
                 value={delivery.lastName}
                 onChange={({ target: { value } }) => {
                   setDelivery({ ...delivery, lastName: value });
+                }}
+              ></input>
+            </FormControl>
+            <FormControl>
+              <label>Email</label>
+              <input
+                type="text"
+                value={delivery.email}
+                onChange={({ target: { value } }) => {
+                  setDelivery({ ...delivery, email: value });
                 }}
               ></input>
             </FormControl>
@@ -216,7 +186,11 @@ export default function Payment() {
               ></input>
             </FormControl>
           </form>
-          <Check onChange={onChange}>
+          <Check
+            onChange={() => {
+              setCheck(!check);
+            }}
+          >
             <h3>Save this Delivery Info</h3>
           </Check>
         </DeliveryInfo>
@@ -260,7 +234,7 @@ const Container = styled.div`
 `;
 
 const DeliveryInfo = styled.div`
-  padding: 5rem;
+  padding: 10rem 2rem;
   width: 35vw;
 `;
 
@@ -281,7 +255,7 @@ const FormControl = styled.div`
     display: block;
     margin-bottom: 0.5rem;
     text-align: left;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   input {
@@ -289,28 +263,9 @@ const FormControl = styled.div`
     border: gray solid 0.2rem;
     display: block;
     width: 100%;
-    font-size: 1.8rem;
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-`;
-
-const Button = styled.div`
-  background: black;
-  color: white;
-  text-align: center;
-  vertical-align: middle;
-  display: table-cell;
-  line-height: 2.5;
-  font-size: 1.8rem;
-  border-radius: 0.5rem;
-  border: solid black 0.2rem;
-  margin: 1rem auto;
-  width: 70%;
-
-  :hover {
-    color: black;
-    background: white;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
   }
 `;
 
