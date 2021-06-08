@@ -57,6 +57,13 @@ export default function Payment() {
     },
   ];
 
+  let totalPrice = 0;
+  const total = order.forEach((el) => {
+    console.log(el.price);
+    totalPrice += el.price;
+  });
+  console.log('total price', totalPrice);
+
   const [orderId, setOrderId] = useState('');
 
   function getCookie(name) {
@@ -96,7 +103,7 @@ export default function Payment() {
     };
 
     const body = {
-      total_price: 1,
+      total_price: totalPrice,
     };
 
     return axios
@@ -221,10 +228,10 @@ export default function Payment() {
               columns={columns}
               dataSource={order}
               bordered
-              footer={() => 'Total : $1000'}
+              footer={() => `Total : $${totalPrice}`}
               pagination={false}
               scroll={{ y: 200 }}
-              style={{ marginBottom: '1rem' }}
+              style={{ marginBottom: '5rem' }}
             />
           </div>
           <PayPalButton
