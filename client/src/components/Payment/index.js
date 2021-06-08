@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { Checkbox } from 'antd';
 import { Table } from 'antd';
 import HeaderComponent from '../Header';
+import { PayPalButton } from 'react-paypal-button-v2';
+import axios from 'axios';
+import baseUrl from '../../url';
 
 export default function Payment() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -84,6 +87,121 @@ export default function Payment() {
     },
   ];
 
+  const [orderId, setOrderId] = useState('');
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + '=') {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken'); // django에 csrf 토큰 보내야함, 안보내면 오류 발생할 수 있음
+
+  const token = localStorage.getItem('token');
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  // Call your server to set up the transaction
+  function createOrder(data, actions) {
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+
+    const body = {
+      total_price: 1,
+    };
+
+    // fetch(baseUrl + 'api/payment/', {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Token ${token}`,
+    //   },
+    //   body: {
+    //     total_price: 1000,
+    //   },
+    // })
+    //   .then(function (res) {
+    //     return res.json();
+    //   })
+    //   .then(function (orderData) {
+    //     return orderData.id;
+    //   });
+
+    return axios
+      .post(baseUrl + 'api/payment/', body, config)
+      .then((res) => {
+        console.log(res);
+        console.log(res.data.order_id);
+        setOrderId(res.data.order_id);
+        return res.data.order_id;
+      })
+      .catch((err) => console.log(err.response));
+  }
+
+  // Call your server to finalize the transaction
+  function onApprove(data, actions) {
+    console.log('onApprove', data.orderID);
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    };
+
+    return axios
+      .post(baseUrl + 'api/payment/' + data.orderID + '/', null, config)
+      .then((res) => {
+        console.log('onApprove response', res);
+        return res;
+      })
+      .then((orderData) => {
+        // Three cases to handle:
+        //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+        //   (2) Other non-recoverable errors -> Show a failure message
+        //   (3) Successful transaction -> Show confirmation or thank you
+
+        // This example reads a v2/checkout/orders capture response, propagated from the server
+        // You could use a different API or structure for your 'orderData'
+        const errorDetail =
+          Array.isArray(orderData.details) && orderData.details[0];
+
+        if (errorDetail && errorDetail.issue === 'INSTRUMENT_DECLINED') {
+          return actions.restart(); // Recoverable state, per:
+          // https://developer.paypal.com/docs/checkout/integration-features/funding-failure/
+        }
+
+        if (errorDetail) {
+          var msg = 'Sorry, your transaction could not be processed.';
+          if (errorDetail.description) msg += '\n\n' + errorDetail.description;
+          if (orderData.debug_id) msg += ' (' + orderData.debug_id + ')';
+          return alert(msg); // Show a failure message
+        }
+
+        // Show a success message
+        alert('Transaction completed by ' + orderData.payer.name.given_name);
+      });
+  }
+
   return (
     <>
       {/* {true ? (
@@ -153,11 +271,21 @@ export default function Payment() {
               footer={() => 'Total : $1000'}
               pagination={false}
               scroll={{ y: 200 }}
+              style={{ marginBottom: '1rem' }}
             />
           </div>
-          <br />
-          <br />
-          <Button>Pay with Paypal</Button>
+          <PayPalButton
+            createOrder={(data, actions) => createOrder(data, actions)}
+            onApprove={(orderId, actions) => onApprove(orderId, actions)}
+            style={{
+              layout: 'horizontal',
+              color: 'gold',
+              shape: 'pill',
+              size: 'responsive',
+              locale: 'en_KR',
+              tagline: 'false',
+            }}
+          />
         </OrderInfo>
       </Container>
     </>
