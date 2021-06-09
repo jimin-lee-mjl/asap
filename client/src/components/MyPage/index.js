@@ -9,7 +9,7 @@ import Keywords from './Keywords';
 import OrderHistory from './OrderHistory';
 import LikedItems from './LikedItems';
 
-export default function Mypage() {
+export default function MyPage() {
   const user = useSelector((state) => state.auth.user);
 
   return (
