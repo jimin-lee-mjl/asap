@@ -1,9 +1,10 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from .models import Item
-from .serializers import ItemListSerializer
+from .serializers import ItemListSerializer, ItemDetailSerializer
 
 
 @api_view(['GET'])
@@ -27,9 +28,15 @@ def list_items_by_category(request):
     categories = request.GET['categories'].split(',')
     for cg in categories:
         items = Item.objects.filter(category__exact=cg)[:4]
-        print(items)
         serializer = ItemListSerializer(items, many=True)
         item_dict[cg] = serializer.data
 
-    print(item_dict)
     return Response(item_dict, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def show_item_details(request, item_id):
+    item = get_object_or_404(Item, pk=item_id)
+    serializer = ItemDetailSerializer(item)
+    return Response(serializer.data, status=status.HTTP_200_OK)
