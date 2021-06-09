@@ -8,7 +8,12 @@ import {
   Button,
   Tag,
 } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  CheckOutlined,
+  CheckCircleOutlined,
+} from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -23,6 +28,9 @@ export default function ProductDetailModal({ productInfo }) {
   const { Title } = Typography;
   const selectedProducts = useSelector(
     (state) => state.selectProductReducer.selectedProducts,
+  );
+  const selectedProductIdList = useSelector(
+    (state) => state.selectProductReducer.selectedProductId,
   );
   const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
@@ -57,19 +65,67 @@ export default function ProductDetailModal({ productInfo }) {
   const likesOrNot = (id) => {
     if (likeProducts.includes(id)) {
       return (
-        <HeartFilled
+        <button
+          className="like-btn"
           asin={id}
-          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickUndoLikes}
-        />
+          style={{
+            color: '#ff6f00',
+            background: 'blanchedalmond',
+            fontStyle: 'bold',
+          }}
+        >
+          <HeartFilled />
+          &nbsp; Like
+        </button>
       );
     } else {
       return (
-        <HeartOutlined
+        <button
+          className="like-btn"
           asin={id}
-          style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickLikes}
-        />
+          style={{ color: '#ff6f00' }}
+        >
+          <HeartOutlined />
+          &nbsp; Like
+        </button>
+      );
+    }
+  };
+
+  const renderSelectButton = (id) => {
+    console.log(id);
+    console.log(selectedProductIdList);
+    if (selectedProductIdList.includes(String(id))) {
+      return (
+        <button
+          className="select-btn"
+          asin={id}
+          onClick={handleClickCheck}
+          style={{
+            background: '#ff6f00',
+            color: 'white',
+          }}
+        >
+          <CheckCircleOutlined />
+          &nbsp; Selected item
+        </button>
+      );
+    } else {
+      return (
+        <button
+          className="select-btn"
+          asin={id}
+          onClick={handleClickCheck}
+          style={{
+            background: 'white',
+            color: '#ff6f00',
+          }}
+        >
+          <CheckOutlined />
+          &nbsp; Select this item
+        </button>
       );
     }
   };
@@ -83,15 +139,7 @@ export default function ProductDetailModal({ productInfo }) {
       width={'50%'}
       maskStyle={{ background: 'white' }}
       footer={[
-        <Button
-          id="check-btn"
-          type="primary"
-          asin={modal.data.id}
-          onClick={handleClickCheck}
-          style={{ marginLeft: 30 }}
-        >
-          이 상품 선택하기
-        </Button>,
+        <div>{renderSelectButton(modal.data.id)}</div>,
         <div>{likesOrNot(modal.data.id)}</div>,
       ]}
     >
@@ -153,6 +201,27 @@ const DetailModal = styled(Modal)`
     margin-left: 30px;
     margin-right: 30px;
   }
+  .ant-modal-footer div {
+    font-size: 1.8rem;
+  }
+
+  .ant-modal-footer div .select-btn {
+    border: 0.3rem solid #ff6f00;
+    border-radius: 2rem;
+    line-height: 2;
+    margin-right: 1rem;
+    padding-inline: 2rem;
+    width: 20rem;
+  }
+
+  .ant-modal-footer div .like-btn {
+    border: 0.3rem solid #ff6f00;
+    border-radius: 2rem;
+    line-height: 2;
+    margin-right: 1rem;
+    background: white;
+    padding-inline: 1.5rem;
+  }
 `;
 
 const ProductDetailDiv = styled.div`
@@ -177,3 +246,28 @@ const KeywordDiv = styled.div`
 const PushpinButton = styled(Button)`
   margin-left: 30px;
 `;
+
+// const Button = styled.button`
+//   background: #ff6f00;
+//   width: 8rem;
+//   height: 4rem;
+//   border: 0.1rem solid #ff6f00;
+//   border-radius: 0.5rem;
+//   font-size: 1.7rem;
+//   color: white;
+//   margin: 0 3vw;
+//   text-align: center;
+//   vertical-align: middle;
+//   display: table-cell;
+//   line-height: 2;
+//   margin: 5px 0;
+
+//   :hover {
+//     box-shadow: 2px 4px 8px #c4c4c4;
+//   }
+// `;
+
+// const OutLinedButton = styled(Button)`
+//   background: #fff;
+//   color: #ff6f00;
+// `;

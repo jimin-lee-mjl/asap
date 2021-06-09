@@ -67,7 +67,7 @@ export default function ProductCard({ categoryKey }) {
       return (
         <HeartOutlined
           asin={id}
-          style={{ fontSize: '30px', color: '#ff6f00' }}
+          style={{ fontSize: '30px', color: 'gray' }}
           onClick={handleClickLikes}
         />
       );
@@ -101,7 +101,12 @@ export default function ProductCard({ categoryKey }) {
             <CardIcons>
               <CheckCircleOutlined
                 asin={id}
-                style={{ marginRight: 40 }}
+                style={{
+                  marginRight: 40,
+                  color: selectedProductIdList.includes(String(id))
+                    ? '#ff6f00'
+                    : 'gray',
+                }}
                 onClick={handleClickCheck}
               />
               {likesOrNot(id)}
