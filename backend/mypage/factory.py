@@ -2,6 +2,7 @@ import factory
 from accounts.models import User
 from recommend.models import Item
 from .models import OrderDetail
+from recommend.custom_faker import fake
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -23,7 +24,7 @@ class ItemFactory(factory.django.DjangoModelFactory):
     title = factory.Faker('name')
     price = factory.Faker('pydecimal', positive=True)
     is_women = factory.Faker('pybool')
-    category = 'etc'
+    category = factory.LazyFunction(fake.classify)
 
 
 class OrderFactory(factory.django.DjangoModelFactory):

@@ -1,12 +1,35 @@
+from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-# from .models import Amazon
-# from .serializers import AmazonSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from .models import Item
+from .serializers import ItemListSerializer
 
-# Create your views here.
-# @api_view(['POST'])
-# def AmazonAPI(request, keyword):
-#     amazon = Amazon.objects.filter(keyword=keyword).all()
-#     serializer = AmazonSerializer(amazon, many=True)
-#     return Response(serializer.data)
-# => id=1에 대해 리턴된 Response: {'id': 1, 'name': '태뽕', 'phone': '01012345678', 'addr': '주소주소'}
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_items_by_category(request):
+    '''
+    사용자가 선택한 카테고리에 해당하는 아이템 목록을 보내주는 API
+
+    ---
+    ## `/api/recommendation?keywords=&categories=`
+       - 복수의 쿼리 구분 시 쉼표(',')로 해주세요.
+    ## 응답 내용
+       - category1 : 카테고리에 해당하는 아이템의 asin, title, price 정보
+       - category2 : 카테고리에 해당하는 아이템의 asin, title, price 정보
+    '''
+    if not 'categories' in request.GET:
+        error_msg = 'Category does not exist.'
+        return Response({'error_msg': error_msg}, status=status.HTTP_400_BAD_REQUEST)
+
+    item_dict = dict()
+    categories = request.GET['categories'].split(',')
+    for cg in categories:
+        items = Item.objects.filter(category__exact=cg)[:4]
+        print(items)
+        serializer = ItemListSerializer(items, many=True)
+        item_dict[cg] = serializer.data
+
+    print(item_dict)
+    return Response(item_dict, status=status.HTTP_200_OK)
