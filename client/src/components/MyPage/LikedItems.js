@@ -1,8 +1,10 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import ItemCard from './ItemCard';
 
 export default function LikedItems() {
+  const history = useHistory();
   const asins = [2, 3, 4, 15, 17, 18, 2, 3, 4, 15, 17, 18];
   return (
     <Container>
@@ -12,7 +14,13 @@ export default function LikedItems() {
           return <ItemCard productId={n}></ItemCard>;
         })}
       </ScrollingList>
-      <Button>Add to Cart</Button>
+      <Button
+        onClick={() => {
+          history.push('/likes');
+        }}
+      >
+        Add to Cart
+      </Button>
     </Container>
   );
 }

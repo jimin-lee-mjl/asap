@@ -10,7 +10,7 @@ export default function LogoHeaderComponent() {
     <Container>
       <LogoWrapper>
         <Logo
-          src="logo-circle.png"
+          src="/logo-circle.png"
           alt="logo"
           onClick={() => {
             history.push('/');

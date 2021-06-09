@@ -2,13 +2,22 @@ import React from 'react';
 import ProductTable from './productTable';
 import styled from 'styled-components';
 import ProductDetailModal from './productDetailModal';
+import HeaderComponent from '../Header';
 
 export default function Result() {
+  const authToken = localStorage.getItem('token');
   return (
-    <ResultContainer>
-      <ProductTable />
-      <ProductDetailModal />
-    </ResultContainer>
+    <>
+      {authToken ? (
+        <HeaderComponent type="logo" />
+      ) : (
+        <HeaderComponent type="logo guest" />
+      )}
+      <ResultContainer>
+        <ProductTable />
+        <ProductDetailModal />
+      </ResultContainer>
+    </>
   );
 }
 
@@ -19,5 +28,6 @@ const ResultContainer = styled.div`
   align-items: center;
   width: 60vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
+  min-height: 75%;
 `;
