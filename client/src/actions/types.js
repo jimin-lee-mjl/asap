@@ -35,6 +35,7 @@ export const ProductActionTypes = {
 };
 
 export const UserSelectTypes = {
+  SELECT_GENDER: 'SELECT_GENDER',
   SET_KEYWORDS: 'SET_KEYWORDS',
   SELECT_KEYWORDS: 'SELECT_KEYWORDS',
   UNSELECT_KEYWORDS: 'UNSELECT_KEYWORDS',

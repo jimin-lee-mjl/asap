@@ -1,17 +1,36 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { selectGender } from '../../actions/userSelect';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export default function Gender() {
+  const dispatch = useDispatch();
+
   return (
     <>
       <h1>Choose your gender!</h1>
       <Container>
-        <Item style={{ backgroundImage: `url('/shopMen.png')` }}>
-          <Link>Men</Link>
+        <input
+          id="men"
+          type="radio"
+          name="gender"
+          onClick={() => {
+            dispatch(selectGender('men'));
+          }}
+        />
+        <Item for="men" style={{ backgroundImage: `url('/shopMen.png')` }}>
+          <span>Men</span>
         </Item>
-        <Item style={{ backgroundImage: `url('/shopWomens.jpg')` }}>
-          <Link>Women</Link>
+        <input
+          id="women"
+          type="radio"
+          name="gender"
+          onClick={() => {
+            dispatch(selectGender('women'));
+          }}
+        />
+        <Item for="women" style={{ backgroundImage: `url('/shopWomens.jpg')` }}>
+          <span>Women</span>
         </Item>
       </Container>
     </>
@@ -25,9 +44,19 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+
+  input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  input:checked + label {
+    filter: grayscale(0);
+  }
 `;
 
-const Item = styled.div`
+const Item = styled.label`
   position: relative;
   width: 40%;
   height: 90%;
@@ -48,7 +77,7 @@ const Item = styled.div`
     filter: grayscale(0);
   }
 
-  a {
+  span {
     -webkit-text-decoration: none;
     text-decoration: none;
     /* background: rgba(255, 255, 255, 0.3); */

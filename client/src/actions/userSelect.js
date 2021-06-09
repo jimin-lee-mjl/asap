@@ -57,6 +57,13 @@ export const setKeywords = () => (dispatch, getstate) => {
   });
 };
 
+export const selectGender = (payload) => {
+  return {
+    type: UserSelectTypes.SELECT_GENDER,
+    payload,
+  };
+};
+
 export const selectKeywords = (selectedKeyword) => (dispatch, getstate) => {
   const curSelectedKeywords = getstate().userSelect.selectedKeywords;
   console.log('curSelectedKeywords:', curSelectedKeywords);
