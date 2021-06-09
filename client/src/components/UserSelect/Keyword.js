@@ -78,6 +78,7 @@ const Container = styled.div`
 `;
 
 const SelectedKeywordDiv = styled.div`
+  border-radius: 1rem;
   border: 0.1rem solid #ff6f00;
   width: 80%;
   min-height: 10%;

@@ -80,7 +80,7 @@ export default function ProductDetailModal({ productInfo }) {
       centered
       visible={modal.key > 0}
       onCancel={() => dispatch(showModal(0))}
-      width={1200}
+      width={'50%'}
       maskStyle={{ background: 'white' }}
       footer={[
         <Button
@@ -96,20 +96,20 @@ export default function ProductDetailModal({ productInfo }) {
       ]}
     >
       <ProductDetailDiv>
-        <Col span={11}>
+        <Col span={11} style={{ textAlign: 'center', paddingRight: '2rem' }}>
           <img
             alt={modal.data.title}
             src={modal.data.image}
-            style={{ width: 500, height: 600 }}
+            style={{ width: 300, height: 400 }}
           />
         </Col>
-        <ProductDescriptionCol span={13}>
+        <ProductDescriptionCol span={11}>
           <Title level={2}>{modal.data.title}</Title>
           <Title level={3}>가격: {modal.data.price}</Title>
 
           <KeywordContainer>
             <KeywordDiv>
-              <Title level={3}>긍정 키워드</Title>
+              <Title level={5}>긍정 키워드</Title>
               <div>
                 <Tag color="green">편함</Tag>
                 <Tag color="cyan">깨끗함</Tag>
@@ -119,7 +119,7 @@ export default function ProductDetailModal({ productInfo }) {
               </div>
             </KeywordDiv>
             <KeywordDiv>
-              <Title level={3}>부정 키워드</Title>
+              <Title level={5}>부정 키워드</Title>
               <div>
                 <Tag color="magenta">실밥마감</Tag>
                 <Tag color="red">무거움</Tag>
@@ -158,11 +158,10 @@ const DetailModal = styled(Modal)`
 const ProductDetailDiv = styled.div`
   display: flex;
   align-items: center;
+  height: 60rem;
 `;
 
-const ProductDescriptionCol = styled(Col)`
-  height: 600px;
-`;
+const ProductDescriptionCol = styled(Col)``;
 
 const KeywordContainer = styled.div`
   margin-top: 50px;

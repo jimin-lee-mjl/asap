@@ -44,4 +44,5 @@ const Header = styled.div`
 
 const Body = styled.div`
   display: flex;
+  width: 100%;
 `;
