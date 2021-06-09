@@ -6,6 +6,20 @@ import baseUrl from '../url';
 const keywordApiUrl = `${baseUrl}api/keyword/`;
 const recommendApiBaseUrl = `${baseUrl}recommend/`;
 
+export const selectGender = (payload) => {
+  return {
+    type: UserSelectTypes.SELECT_GENDER,
+    payload,
+  };
+};
+
+export const selectCategories = (payload) => {
+  return {
+    type: UserSelectTypes.SELECT_CATEGORIES,
+    payload,
+  };
+};
+
 export const setKeywords = () => (dispatch, getstate) => {
   // asap api
   //   axios
@@ -23,45 +37,45 @@ export const setKeywords = () => (dispatch, getstate) => {
 
   // test
   const test_keyword = [
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
+    'test',
+    'cotton',
+    'fit',
+    'underwear',
+    'comfortable',
+    'panties',
+    'beautiful',
+    'guitars',
+    'stunning',
+    'happy',
+    'shiny',
+    'sexy',
+    'stretchy',
+    'toe',
+    'boots',
+    'calves',
+    'cheap',
+    'daughter',
+    'nice',
+    'sparingnly',
+    'cute',
+    'disney',
+    'wife',
+    'pug',
+    'love',
+    'hoops',
+    'tired',
+    'tiny',
+    'love',
+    'husband',
+    'leather',
+    'silver',
+    'daily',
+    'dainty',
   ];
   dispatch({
     type: UserSelectTypes.SET_KEYWORDS,
     payload: test_keyword,
   });
-};
-
-export const selectGender = (payload) => {
-  return {
-    type: UserSelectTypes.SELECT_GENDER,
-    payload,
-  };
 };
 
 export const selectKeywords = (selectedKeyword) => (dispatch, getstate) => {

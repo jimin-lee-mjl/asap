@@ -1,12 +1,11 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { selectCategories } from '../../actions/userSelect';
 import { Checkbox } from 'antd';
 import styled from 'styled-components';
 
-function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
-}
-
 export default function Category() {
+  const dispatch = useDispatch();
   const categories = [
     'Outer',
     'Top',
@@ -18,6 +17,12 @@ export default function Category() {
     'Bag',
     'Accessories',
   ];
+
+  function onChange(checkedValues) {
+    console.log('checked = ', checkedValues);
+    dispatch(selectCategories(checkedValues));
+  }
+
   return (
     <>
       <h1>Choose catagories!</h1>
