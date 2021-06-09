@@ -32,3 +32,9 @@ export const ProductActionTypes = {
 };
 
 export const SET_USERINFO = 'SET_USERINFO';
+
+export const UserSelectTypes = {
+  SET_KEYWORDS: 'SET_KEYWORDS',
+  SELECT_KEYWORDS: 'SELECT_KEYWORDS',
+  UNSELECT_KEYWORDS: 'UNSELECT_KEYWORDS',
+};

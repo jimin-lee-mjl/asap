@@ -1,78 +1,139 @@
-import React from 'react';
-import { Checkbox } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { Checkbox, Button, Badge } from 'antd';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectKeywords, setKeywords } from '../../actions/userSelect';
+import { Redirect } from 'react-router';
 
 function onChange(checkedValues) {
   console.log('checked = ', checkedValues);
 }
 
-export default function Category() {
-  const categories = [
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear',
-    'Shoes',
-    'Bag',
-    'Accessories',
-  ];
+export default function Keyword() {
+  const keywords = useSelector((state) => state.userSelect.keywords);
+  const selectedKeywords = useSelector(
+    (state) => state.userSelect.selectedKeywords,
+  );
+  const dispatch = useDispatch();
+
+  const handleClickKeyword = (e) => {
+    e.stopPropagation();
+    const clickedKeyword = e.currentTarget.getAttribute('value');
+    console.log(clickedKeyword);
+    dispatch(selectKeywords(clickedKeyword));
+  };
+
+  const renderKeywords = keywords.map((keyword, index) => {
+    return (
+      <KeywordButton
+        $isselected={selectedKeywords.includes(keyword)}
+        key={index}
+        value={keyword}
+        onClick={handleClickKeyword}
+      >
+        {keyword}
+      </KeywordButton>
+    );
+  });
+
+  const renderSelectedKeywords = selectedKeywords.map((keyword, index) => {
+    return (
+      <DeleteBadge
+        count={'X'}
+        size="small"
+        value={keyword}
+        onClick={handleClickKeyword}
+      >
+        <SelectedKeywordButton>{keyword}</SelectedKeywordButton>
+      </DeleteBadge>
+    );
+  });
+
+  useEffect(() => {
+    dispatch(setKeywords());
+  }, []);
+
   return (
     <>
       <h1>Choose keywords!</h1>
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-        }}
-      >
-        <Checkboxes
-          options={categories}
-          defaultValue={[]}
-          onChange={onChange}
-        />
-      </div>
+      <Container>
+        <SelectedKeywordDiv>
+          <h3>Selected Word</h3>
+          {renderSelectedKeywords}
+        </SelectedKeywordDiv>
+        <KeywordDiv>{renderKeywords}</KeywordDiv>
+      </Container>
     </>
   );
 }
 
-const Checkboxes = styled(Checkbox.Group)`
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   flex-wrap: wrap;
-  margin: auto;
-  .ant-checkbox-wrapper {
-    font-size: 1.5rem;
-    margin: 1rem;
-    padding: 0.5rem;
-    width: 15%;
-  }
+`;
 
-  .ant-checkbox-checked .ant-checkbox-inner {
+const SelectedKeywordDiv = styled.div`
+  border-radius: 1rem;
+  border: 0.1rem solid #ff6f00;
+  width: 80%;
+  min-height: 10%;
+  padding: 1rem;
+`;
+
+const KeywordDiv = styled.div`
+  width: 60%;
+`;
+
+const KeywordButton = styled.button`
+  border-radius: 0.5rem;
+  color: black;
+  margin: 0.3rem;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  background-color: white;
+  color: black;
+  border: 0.1rem solid gray;
+
+  ${(props) =>
+    props.$isselected &&
+    `
     background-color: #ff6f00;
-    border-color: #ff6f00;
-  }
+    color: white;
+    border: 0.1rem solid #ff6f00;
+    box-shadow: 2px 4px 8px #c4c4c4;
 
-  .ant-checkbox-checked::after {
-    border: 1px solid #ff6f00;
+    `}
+
+  :hover {
+    color: ${(props) => (props.$isselected ? 'white' : '#ff6f00')};
+    border: 0.1rem solid #ff6f00;
+    box-shadow: 2px 4px 8px #c4c4c4;
   }
+`;
+
+const SelectedKeywordButton = styled.button`
+  border-radius: 0.5rem;
+  color: black;
+  margin: 0.3rem;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  background-color: white;
+  color: black;
+  border: 0.1rem solid gray;
+`;
+
+const DeleteBadge = styled(Badge)`
+  .ant-badge-count {
+    background: gray;
+  }
+  margin: 0.5rem;
 `;

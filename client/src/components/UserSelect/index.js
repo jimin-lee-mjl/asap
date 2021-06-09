@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Steps } from 'antd';
 import Category from './Category';
 import Keyword from './Keyword';
 import { useHistory } from 'react-router-dom';
 import HeaderComponent from '../Header';
+import { postUserSelection } from '../../actions/userSelect';
 
 import Gender from './Gender';
 
@@ -28,6 +29,7 @@ const steps = [
 
 function UserInfo() {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [current, setCurrent] = useState(0);
@@ -74,7 +76,14 @@ function UserInfo() {
             <Button onClick={() => next()}>Next</Button>
           )}
           {current === steps.length - 1 && (
-            <Button onClick={() => history.push('/recommend')}>Done</Button>
+            <Button
+              onClick={() => {
+                dispatch(postUserSelection());
+                history.push('/recommend');
+              }}
+            >
+              Done
+            </Button>
           )}
           {current > 0 && (
             <OutLinedButton style={{ margin: 'auto' }} onClick={() => prev()}>
