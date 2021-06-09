@@ -193,7 +193,7 @@ export default function OrderHistory() {
         </div>
         <OrderInfoContainer>
           <div style={{ textAlign: 'left' }}>2021-06-01 </div>
-          <CartListTable
+          <OrderListTable
             columns={columns}
             dataSource={orderedItemsTableData}
             scroll={{ y: 400 }}
@@ -241,8 +241,10 @@ const RootContainer = styled.div`
   margin-top: 13rem;
 `;
 
-const OrderInfoContainer = styled.div``;
-const CartListTable = styled(Table)`
+const OrderInfoContainer = styled.div`
+  width: 100%;
+`;
+const OrderListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
@@ -253,6 +255,13 @@ const CartListTable = styled(Table)`
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
+  }
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
   }
 
   .ant-table-thead tr th {
@@ -292,6 +301,7 @@ const DeliveryInfo = styled.div`
   padding-right: 10px;
   align-items: center;
   font-size: 1.5rem;
+  border-radius: 2rem;
 `;
 
 const InfoTitleDiv = styled.div`

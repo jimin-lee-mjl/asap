@@ -89,12 +89,12 @@ export default function CartList() {
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 100,
+      width: '20%',
     },
     {
       title: 'Description',
       dataIndex: 'name',
-      width: 250,
+      width: 300,
     },
     {
       title: 'Price',
@@ -240,6 +240,15 @@ const CartListTable = styled(Table)`
     border-left: solid 1px #dfe4ea;
     border-bottom: solid 0.1px #dfe4ea;
   }
+
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
@@ -257,6 +266,25 @@ const CartListTable = styled(Table)`
   .ant-table-tbody td {
     font-size: 20px;
   }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: #f1f2f6;
+  }
+
+  //checkbox css
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #ff6f00;
+  }
+  .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .ant-checkbox:hover .ant-checkbox-inner,
+  .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #ff6f00;
+  }
 `;
 
 const TableFooter = styled.div`
@@ -267,6 +295,7 @@ const TableFooter = styled.div`
   padding: 10px;
   border-top: solid 2px gray;
 `;
+
 const ButtonGroup = styled.div`
   button {
     margin-left: 5px;

@@ -45,8 +45,8 @@ export default function App() {
         <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
-        <AuthRoute path="/likes" component={Likes} />
-        <AuthRoute path="/cart" component={Cart} />
+        <Route path="/likes" component={Likes} />
+        <Route path="/cart" component={Cart} />
         <Route exact path="/orderhistory/:orderId" component={OrderHistory} />
         <Route path="/order" component={Order} />
         <Route path="/payment" component={Payment} />

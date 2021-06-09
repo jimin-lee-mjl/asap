@@ -14,23 +14,23 @@ export default function Likes() {
       ) : (
         <HeaderComponent type="logo guest" />
       )}
-      <LikesContainer>
-        <div style={{ width: '1000px', textAlign: 'left' }}>
+      <RootContainer>
+        <div style={{ width: '100%', textAlign: 'left' }}>
           <h1>Your Likes</h1>
         </div>
         <LikesList />
         <ProductDetailModal />
-      </LikesContainer>
+      </RootContainer>
     </>
   );
 }
 
-const LikesContainer = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
   margin-top: 13rem;
 `;
