@@ -269,7 +269,7 @@ const TableFooter = styled.div`
   position: sticky;
   background: white;
   padding: 10px;
-  border-top: solid 2px gray;
+  border-top: solid 0.15rem #ff6f00;
 `;
 
 const ButtonGroup = styled.div`

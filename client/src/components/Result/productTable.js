@@ -105,12 +105,12 @@ export default function ProductTable() {
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 100,
+      width: '20%',
     },
     {
       title: 'Description',
       dataIndex: 'name',
-      width: 250,
+      width: 300,
     },
     {
       title: 'Price',
@@ -125,39 +125,47 @@ export default function ProductTable() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
           {cartProducts.includes(record.key) ? (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              style={{ fontSize: '3.8rem', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoCart}
             />
           ) : (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: 'grey' }}
+              style={{ fontSize: '3.8rem', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickCart}
             />
           )}
-          {likeProducts.includes(record.key) ? (
-            <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickUndoLikes}
-            />
-          ) : (
-            <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickLikes}
-            />
-          )}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '0.6rem',
+            }}
+          >
+            {likeProducts.includes(record.key) ? (
+              <HeartFilled
+                style={{ color: '#ff6f00' }}
+                asin={record.key}
+                onClick={handleClickUndoLikes}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: 'darkgray' }}
+                asin={record.key}
+                onClick={handleClickLikes}
+              />
+            )}
+          </div>
         </div>
       ),
-      width: '10%',
+      width: '11%',
     },
   ];
 
@@ -202,12 +210,11 @@ export default function ProductTable() {
   }, [checkedProduct, totalPrice]);
 
   return (
-    <div>
+    <Container>
       <ProductListTable
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
-        scroll={{ y: 720 }}
         onRow={(record, index) => ({
           onClick: () => {
             dispatch(showModal(record.key));
@@ -230,7 +237,8 @@ export default function ProductTable() {
             ADD TO LIKES
           </OutLinedButton>
           <OutLinedButton onClick={handleClickCartSelected}>
-            ADD TO CART
+            <ShoppingCartOutlined style={{ fontSize: '2rem' }} />
+            &nbsp;&nbsp; ADD TO CART
           </OutLinedButton>
           <Button
             onClick={() => {
@@ -242,9 +250,13 @@ export default function ProductTable() {
           </Button>
         </ButtonGroup>
       </TableFooter>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 const ProductListTable = styled(Table)`
   .ant-pagination {
@@ -254,6 +266,15 @@ const ProductListTable = styled(Table)`
     border-left: solid 1px #dfe4ea;
     border-bottom: solid 0.1px #dfe4ea;
   }
+
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
@@ -271,12 +292,36 @@ const ProductListTable = styled(Table)`
   .ant-table-tbody td {
     font-size: 20px;
   }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: #f1f2f6;
+  }
+
+  //checkbox css
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #ff6f00;
+  }
+  .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .ant-checkbox:hover .ant-checkbox-inner,
+  .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #ff6f00;
+  }
 `;
 
 const TableFooter = styled.div`
   text-align: right;
-  margin: 20px;
+  bottom: 1px;
+  position: sticky;
+  background: white;
+  padding: 10px;
+  border-top: solid 0.15rem #ff6f00;
 `;
+
 const ButtonGroup = styled.div`
   button {
     margin-left: 5px;
@@ -290,12 +335,12 @@ const Button = styled.button`
   border-radius: 0.5rem;
   font-size: 1.7rem;
   color: white;
-  margin: 0 3vw;
   text-align: center;
   vertical-align: middle;
   display: table-cell;
   line-height: 2;
   margin: 5px 0;
+  padding-inline: 2rem;
 
   :hover {
     box-shadow: 2px 4px 8px #c4c4c4;
