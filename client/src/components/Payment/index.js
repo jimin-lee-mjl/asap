@@ -11,7 +11,7 @@ import OrderTable from './OrderTable';
 
 export default function Payment() {
   const history = useHistory();
-  const user = useSelector((state) => state.mypage);
+  const user = useSelector((state) => state.auth.user);
   const authToken = localStorage.getItem('token');
   const order = useSelector((state) => state.orderReducer.orderList);
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadUser } from './actions/auth';
 
 import Home from './components/Home';
 import Result from './components/Result';
@@ -23,9 +24,14 @@ import Payment from './components/Payment';
 import Footer from './components/Footer';
 
 export default function App() {
-  // const [user, setUser] = useState(null); // 로그인 된 사용자 정보
-  // const authenticated = user != null; // 로그인 된 사용자가 존재하는지, 인증 여부를 저장
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(loadUser());
+    }
+  }, [isAuthenticated, dispatch]);
 
   return (
     <Router>

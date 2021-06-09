@@ -1,50 +1,42 @@
-import {
-  USER_LOADED,
-  USER_LOADING,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT_SUCCESS,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  CLEAR_USER,
-  DELETE_USER,
-} from '../actions/types';
+import { Auth } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: false,
   isLoading: false,
   user: null,
+  isUpdated: false,
 };
 
 export default function auth(state = initialState, action) {
   switch (action.type) {
-    case USER_LOADING:
+    case Auth.USER_LOADING:
       return {
         ...state,
         isLoading: true,
       };
-    case USER_LOADED:
+    case Auth.USER_LOADED:
       return {
         ...state,
         isAuthenticated: true,
         isLoading: false,
+        isUpdated: false,
         user: action.payload,
       };
-    case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
+    case Auth.LOGIN_SUCCESS:
+    case Auth.REGISTER_SUCCESS:
       localStorage.setItem('token', action.payload.key);
       return {
         ...state,
-        ...action.payload,
+        token: action.payload.key,
         isAuthenticated: true,
         isLoading: false,
       };
-    case LOGIN_FAIL:
-    case LOGOUT_SUCCESS:
-    case REGISTER_FAIL:
-    case CLEAR_USER:
-    case DELETE_USER:
+    case Auth.LOGIN_FAIL:
+    case Auth.LOGOUT_SUCCESS:
+    case Auth.REGISTER_FAIL:
+    case Auth.CLEAR_USER:
+    case Auth.DELETE_USER:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -52,6 +44,12 @@ export default function auth(state = initialState, action) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
+        isUpdated: false,
+      };
+    case Auth.UPDATE_USER:
+      return {
+        ...state,
+        isUpdated: true,
       };
     default:
       return state;

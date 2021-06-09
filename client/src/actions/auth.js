@@ -1,129 +1,12 @@
 import axios from 'axios';
-import {
-  USER_LOADED,
-  USER_LOADING,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT_SUCCESS,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  CLEAR_USER,
-  DELETE_USER,
-} from './types';
+import { Auth } from './types';
 import baseUrl from '../url';
 
-// redux-thunk
-// 1. dispatch 액션을 디스패치할 수 있고
-// 2. getState를 사용하여 현재 상태를 조회할 수 있다.
-
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === name + '=') {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
-const csrftoken = getCookie('csrftoken');
-
+// DEFAULT CONFIG
 const config = {
   headers: {
     'Content-Type': 'application/json',
   },
-};
-
-// CHECK TOKEN & LOAD USER
-export const loadUser = () => (dispatch, getState) => {
-  dispatch({ type: USER_LOADING });
-
-  axios
-    .get('/rest-auth/login', tokenConfig(getState))
-    .then((res) => {
-      dispatch({
-        type: USER_LOADED,
-        payload: res.data,
-      });
-    })
-    .catch((err) => console.log(err));
-};
-
-// LOGIN
-export const login = (username, password) => (dispatch) => {
-  const body = { username, password };
-  axios
-    .post(baseUrl + '/rest-auth/login/', body, config)
-    .then((res) => {
-      console.log('OK');
-      console.log('res.data', res.data);
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      console.log(err.response);
-      console.log(Object.keys(err.response.data));
-      const errors = Object.keys(err.response.data);
-      errors.forEach((x) => {
-        alert(err.response.data[x]);
-      });
-      dispatch({
-        type: LOGIN_FAIL,
-      });
-    });
-};
-
-// REGIESTER
-export const register =
-  ({ id, email, password1, password2 }) =>
-  (dispatch) => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken,
-      },
-    };
-
-    const body = { username: id, email, password1, password2 };
-    console.log(body);
-
-    axios
-      .post(baseUrl + '/rest-auth/registration/', body, config)
-      .then((res) => {
-        console.log('res', res);
-        dispatch({
-          type: REGISTER_SUCCESS,
-          payload: res,
-        });
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        console.log(Object.keys(err.response.data));
-        const errors = Object.keys(err.response.data);
-        errors.forEach((x) => {
-          alert(err.response.data[x]);
-        });
-        dispatch({ type: REGISTER_FAIL });
-      });
-  };
-
-// LOGOUT
-export const logout = () => (dispatch, getState) => {
-  axios
-    .post(baseUrl + '/rest-auth/logout/', null, tokenConfig(getState))
-    .then((res) => {
-      console.log(res.data.detail);
-      dispatch({ type: CLEAR_USER });
-      dispatch({ type: LOGOUT_SUCCESS });
-    })
-    .catch((err) => console.log(err));
 };
 
 // GET USER'S TOKEN
@@ -143,6 +26,91 @@ export const tokenConfig = (getState) => {
   return config;
 };
 
+// CHECK TOKEN & LOAD USER
+export const loadUser = () => (dispatch, getState) => {
+  dispatch({ type: Auth.USER_LOADING });
+  axios
+    .get(baseUrl + 'api/user/', tokenConfig(getState))
+    .then((res) => {
+      dispatch({
+        type: Auth.USER_LOADED,
+        payload: res.data,
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+// LOGIN
+export const login = (username, password) => (dispatch) => {
+  const body = { username, password };
+  axios
+    .post(baseUrl + 'rest-auth/login/', body, config)
+    .then((res) => {
+      console.log('OK');
+      console.log('res.data', res.data);
+      dispatch({
+        type: Auth.LOGIN_SUCCESS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err.response);
+      console.log(Object.keys(err.response.data));
+      const errors = Object.keys(err.response.data);
+      errors.forEach((x) => {
+        alert(err.response.data[x]);
+      });
+      dispatch({
+        type: Auth.LOGIN_FAIL,
+      });
+    });
+};
+
+// REGIESTER
+export const register =
+  ({ id, email, password1, password2 }) =>
+  (dispatch) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+
+    const body = { username: id, email, password1, password2 };
+    console.log(body);
+
+    axios
+      .post(baseUrl + '/rest-auth/registration/', body, config)
+      .then((res) => {
+        console.log('res', res);
+        dispatch({
+          type: Auth.REGISTER_SUCCESS,
+          payload: res,
+        });
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        console.log(Object.keys(err.response.data));
+        const errors = Object.keys(err.response.data);
+        errors.forEach((x) => {
+          alert(err.response.data[x]);
+        });
+        dispatch({ type: Auth.REGISTER_FAIL });
+      });
+  };
+
+// LOGOUT
+export const logout = () => (dispatch, getState) => {
+  axios
+    .post(baseUrl + 'rest-auth/logout/', null, tokenConfig(getState))
+    .then((res) => {
+      console.log(res.data.detail);
+      dispatch({ type: Auth.CLEAR_USER });
+      dispatch({ type: Auth.LOGOUT_SUCCESS });
+    })
+    .catch((err) => console.log(err));
+};
+
 // DELETE USER
 export const deleteUser = () => (dispatch, getState) => {
   console.log('delete user action working', tokenConfig(getState));
@@ -150,9 +118,42 @@ export const deleteUser = () => (dispatch, getState) => {
     .delete(baseUrl + '/api/account/delete/', tokenConfig(getState))
     .then((res) => {
       console.log('delete account', res);
-      dispatch({ type: DELETE_USER });
-      dispatch({ type: CLEAR_USER });
-      dispatch({ type: LOGOUT_SUCCESS });
+      dispatch({ type: Auth.DELETE_USER });
+      dispatch({ type: Auth.CLEAR_USER });
+      dispatch({ type: Auth.LOGOUT_SUCCESS });
     })
     .catch((err) => console.log(err.response));
+};
+
+// CHANGE DELIVERY INFO
+export const changeDelivery = (body) => (dispatch, getState) => {
+  axios
+    .patch(baseUrl + 'api/user/delivery/', body, tokenConfig(getState))
+    .then((res) => {
+      console.log('change delivery info SUCCESSED', res);
+      alert('Delivery Information successfully updated.');
+    })
+    .catch((err) => {
+      console.log(err.response);
+      alert('Update failed. Please try again.');
+    });
+};
+
+// CHANGE PASSWORD
+export const changePassword = (body) => (dispatch, getState) => {
+  axios
+    .post(baseUrl + '/rest-auth/password/change/', body, tokenConfig(getState))
+    .then((res) => {
+      console.log('change password SUCCESSED', res);
+      alert('Your password successfully changed.');
+      dispatch({ type: Auth.UPDATE_USER });
+    })
+    .catch((err) => {
+      console.log(err.response);
+      console.log(Object.keys(err.response.data));
+      const errors = Object.keys(err.response.data);
+      errors.forEach((x) => {
+        alert(err.response.data[x]);
+      });
+    });
 };
