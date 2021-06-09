@@ -16,7 +16,7 @@ export default function Navigator() {
 
   return (
     <NavigatorContainer>
-      <Link to="/info">
+      <Link to="/select">
         <Button type="primary" size={'large'} style={{ marginRight: 10 }}>
           이전으로
         </Button>

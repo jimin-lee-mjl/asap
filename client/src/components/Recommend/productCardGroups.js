@@ -25,14 +25,14 @@ export default function ProductCardGroups() {
       const category = product[0];
       const productList = product[1];
 
-      if (productList.length == 0) {
+      if (productList.length === 0) {
         return false;
       }
       const categoryTitle = category.toUpperCase();
       cardGroupArray.push(
         <ProductCardGroup key={category}>
-          <Col span={3}>
-            <Title level={2}>{categoryTitle}</Title>
+          <Col span={2}>
+            <Title level={5}>{categoryTitle}</Title>
           </Col>
           <ProductCardCol span={20}>
             <ProductCard categoryKey={category} />
@@ -50,7 +50,7 @@ export default function ProductCardGroups() {
 
 const ProductCardGroupContainer = styled.div`
   margin-bottom: 50px;
-  width: 1250px;
+  width: 83%;
 `;
 
 const ProductCardGroup = styled.div`

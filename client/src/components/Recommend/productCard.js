@@ -85,9 +85,9 @@ export default function ProductCard({ categoryKey }) {
       >
         <Card
           hoverable
-          style={{ width: 240 }}
+          style={{ width: 180 }}
           cover={
-            <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
+            <img alt={title} src={image} style={{ height: 180, padding: 10 }} />
           }
           onClick={(e) => {
             dispatch(showModal(id));
@@ -118,12 +118,12 @@ export default function ProductCard({ categoryKey }) {
 const CardContainer = styled.div`
   margin: 10px;
   .ant-card {
-    height: 520px;
+    height: 400px;
     border: 5px solid;
     border-color: ${(props) => props.$colorbyselect};
   }
   .ant-card-body {
-    height: 210px;
+    height: 200px;
     padding: 10px;
   }
   .ant-card-cover {

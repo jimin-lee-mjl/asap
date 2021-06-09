@@ -53,7 +53,7 @@ export const setProducts = () => (dispatch, getstate) => {
       console.log('categoryData:', categoryData);
       dispatch({
         type: ProductActionTypes.SET_PRODUCTS,
-        payload: productData,
+        payload: { ...productData },
       });
       dispatch({
         type: ProductActionTypes.SET_CATEGORY,
