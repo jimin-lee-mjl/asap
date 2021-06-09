@@ -137,7 +137,7 @@ export default function ProductDetailModal({ productInfo }) {
 
 const DetailModal = styled(Modal)`
   .ant-modal-content {
-    height: 800px;
+    height: 60rem;
   }
 
   .ant-modal-content .ant-modal-footer {
@@ -158,7 +158,7 @@ const DetailModal = styled(Modal)`
 const ProductDetailDiv = styled.div`
   display: flex;
   align-items: center;
-  height: 60rem;
+  height: 60%;
 `;
 
 const ProductDescriptionCol = styled(Col)``;

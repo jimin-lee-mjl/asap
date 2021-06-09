@@ -6,17 +6,17 @@ import baseUrl from '../url';
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
-const categories = [
-  'outer',
-  'top',
-  'bottom',
-  'set',
-  'sports',
-  'etc',
-  'shoes',
-  'bag',
-  'accessories',
-];
+// const categories = [
+//   'outer',
+//   'top',
+//   'bottom',
+//   'set',
+//   'sports',
+//   'etc',
+//   'shoes',
+//   'bag',
+//   'accessories',
+// ];
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
@@ -36,8 +36,8 @@ export const setProducts = () => (dispatch, getstate) => {
         }
       });
 
-      // res.data.map((data)=>{
-      //   productData[data.category] = [...productData[data.category], data]
+      // res.data.map((data) => {
+      //   productData[data.category] = [...productData[data.category], data];
       // });
 
       console.log(productData);
@@ -262,7 +262,7 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
   const curLikesState = getstate().likesReducer.likeProducts;
   console.log('curLikesState:', curLikesState);
   const newLikesState = curLikesState.filter(
-    (product) => undoLikesProductList.includes(product) === false,
+    (product) => undoLikesProductList.includes(String(product)) === false,
   );
   console.log('newLikesState:', newLikesState);
 
@@ -463,10 +463,10 @@ export const setOrderDetails = (orderId) => (dispatch, getstate) => {
   axios
     .get(`${orderApiUrl}${Number(orderId)}/`, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
+      console.log('setOrderDetails Success', res.data);
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('setOrderDetails Fail', err.response);
     });
 
   // fake api
