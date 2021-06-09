@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
-import mypage from './mypage';
 import userSelect from './userSelect';
 import {
   setProductsReducer,
@@ -15,7 +14,6 @@ import {
 
 const rootReducer = combineReducers({
   auth,
-  mypage,
   userSelect,
   setProductsReducer,
   selectProductReducer,

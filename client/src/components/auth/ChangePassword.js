@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../Header';
 import axios from 'axios';
 import baseUrl from '../../url';
+import { changePassword } from '../../actions/auth';
 
 export default function Register() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const isUpdated = useSelector((state) => state.auth.isUpdated);
 
   const [old, setOld] = useState('');
   const [password1, setPassword] = useState('');
@@ -28,38 +31,21 @@ export default function Register() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     console.log(old, password1, password2);
-    changePassword();
+
+    dispatch(
+      changePassword({
+        old_password: old,
+        new_password1: password1,
+        new_password2: password2,
+      }),
+    );
   };
 
-  const changePassword = () => {
-    const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    };
-    const body = {
-      old_password: old,
-      new_password1: password1,
-      new_password2: password2,
-    };
-    axios
-      .post(baseUrl + '/rest-auth/password/change/', body, config)
-      .then((res) => {
-        console.log('change password SUCCESSED', res);
-        alert('Your password successfully changed.');
-        history.push('/mypage');
-      })
-      .catch((err) => {
-        console.log(err.response);
-        console.log(Object.keys(err.response.data));
-        const errors = Object.keys(err.response.data);
-        errors.forEach((x) => {
-          alert(err.response.data[x]);
-        });
-      });
-  };
+  useEffect(() => {
+    if (isUpdated) {
+      history.push('/mypage');
+    }
+  }, [isUpdated, history]);
 
   return (
     <Container>

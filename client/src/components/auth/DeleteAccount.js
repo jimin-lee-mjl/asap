@@ -5,7 +5,7 @@ import { deleteUser } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
 
-export default function Register() {
+export default function DeleteAccount() {
   const dispatch = useDispatch();
   const history = useHistory();
 

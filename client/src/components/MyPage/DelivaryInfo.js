@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import baseUrl from '../../url';
-import { useSelector, useDispatch } from 'react-redux';
-import { userinfo } from '../../actions/mypage';
+import { useDispatch } from 'react-redux';
+import { changeDelivery, loadUser } from '../../actions/auth';
 
-export default function DeliveryInfo() {
+export default function DeliveryInfo({ user }) {
   const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.mypage);
+  console.log('user from deliveryinfo', user);
 
   const [delivery, setDelivery] = useState({
     firstName: user.first_name,
@@ -18,30 +15,15 @@ export default function DeliveryInfo() {
   });
 
   const onClickHandler = () => {
-    const token = localStorage.getItem('token');
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    };
-    const body = {
-      first_name: delivery.firstName,
-      last_name: delivery.lastName,
-      address: delivery.address,
-      postal_code: delivery.post,
-    };
-    axios
-      .patch(baseUrl + '/api/user/delivery/', body, config)
-      .then((res) => {
-        console.log('change delivery info SUCCESSED', res);
-        alert('Delivery Information successfully updated.');
-        dispatch(userinfo(body));
-      })
-      .catch((err) => {
-        console.log(err.response);
-        alert('Update failed. Please try again.');
-      });
+    dispatch(
+      changeDelivery({
+        first_name: delivery.firstName,
+        last_name: delivery.lastName,
+        address: delivery.address,
+        postal_code: delivery.post,
+      }),
+    );
+    dispatch(loadUser());
   };
 
   return (
