@@ -179,11 +179,11 @@ export default function OrderHistory() {
       ) : (
         <HeaderComponent type="logo guest" />
       )}
-      <Container>
+      <RootContainer>
         <div style={{ alignSelf: 'start' }}>
           <h1>Order Details</h1>
         </div>
-        <div>
+        <OrderInfoContainer>
           <div style={{ textAlign: 'left' }}>2021-06-01 </div>
           <CartListTable
             columns={columns}
@@ -199,7 +199,7 @@ export default function OrderHistory() {
           <TableFooter>
             <h1>Total ${}</h1>
           </TableFooter>
-        </div>
+        </OrderInfoContainer>
         <DeliveryInfoContainer>
           <h1>Delivery Info</h1>
           <DeliveryInfo>
@@ -218,21 +218,22 @@ export default function OrderHistory() {
           </DeliveryInfo>
         </DeliveryInfoContainer>
         <ProductDetailModal />
-      </Container>
+      </RootContainer>
     </>
   );
 }
 
-const Container = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
 `;
 
+const OrderInfoContainer = styled.div``;
 const CartListTable = styled(Table)`
   .ant-pagination {
     display: none;

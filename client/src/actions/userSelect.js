@@ -8,18 +8,18 @@ const recommendApiBaseUrl = `${baseUrl}recommend/`;
 
 export const setKeywords = () => (dispatch, getstate) => {
   // asap api
-  //   axios
-  //     .get(keywordApiUrl)
-  //     .then((res) => {
-  //       console.log('setKeywords:', res.data);
-  //       dispatch({
-  //         type: UserSelectTypes.SET_KEYWORDS,
-  //         payload: res.data,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log('Err: ', err.response);
+  // axios
+  //   .get(keywordApiUrl)
+  //   .then((res) => {
+  //     console.log('setKeywords:', res.data);
+  //     dispatch({
+  //       type: UserSelectTypes.SET_KEYWORDS,
+  //       payload: res.data,
   //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('Err: ', err.response);
+  //   });
 
   // test
   const test_keyword = [

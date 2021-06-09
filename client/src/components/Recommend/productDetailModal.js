@@ -108,7 +108,7 @@ export default function ProductDetailModal({ productInfo }) {
             color: 'white',
           }}
         >
-          <CheckCircleOutlined />
+          <CheckOutlined />
           &nbsp; Selected item
         </button>
       );
@@ -123,7 +123,6 @@ export default function ProductDetailModal({ productInfo }) {
             color: '#ff6f00',
           }}
         >
-          <CheckOutlined />
           &nbsp; Select this item
         </button>
       );
@@ -132,7 +131,6 @@ export default function ProductDetailModal({ productInfo }) {
 
   return (
     <DetailModal
-      title="Details"
       centered
       visible={modal.key > 0}
       onCancel={() => dispatch(showModal(0))}
@@ -153,7 +151,10 @@ export default function ProductDetailModal({ productInfo }) {
         </Col>
         <ProductDescriptionCol span={11}>
           <Title level={2}>{modal.data.title}</Title>
-          <Title level={3}>가격: {modal.data.price}</Title>
+          <Title level={4}>PRICE</Title>
+          <p style={{ paddingLeft: '1rem', fontSize: '2rem' }}>
+            $ {modal.data.price}
+          </p>
 
           <KeywordContainer>
             <KeywordDiv>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { Table, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -110,7 +110,8 @@ export default function CartList() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
@@ -122,22 +123,23 @@ export default function CartList() {
             />
           ) : (
             <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+              style={{ fontSize: '30px', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickLikes}
             />
           )}
-          <Button
+          <DeleteOutlined
             asin={record.key}
-            size="small"
-            style={{ fontSize: 'xx-small' }}
+            style={{
+              marginTop: '1rem',
+              fontSize: '30px',
+              color: 'darkgray',
+            }}
             onClick={handleClickDelete}
-          >
-            DELETE
-          </Button>
+          />
         </div>
       ),
-      width: '10%',
+      width: '11%',
     },
   ];
 
@@ -181,17 +183,12 @@ export default function CartList() {
   }, [checkedProduct, totalPrice]);
 
   return (
-    <div>
+    <Container>
       <CartListTable
         rowSelection={rowSelection}
         columns={columns}
         dataSource={CartListTableData}
-        scroll={{ y: 720 }}
-        onRow={(
-          record,
-
-          index,
-        ) => ({
+        onRow={(record, index) => ({
           onClick: () => {
             console.log(record, index, 'clicked!!');
             dispatch(showModal(record.key));
@@ -208,16 +205,17 @@ export default function CartList() {
         </div>
         <ButtonGroup>
           <div style={{ float: 'left' }}>
-            <Button size="large" onClick={handleClickDeleteSelected}>
-              DELETE SELECTED
-            </Button>
+            <OutLinedButton onClick={handleClickDeleteSelected}>
+              <DeleteOutlined
+                style={{ color: 'darkgray', fontSize: '1.8rem' }}
+              />
+              &nbsp;&nbsp; DELETE SELECTED
+            </OutLinedButton>
           </div>
-          <Button size="large" onClick={handleClickLikesSelected}>
+          <OutLinedButton onClick={handleClickLikesSelected}>
             ADD TO LIKES
-          </Button>
+          </OutLinedButton>
           <Button
-            type="primary"
-            size="large"
             onClick={() => {
               handleClickOrder();
               history.push('/payment');
@@ -227,10 +225,13 @@ export default function CartList() {
           </Button>
         </ButtonGroup>
       </TableFooter>
-    </div>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+`;
 const CartListTable = styled(Table)`
   .ant-pagination {
     display: none;
@@ -260,10 +261,38 @@ const CartListTable = styled(Table)`
 
 const TableFooter = styled.div`
   text-align: right;
-  margin: 20px;
+  bottom: 1px;
+  position: sticky;
+  background: white;
+  padding: 10px;
+  border-top: solid 2px gray;
 `;
 const ButtonGroup = styled.div`
   button {
     margin-left: 5px;
   }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  height: 4rem;
+  border: 0.1rem solid #ff6f00;
+  border-radius: 0.5rem;
+  font-size: 1.7rem;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  margin: 5px 0;
+  padding-inline: 2rem;
+
+  :hover {
+    box-shadow: 2px 4px 8px #c4c4c4;
+  }
+`;
+
+const OutLinedButton = styled(Button)`
+  background: #fff;
+  color: #ff6f00;
 `;

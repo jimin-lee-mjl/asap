@@ -14,23 +14,23 @@ export default function Cart() {
       ) : (
         <HeaderComponent type="logo guest" />
       )}
-      <CartContainer>
-        <div style={{ width: '1000px', textAlign: 'left' }}>
+      <RootContainer>
+        <div style={{ width: '100%', textAlign: 'left' }}>
           <h1>Shopping Cart</h1>
         </div>
         <CartList />
         <ProductDetailModal />
-      </CartContainer>
+      </RootContainer>
     </>
   );
 }
 
-const CartContainer = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
   margin-top: 13rem;
 `;
