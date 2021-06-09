@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export default function UserInfo({ user }) {
   const history = useHistory();
-
-  // const user = useSelector((state) => state.auth.user);
 
   return (
     <Container>
