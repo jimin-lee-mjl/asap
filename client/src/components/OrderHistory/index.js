@@ -22,8 +22,11 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductDetailModal from './productDetailModal';
 // import OrderInfo from './orderInfo';
+import HeaderComponent from '../Header';
 
 export default function OrderHistory() {
+  const authToken = localStorage.getItem('token');
+
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
 
@@ -170,46 +173,53 @@ export default function OrderHistory() {
   };
 
   return (
-    <Container>
-      <div style={{ alignSelf: 'start' }}>
-        <h1>Order Details</h1>
-      </div>
-      <div>
-        <div style={{ textAlign: 'left' }}>2021-06-01 </div>
-        <CartListTable
-          columns={columns}
-          dataSource={orderedItemsTableData}
-          scroll={{ y: 400 }}
-          onRow={(record, index) => ({
-            onClick: () => {
-              console.log(record, index, 'clicked!!');
-              dispatch(showModal(record.key));
-            },
-          })}
-        />
-        <TableFooter>
-          <h1>Total ${}</h1>
-        </TableFooter>
-      </div>
-      <DeliveryInfoContainer>
-        <h1>Delivery Info</h1>
-        <DeliveryInfo>
-          <InfoTitleDiv>
-            <p>Name</p>
-            <p>Email</p>
-            <p>Shipping Address</p>
-            <p>Postal Code</p>
-          </InfoTitleDiv>
-          <InfoContentDiv>
-            <p>Kyunglim Khang</p>
-            <p>Kyunglim.Khang@gmail.com</p>
-            <p>157, Hwarang-ro, Seongbuk-gu, Seoul, Republic of Korea</p>
-            <p>02773</p>
-          </InfoContentDiv>
-        </DeliveryInfo>
-      </DeliveryInfoContainer>
-      <ProductDetailModal />
-    </Container>
+    <>
+      {authToken ? (
+        <HeaderComponent type="logo" />
+      ) : (
+        <HeaderComponent type="logo guest" />
+      )}
+      <Container>
+        <div style={{ alignSelf: 'start' }}>
+          <h1>Order Details</h1>
+        </div>
+        <div>
+          <div style={{ textAlign: 'left' }}>2021-06-01 </div>
+          <CartListTable
+            columns={columns}
+            dataSource={orderedItemsTableData}
+            scroll={{ y: 400 }}
+            onRow={(record, index) => ({
+              onClick: () => {
+                console.log(record, index, 'clicked!!');
+                dispatch(showModal(record.key));
+              },
+            })}
+          />
+          <TableFooter>
+            <h1>Total ${}</h1>
+          </TableFooter>
+        </div>
+        <DeliveryInfoContainer>
+          <h1>Delivery Info</h1>
+          <DeliveryInfo>
+            <InfoTitleDiv>
+              <p>Name</p>
+              <p>Email</p>
+              <p>Shipping Address</p>
+              <p>Postal Code</p>
+            </InfoTitleDiv>
+            <InfoContentDiv>
+              <p>Kyunglim Khang</p>
+              <p>Kyunglim.Khang@gmail.com</p>
+              <p>157, Hwarang-ro, Seongbuk-gu, Seoul, Republic of Korea</p>
+              <p>02773</p>
+            </InfoContentDiv>
+          </DeliveryInfo>
+        </DeliveryInfoContainer>
+        <ProductDetailModal />
+      </Container>
+    </>
   );
 }
 
