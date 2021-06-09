@@ -133,3 +133,32 @@ export const postUserSelection = () => (dispatch, getstate) => {
       console.log('Err: ', err.response);
     });
 };
+
+export const categoryFilter = (category) => (dispatch) => {
+  const categoryParameter = category.join(',');
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  axios
+    .get(
+      baseUrl +
+        'api/recommendation' +
+        '?' +
+        'keywords=' +
+        '&' +
+        'categories=' +
+        categoryParameter,
+      null,
+      config,
+    )
+    .then((res) => {
+      console.log('카테고리api요청결과', res);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+};

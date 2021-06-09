@@ -7,15 +7,15 @@ import styled from 'styled-components';
 export default function Category() {
   const dispatch = useDispatch();
   const categories = [
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear/Homewear',
-    'Shoes',
-    'Bag',
-    'Accessories',
+    { label: 'Outer', value: 'outer' },
+    { label: 'Top', value: 'top' },
+    { label: 'Bottom', value: 'bottom' },
+    { label: 'Set', value: 'set' },
+    { label: 'Sports Wear', value: 'sport' },
+    { label: 'Underwear/Homewear', value: 'etc' },
+    { label: 'Shoes', value: 'shoes' },
+    { label: 'Bag', value: 'bag' },
+    { label: 'Accessories', value: 'accessories' },
   ];
 
   function onChange(checkedValues) {
