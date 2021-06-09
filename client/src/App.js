@@ -41,7 +41,7 @@ export default function App() {
         <Route path="/register" component={Register} />
         <AuthRoute path="/password/change" component={ChangePassword} />
         <AuthRoute path="/user/delete" component={DeleteAccount} />
-        <AuthRoute path="/mypage" render={MyPage} />
+        <AuthRoute path="/mypage" component={MyPage} />
         <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />

@@ -115,7 +115,7 @@ export const logout = () => (dispatch, getState) => {
 export const deleteUser = () => (dispatch, getState) => {
   console.log('delete user action working', tokenConfig(getState));
   axios
-    .delete(baseUrl + '/api/account/delete/', tokenConfig(getState))
+    .delete(baseUrl + '/api/account/', tokenConfig(getState))
     .then((res) => {
       console.log('delete account', res);
       dispatch({ type: Auth.DELETE_USER });

@@ -6,7 +6,7 @@ import Category from './Category';
 import Keyword from './Keyword';
 import { useHistory } from 'react-router-dom';
 import HeaderComponent from '../Header';
-import { postUserSelection } from '../../actions/userSelect';
+import { categoryFilter } from '../../actions/userSelect';
 
 import Gender from './Gender';
 
@@ -41,6 +41,8 @@ function UserInfo() {
   const prev = () => {
     setCurrent(current - 1);
   };
+
+  const category = useSelector((state) => state.userSelect.selectedCategories);
 
   return (
     <>
@@ -78,7 +80,8 @@ function UserInfo() {
           {current === steps.length - 1 && (
             <Button
               onClick={() => {
-                dispatch(postUserSelection());
+                // dispatch(postUserSelection());
+                dispatch(categoryFilter(category));
                 history.push('/recommend');
               }}
             >
