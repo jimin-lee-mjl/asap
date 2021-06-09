@@ -39,27 +39,19 @@ export default function App() {
         <Route exact path="/" component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-        <AuthRoute
-          authenticated={isAuthenticated}
-          path="/password/change"
-          component={ChangePassword}
-        />
-        <AuthRoute
-          authenticated={isAuthenticated}
-          path="/user/delete"
-          component={DeleteAccount}
-        />
-        <AuthRoute
-          authenticated={isAuthenticated}
-          path="/mypage"
-          render={(props) => <MyPage />}
-        />
+        <AuthRoute path="/password/change" component={ChangePassword} />
+        <AuthRoute path="/user/delete" component={DeleteAccount} />
+        <AuthRoute path="/mypage" render={MyPage} />
         <Route path="/select" component={UserSelect} />
         <Route path="/recommend" component={Recommend} />
         <Route path="/result" component={Result} />
-        <Route path="/likes" component={Likes} />
-        <Route path="/cart" component={Cart} />
-        <Route exact path="/orderhistory/:orderId" component={OrderHistory} />
+        <AuthRoute path="/likes" component={Likes} />
+        <AuthRoute path="/cart" component={Cart} />
+        <AuthRoute
+          exact
+          path="/orderhistory/:orderId"
+          component={OrderHistory}
+        />
         <Route path="/order" component={Order} />
         <Route path="/payment" component={Payment} />
         <Route component={NotFound} />
