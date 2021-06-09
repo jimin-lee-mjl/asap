@@ -117,13 +117,13 @@ export default function CartList() {
         >
           {likeProducts.includes(record.key) ? (
             <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+              style={{ fontSize: '3rem', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoLikes}
             />
           ) : (
             <HeartOutlined
-              style={{ fontSize: '30px', color: 'darkgray' }}
+              style={{ fontSize: '3rem', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickLikes}
             />
@@ -132,7 +132,7 @@ export default function CartList() {
             asin={record.key}
             style={{
               marginTop: '1rem',
-              fontSize: '30px',
+              fontSize: '3rem',
               color: 'darkgray',
             }}
             onClick={handleClickDelete}

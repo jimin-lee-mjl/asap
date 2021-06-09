@@ -109,36 +109,44 @@ export default function OrderHistory() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
           {cartProducts.includes(record.key) ? (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              style={{ fontSize: '3.8rem', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoCart}
             />
           ) : (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: 'grey' }}
+              style={{ fontSize: '3.8rem', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickCart}
             />
           )}
-          {likeProducts.includes(record.key) ? (
-            <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickUndoLikes}
-            />
-          ) : (
-            <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickLikes}
-            />
-          )}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '0.6rem',
+            }}
+          >
+            {likeProducts.includes(record.key) ? (
+              <HeartFilled
+                style={{ color: '#ff6f00' }}
+                asin={record.key}
+                onClick={handleClickUndoLikes}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: 'darkgray' }}
+                asin={record.key}
+                onClick={handleClickLikes}
+              />
+            )}
+          </div>
         </div>
       ),
       width: '10%',
@@ -283,6 +291,7 @@ const DeliveryInfo = styled.div`
   padding-left: 10px;
   padding-right: 10px;
   align-items: center;
+  font-size: 1.5rem;
 `;
 
 const InfoTitleDiv = styled.div`
