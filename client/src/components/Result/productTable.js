@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography, message } from 'antd';
+import { Table, Typography, message } from 'antd';
 import {
   HeartOutlined,
   HeartFilled,
@@ -224,19 +224,15 @@ export default function ProductTable() {
         </div>
         <ButtonGroup>
           <Link to="/recommend" style={{ float: 'left' }}>
-            <Button type="primary" size="large">
-              Previous
-            </Button>
+            <OutLinedButton>Previous</OutLinedButton>
           </Link>
-          <Button size="large" onClick={handleClickLikesSelected}>
+          <OutLinedButton onClick={handleClickLikesSelected}>
             ADD TO LIKES
-          </Button>
-          <Button size="large" onClick={handleClickCartSelected}>
+          </OutLinedButton>
+          <OutLinedButton onClick={handleClickCartSelected}>
             ADD TO CART
-          </Button>
+          </OutLinedButton>
           <Button
-            type="primary"
-            size="large"
             onClick={() => {
               handleClickOrder();
               history.push('/payment');
@@ -285,4 +281,28 @@ const ButtonGroup = styled.div`
   button {
     margin-left: 5px;
   }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  height: 4rem;
+  border: 0.1rem solid #ff6f00;
+  border-radius: 0.5rem;
+  font-size: 1.7rem;
+  color: white;
+  margin: 0 3vw;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  margin: 5px 0;
+
+  :hover {
+    box-shadow: 2px 4px 8px #c4c4c4;
+  }
+`;
+
+const OutLinedButton = styled(Button)`
+  background: #fff;
+  color: #ff6f00;
 `;
