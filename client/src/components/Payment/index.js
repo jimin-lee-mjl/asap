@@ -15,13 +15,17 @@ export default function Payment() {
   const authToken = localStorage.getItem('token');
   const order = useSelector((state) => state.orderReducer.orderList);
 
-  const [delivery, setDelivery] = useState({
-    firstName: user.first_name,
-    lastName: user.last_name,
-    email: user.email,
-    address: user.address,
-    post: user.postal_code,
-  });
+  const initialState = user
+    ? {
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+        address: user.address,
+        post: user.postal_code,
+      }
+    : {};
+
+  const [delivery, setDelivery] = useState(initialState);
 
   let totalPrice = 0;
   order.forEach((el) => {
@@ -116,10 +120,10 @@ export default function Payment() {
             onApprove={(data, actions) => onApprove(data, actions)}
             style={{
               layout: 'horizontal',
+              label: 'paypal',
               color: 'gold',
               shape: 'pill',
               size: 'responsive',
-              tagline: 'false',
             }}
           />
         </OrderInfo>
