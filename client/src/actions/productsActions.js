@@ -311,25 +311,14 @@ export const setCart = () => (dispatch, getstate) => {
   axios
     .get(cartApiUrl, tokenConfig(getstate))
     .then((res) => {
-      console.log('setCart Success!!', res.data);
+      console.log('setCart Success!!', res.data['cart_items']);
+      dispatch({
+        type: ProductActionTypes.SET_CART,
+        payload: res.data['cart_items'],
+      });
     })
     .catch((err) => {
       console.log('setCart Fail!!', err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
-
-      dispatch({
-        type: ProductActionTypes.SET_CART,
-        payload: res.data,
-      });
-      console.log(getstate());
-    })
-    .catch((err) => {
-      console.log(err.response);
     });
 };
 
@@ -365,34 +354,18 @@ export const loadCart = () => (dispatch, getstate) => {
     .get(cartApiUrl, tokenConfig(getstate))
     .then((res) => {
       console.log(res.data);
-    })
-    .catch((err) => {
-      console.log('loadCart:', err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
       const loadedCartProduct = res.data;
       const loadedcart = [];
       loadedCartProduct.map((product) => {
         loadedcart.push(product.asin);
       });
-
-      // dispatch({
-      //   type: ProductActionTypes.LOAD_CART,
-      //   payload: loadedLikes,
-      // });
-
       dispatch({
         type: ProductActionTypes.LOAD_CART,
-        payload: [5, 6, 7, 8],
+        payload: loadedcart,
       });
-      console.log('loadCart!!:', getstate().cartReducer.cartProducts);
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('loadCart:', err.response);
     });
 };
 
