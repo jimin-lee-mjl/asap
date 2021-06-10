@@ -1,6 +1,6 @@
 import factory
 from accounts.models import User
-from recommend.models import Item
+from recommend.models import Item, Keyword
 from .models import OrderDetail
 from recommend.custom_faker import fake
 
@@ -37,3 +37,10 @@ class OrderFactory(factory.django.DjangoModelFactory):
     email = factory.Faker('email')
     address = factory.Faker('address')
     postal_code = factory.Faker('zipcode')
+
+
+class KeywordFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Keyword
+
+    name = factory.Faker('first_name')

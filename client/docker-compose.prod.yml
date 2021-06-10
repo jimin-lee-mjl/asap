@@ -1,0 +1,11 @@
+version: "3.5"
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.prod
+      context: ./
+    volumes:
+      - /client/node_modules
+      - ./:/client
+    ports:
+      - "80:80"
