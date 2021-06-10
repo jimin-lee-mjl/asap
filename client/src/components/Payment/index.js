@@ -33,7 +33,7 @@ export default function Payment() {
   });
   console.log('total price', totalPrice);
 
-  const totalItems = order.map((el) => el.key);
+  const totalItems = order.map((el) => String(el.key));
   console.log('totalItems', totalItems);
 
   const [check, setCheck] = useState(false);
@@ -92,9 +92,9 @@ export default function Payment() {
           AddOrderHistory();
         }
         alert('order completed');
+        history.push('/');
         return res;
       })
-      .then(history.push('/'))
       .catch((err) => console.log(err.response));
   }
 
