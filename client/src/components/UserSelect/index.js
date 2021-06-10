@@ -74,6 +74,11 @@ function UserInfo() {
         </div>
 
         <div className="steps-action" style={{ marginTop: '3rem' }}>
+          {current > 0 && (
+            <OutLinedButton style={{ margin: 'auto' }} onClick={() => prev()}>
+              Previous
+            </OutLinedButton>
+          )}
           {current < steps.length - 1 && (
             <Button onClick={() => next()}>Next</Button>
           )}
@@ -87,11 +92,6 @@ function UserInfo() {
             >
               Done
             </Button>
-          )}
-          {current > 0 && (
-            <OutLinedButton style={{ margin: 'auto' }} onClick={() => prev()}>
-              Previous
-            </OutLinedButton>
           )}
         </div>
       </Wrapper>
