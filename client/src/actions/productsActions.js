@@ -20,6 +20,18 @@ const likesApiUrl = `${baseUrl}api/user/like/`;
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
+    .get(
+      'http://elice-kdt-ai-track-vm-distribute-22.koreacentral.cloudapp.azure.com:8000/api/item/recommendation?keywords=love,cheap&categories=top,bottom',
+      tokenConfig(getstate),
+    )
+    .then((res) => {
+      console.log('Success!!:', res.data);
+    })
+    .catch((err) => {
+      console.log('Fail!!:', err.response);
+    });
+
+  axios
     .get('https://fakestoreapi.com/products')
     .then((res) => {
       const productData = getstate().setProductsReducer.products;
