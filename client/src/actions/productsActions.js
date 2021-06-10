@@ -155,25 +155,15 @@ export const setLikes = () => (dispatch, getstate) => {
   axios
     .get(likesApiUrl, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
+      console.log('setLikes Success!!', res.data['like_items']);
+      dispatch({
+        type: ProductActionTypes.SET_LIKES,
+        payload: res.data['like_items'],
+      });
     })
     .catch((err) => {
       console.log(err.response);
     });
-
-  // axios
-  //   .get('https://fakestoreapi.com/products')
-  //   .then((res) => {
-  //     console.log(res.data);
-
-  //     dispatch({
-  //       type: ProductActionTypes.SET_LIKES,
-  //       payload: res.data,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.response);
-  //   });
 };
 
 export const deleteLikes = (deleteLikesProductList) => (dispatch, getstate) => {
