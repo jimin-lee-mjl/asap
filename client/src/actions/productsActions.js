@@ -6,22 +6,11 @@ import baseUrl from '../url';
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
-// const categories = [
-//   'outer',
-//   'top',
-//   'bottom',
-//   'set',
-//   'sports',
-//   'etc',
-//   'shoes',
-//   'bag',
-//   'accessories',
-// ];
 
 export const setProducts = () => (dispatch, getstate) => {
   axios
     .get(
-      'http://elice-kdt-ai-track-vm-distribute-22.koreacentral.cloudapp.azure.com:8000/api/item/recommendation?keywords=love,cheap&categories=top,bottom',
+      'http://elice-kdt-ai-track-vm-distribute-22.koreacentral.cloudapp.azure.com:8000/api/item/recommendation?keywords=great,quality,stretchy,comfortable,cheap&categories=top,bottom,outer,accessories',
       tokenConfig(getstate),
     )
     .then((res) => {
