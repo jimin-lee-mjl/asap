@@ -27,7 +27,7 @@ def list_items_by_category(request):
     item_dict = dict()
     categories = request.GET['categories'].split(',')
     for cg in categories:
-        items = Item.objects.filter(category__exact=cg)[:4]
+        items = Item.objects.filter(category__exact=cg)[:8]
         serializer = ItemListSerializer(items, many=True)
         item_dict[cg] = serializer.data
 
