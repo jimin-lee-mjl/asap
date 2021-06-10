@@ -80,7 +80,7 @@ export const register =
     console.log(body);
 
     axios
-      .post(baseUrl + '/rest-auth/registration/', body, config)
+      .post(baseUrl + 'rest-auth/registration/', body, config)
       .then((res) => {
         console.log('res', res);
         dispatch({
@@ -115,7 +115,7 @@ export const logout = () => (dispatch, getState) => {
 export const deleteUser = () => (dispatch, getState) => {
   console.log('delete user action working', tokenConfig(getState));
   axios
-    .delete(baseUrl + '/api/account/', tokenConfig(getState))
+    .delete(baseUrl + 'api/account/', tokenConfig(getState))
     .then((res) => {
       console.log('delete account', res);
       dispatch({ type: Auth.DELETE_USER });
@@ -142,7 +142,7 @@ export const changeDelivery = (body) => (dispatch, getState) => {
 // CHANGE PASSWORD
 export const changePassword = (body) => (dispatch, getState) => {
   axios
-    .post(baseUrl + '/rest-auth/password/change/', body, tokenConfig(getState))
+    .post(baseUrl + 'rest-auth/password/change/', body, tokenConfig(getState))
     .then((res) => {
       console.log('change password SUCCESSED', res);
       alert('Your password successfully changed.');
