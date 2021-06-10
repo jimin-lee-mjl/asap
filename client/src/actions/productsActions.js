@@ -277,10 +277,10 @@ export const setCart = () => (dispatch, getstate) => {
   axios
     .get(cartApiUrl, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
+      console.log('setCart Success!!', res.data);
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('setCart Fail!!', err.response);
     });
 
   axios

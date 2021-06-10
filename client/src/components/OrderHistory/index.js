@@ -109,36 +109,44 @@ export default function OrderHistory() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
           {cartProducts.includes(record.key) ? (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: '#ff6f00' }}
+              style={{ fontSize: '3.8rem', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoCart}
             />
           ) : (
             <ShoppingCartOutlined
-              style={{ fontSize: '4rem', color: 'grey' }}
+              style={{ fontSize: '3.8rem', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickCart}
             />
           )}
-          {likeProducts.includes(record.key) ? (
-            <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickUndoLikes}
-            />
-          ) : (
-            <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
-              asin={record.key}
-              onClick={handleClickLikes}
-            />
-          )}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '0.6rem',
+            }}
+          >
+            {likeProducts.includes(record.key) ? (
+              <HeartFilled
+                style={{ color: '#ff6f00' }}
+                asin={record.key}
+                onClick={handleClickUndoLikes}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: 'darkgray' }}
+                asin={record.key}
+                onClick={handleClickLikes}
+              />
+            )}
+          </div>
         </div>
       ),
       width: '10%',
@@ -179,13 +187,13 @@ export default function OrderHistory() {
       ) : (
         <HeaderComponent type="logo guest" />
       )}
-      <Container>
+      <RootContainer>
         <div style={{ alignSelf: 'start' }}>
           <h1>Order Details</h1>
         </div>
-        <div>
+        <OrderInfoContainer>
           <div style={{ textAlign: 'left' }}>2021-06-01 </div>
-          <CartListTable
+          <OrderListTable
             columns={columns}
             dataSource={orderedItemsTableData}
             scroll={{ y: 400 }}
@@ -199,7 +207,7 @@ export default function OrderHistory() {
           <TableFooter>
             <h1>Total ${}</h1>
           </TableFooter>
-        </div>
+        </OrderInfoContainer>
         <DeliveryInfoContainer>
           <h1>Delivery Info</h1>
           <DeliveryInfo>
@@ -218,22 +226,25 @@ export default function OrderHistory() {
           </DeliveryInfo>
         </DeliveryInfoContainer>
         <ProductDetailModal />
-      </Container>
+      </RootContainer>
     </>
   );
 }
 
-const Container = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
 `;
 
-const CartListTable = styled(Table)`
+const OrderInfoContainer = styled.div`
+  width: 100%;
+`;
+const OrderListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
@@ -244,6 +255,13 @@ const CartListTable = styled(Table)`
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
+  }
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
   }
 
   .ant-table-thead tr th {
@@ -282,6 +300,8 @@ const DeliveryInfo = styled.div`
   padding-left: 10px;
   padding-right: 10px;
   align-items: center;
+  font-size: 1.5rem;
+  border-radius: 2rem;
 `;
 
 const InfoTitleDiv = styled.div`

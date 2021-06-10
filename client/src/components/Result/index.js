@@ -13,21 +13,24 @@ export default function Result() {
       ) : (
         <HeaderComponent type="logo guest" />
       )}
-      <ResultContainer>
+
+      <RootContainer>
+        <div style={{ width: '100%', textAlign: 'left' }}>
+          <h1>Result</h1>
+        </div>
         <ProductTable />
         <ProductDetailModal />
-      </ResultContainer>
+      </RootContainer>
     </>
   );
 }
 
-const ResultContainer = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
   margin-top: 13rem;
-  min-height: 75%;
 `;
