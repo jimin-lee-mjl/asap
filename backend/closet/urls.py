@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/payment/', include('payment.urls', namespace='payment')),
     path('api-token-auth/', views.obtain_auth_token),
     path('api/account/', include('accounts.urls', namespace='accounts')),
-    path('api/recommendation', include('recommend.urls', namespace='recommend')),
+    path('api/item/', include('recommend.urls', namespace='recommend')),
 ]
 
 schema_view = get_schema_view(
