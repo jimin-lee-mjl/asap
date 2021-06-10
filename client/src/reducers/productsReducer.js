@@ -1,5 +1,4 @@
 import { ProductActionTypes } from '../actions/types';
-
 // products: {
 //   outer: [],
 //   top: [],
@@ -12,11 +11,7 @@ import { ProductActionTypes } from '../actions/types';
 //   accessories: [],
 // },
 const initialState = {
-  products: {
-    outer: [],
-    top: [],
-    bottom: [],
-  },
+  products: {},
   selectedProducts: {
     outer: [],
     top: [],

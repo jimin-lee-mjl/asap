@@ -16,6 +16,7 @@ import {
   addToLikes,
   undoLikes,
 } from '../../actions/productsActions';
+import ImageUrl from '../../url/imageUrl';
 
 export default function ProductCard({ categoryKey }) {
   const products = useSelector((state) => state.setProductsReducer.products);
@@ -54,11 +55,11 @@ export default function ProductCard({ categoryKey }) {
     message.success('찜이 해제되었습니다', 0.5);
   };
 
-  const likesOrNot = (id) => {
-    if (likeProducts.includes(id)) {
+  const likesOrNot = (asin) => {
+    if (likeProducts.includes(asin)) {
       return (
         <HeartFilled
-          asin={id}
+          asin={asin}
           style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickUndoLikes}
         />
@@ -66,7 +67,7 @@ export default function ProductCard({ categoryKey }) {
     } else {
       return (
         <HeartOutlined
-          asin={id}
+          asin={asin}
           style={{ fontSize: '30px', color: 'gray' }}
           onClick={handleClickLikes}
         />
@@ -75,22 +76,27 @@ export default function ProductCard({ categoryKey }) {
   };
 
   const renderProductCard = products[categoryKey].map((product) => {
-    const { id, title, image, price, category } = product;
+    const { asin, price, title } = product;
+    const image = ImageUrl(asin);
     return (
       <CardContainer
-        key={id}
+        key={asin}
         $colorbyselect={
-          selectedProductIdList.includes(String(id)) ? '#ff6f00' : '#f0f0f0'
+          selectedProductIdList.includes(asin) ? '#ff6f00' : '#f0f0f0'
         }
       >
         <Card
           hoverable
           style={{ width: 180 }}
           cover={
-            <img alt={title} src={image} style={{ height: 200, padding: 10 }} />
+            <img
+              alt="No Image"
+              src={image}
+              style={{ height: 200, padding: 10 }}
+            />
           }
           onClick={(e) => {
-            dispatch(showModal(id));
+            dispatch(showModal(asin));
           }}
         >
           <CardBody>
@@ -100,16 +106,16 @@ export default function ProductCard({ categoryKey }) {
             </CardContent>
             <CardIcons>
               <CheckCircleOutlined
-                asin={id}
+                asin={asin}
                 style={{
                   marginRight: 40,
-                  color: selectedProductIdList.includes(String(id))
+                  color: selectedProductIdList.includes(asin)
                     ? '#ff6f00'
                     : 'gray',
                 }}
                 onClick={handleClickCheck}
               />
-              {likesOrNot(id)}
+              {likesOrNot(asin)}
             </CardIcons>
           </CardBody>
         </Card>

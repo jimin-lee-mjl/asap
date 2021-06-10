@@ -23,6 +23,8 @@ import {
   undoLikes,
 } from '../../actions/productsActions';
 import { setModal, controlModal } from '../../actions/productsActions';
+import ImageUrl from '../../url/imageUrl';
+import { test_keyword } from '../../actions/userSelect';
 
 export default function ProductDetailModal({ productInfo }) {
   const { Title } = Typography;
@@ -97,7 +99,7 @@ export default function ProductDetailModal({ productInfo }) {
   const renderSelectButton = (id) => {
     console.log(id);
     console.log(selectedProductIdList);
-    if (selectedProductIdList.includes(String(id))) {
+    if (selectedProductIdList.includes(id)) {
       return (
         <button
           className="select-btn"
@@ -128,18 +130,27 @@ export default function ProductDetailModal({ productInfo }) {
       );
     }
   };
+  const renderKeywords = (keywordNumList) => {
+    const keywordList = [];
+    if (keywordNumList) {
+      keywordNumList.map((keyword) => {
+        keywordList.push(<Tag color="green">{test_keyword[keyword]}</Tag>);
+      });
+    }
+    return keywordList;
+  };
 
   return (
     <DetailModal
       title="Details"
       centered
-      visible={modal.key > 0}
+      visible={modal.key !== 0}
       onCancel={() => dispatch(showModal(0))}
       width={'50%'}
       maskStyle={{ background: 'white' }}
       footer={[
-        <div>{renderSelectButton(modal.data.id)}</div>,
-        <div>{likesOrNot(modal.data.id)}</div>,
+        <div>{renderSelectButton(modal.data.asin)}</div>,
+        <div>{likesOrNot(modal.data.asin)}</div>,
       ]}
     >
       <ProductDetailDiv>
@@ -148,8 +159,8 @@ export default function ProductDetailModal({ productInfo }) {
           style={{ textAlign: 'center', paddingRight: '2rem', height: '100%' }}
         >
           <img
-            alt={modal.data.title}
-            src={modal.data.image}
+            alt={'No Image'}
+            src={ImageUrl(modal.data.asin)}
             style={{ width: 300, height: 400 }}
           />
         </Col>
@@ -159,27 +170,10 @@ export default function ProductDetailModal({ productInfo }) {
           <p style={{ paddingLeft: '1rem', fontSize: '2rem' }}>
             $ {modal.data.price}
           </p>
-
           <KeywordContainer>
             <KeywordDiv>
-              <Title level={5}>긍정 키워드</Title>
-              <div>
-                <Tag color="green">편함</Tag>
-                <Tag color="cyan">깨끗함</Tag>
-                <Tag color="blue">가성비</Tag>
-                <Tag color="geekblue">빠른건조</Tag>
-                <Tag color="purple">무난</Tag>
-              </div>
-            </KeywordDiv>
-            <KeywordDiv>
-              <Title level={5}>부정 키워드</Title>
-              <div>
-                <Tag color="magenta">실밥마감</Tag>
-                <Tag color="red">무거움</Tag>
-                <Tag color="volcano">애매</Tag>
-                <Tag color="orange">목늘어남</Tag>
-                <Tag color="gold">비쌈</Tag>
-              </div>
+              <Title level={5}>키워드</Title>
+              <div>{renderKeywords(modal.data.keywords)}</div>
             </KeywordDiv>
           </KeywordContainer>
         </ProductDescriptionCol>

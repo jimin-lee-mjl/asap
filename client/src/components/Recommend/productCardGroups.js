@@ -19,25 +19,6 @@ export default function ProductCardGroups() {
 
   console.log('Products :', products);
 
-  /* We define our function 🕹 */
-  function replaceVerticalScrollByHorizontal(event) {
-    console.log('replaceVerticalScrollByHorizontal');
-    if (event.deltaY !== 0) {
-      console.log('deltay');
-      event.preventDefault();
-      // manually scroll horizonally instead
-      window.scroll(window.scrollX + event.deltaY * 5, window.scrollY);
-
-      // prevent vertical scroll
-    }
-    return;
-  }
-
-  // window.addEventListener('wheel', replaceVerticalScrollByHorizontal);
-  // document
-  //   .getElementById('clickMe')
-  //   .addEventListener('wheel', replaceVerticalScrollByHorizontal);
-
   const renderCardGroup = () => {
     const cardGroupArray = [];
     Object.entries(products).map((product) => {
@@ -53,10 +34,7 @@ export default function ProductCardGroups() {
           <Col span={2}>
             <Title level={5}>{categoryTitle}</Title>
           </Col>
-          <ProductCardCol
-            span={20}
-            onWheel={(e) => replaceVerticalScrollByHorizontal(e)}
-          >
+          <ProductCardCol span={20}>
             <ProductCard categoryKey={category} />
           </ProductCardCol>
         </ProductCardGroup>,
@@ -84,4 +62,5 @@ const ProductCardCol = styled(Col)`
   display: flex;
   align-items: center;
   overflow-x: scroll;
+  height: 42rem;
 `;
