@@ -131,6 +131,7 @@ export default function ProductDetailModal({ productInfo }) {
 
   return (
     <DetailModal
+      title="Details"
       centered
       visible={modal.key > 0}
       onCancel={() => dispatch(showModal(0))}
@@ -142,14 +143,17 @@ export default function ProductDetailModal({ productInfo }) {
       ]}
     >
       <ProductDetailDiv>
-        <Col span={11} style={{ textAlign: 'center', paddingRight: '2rem' }}>
+        <Col
+          span={11}
+          style={{ textAlign: 'center', paddingRight: '2rem', height: '100%' }}
+        >
           <img
             alt={modal.data.title}
             src={modal.data.image}
             style={{ width: 300, height: 400 }}
           />
         </Col>
-        <ProductDescriptionCol span={11}>
+        <ProductDescriptionCol span={11} style={{ height: '100%' }}>
           <Title level={2}>{modal.data.title}</Title>
           <Title level={4}>PRICE</Title>
           <p style={{ paddingLeft: '1rem', fontSize: '2rem' }}>
@@ -188,12 +192,16 @@ const DetailModal = styled(Modal)`
   .ant-modal-content {
     height: 60rem;
   }
-
+  .ant-modal-content .ant-modal-body {
+    height: 80%;
+  }
   .ant-modal-content .ant-modal-footer {
     text-align: left;
-    padding-left: 90px;
+    padding-right: 2rem;
     display: flex;
     align-items: center;
+    height: 10%;
+    justify-content: flex-end;
   }
 
   .ant-modal-footer .ant-btn {
@@ -207,7 +215,7 @@ const DetailModal = styled(Modal)`
   }
 
   .ant-modal-footer div .select-btn {
-    border: 0.3rem solid #ff6f00;
+    border: 0.2rem solid #ff6f00;
     border-radius: 2rem;
     line-height: 2;
     margin-right: 1rem;
@@ -216,7 +224,7 @@ const DetailModal = styled(Modal)`
   }
 
   .ant-modal-footer div .like-btn {
-    border: 0.3rem solid #ff6f00;
+    border: 0.2rem solid #ff6f00;
     border-radius: 2rem;
     line-height: 2;
     margin-right: 1rem;

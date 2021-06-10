@@ -21,9 +21,9 @@ export default function Recommend() {
       )}
       <Container>
         <Header>
-          <p>
+          {/* <p>
             These are recommended items based on your information and keywords.
-          </p>
+          </p> */}
         </Header>
         <Body>
           <ProductCardGroups />

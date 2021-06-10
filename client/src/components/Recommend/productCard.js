@@ -87,7 +87,7 @@ export default function ProductCard({ categoryKey }) {
           hoverable
           style={{ width: 180 }}
           cover={
-            <img alt={title} src={image} style={{ height: 180, padding: 10 }} />
+            <img alt={title} src={image} style={{ height: 200, padding: 10 }} />
           }
           onClick={(e) => {
             dispatch(showModal(id));
@@ -121,18 +121,19 @@ export default function ProductCard({ categoryKey }) {
 }
 
 const CardContainer = styled.div`
-  margin: 10px;
+  margin: 0.5rem;
   .ant-card {
     height: 400px;
-    border: 5px solid;
+    border: 0.4rem solid;
     border-color: ${(props) => props.$colorbyselect};
+    border-radius: 2rem;
   }
   .ant-card-body {
     height: 200px;
     padding: 10px;
   }
   .ant-card-cover {
-    border-bottom: 5px solid #f0f0f0;
+    border-bottom: 0.3rem solid #f0f0f0;
   }
 `;
 
@@ -142,7 +143,6 @@ const CardIcons = styled.div`
 `;
 
 const CardBody = styled.div`
-  margin: 10px;
   height: 100%;
 `;
 

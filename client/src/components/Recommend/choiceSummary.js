@@ -50,14 +50,15 @@ export default function ChoiceSummary() {
       <Card
         title="Price Info"
         headStyle={{
-          fontSize: '1.5rem',
+          fontSize: '1.7rem',
           fontWeight: 'bold',
-          borderBottom: '5px solid #f0f0f0',
+          borderBottom: '0.1rem solid #ff6f00',
         }}
         style={{
           width: '15rem',
-          border: '5px solid #f0f0f0',
           position: 'fixed',
+          borderRadius: '2rem',
+          background: '#f0f0f0',
         }}
       >
         <ChoiceSummaryDiv>{choiceSummary()}</ChoiceSummaryDiv>
@@ -83,4 +84,5 @@ const TotalSummary = styled.div`
   font-weight: bold;
   border: solid 1px #ff6f00;
   padding-top: 10px;
+  border-radius: 1rem;
 `;
