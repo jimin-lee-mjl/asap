@@ -146,7 +146,7 @@ export const categoryFilter = (category) => (dispatch) => {
   axios
     .get(
       baseUrl +
-        'api/recommendation' +
+        'api/item/recommendation' +
         '?' +
         'keywords=' +
         '&' +
