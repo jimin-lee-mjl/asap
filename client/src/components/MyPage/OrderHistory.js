@@ -11,7 +11,7 @@ export default function OrderHistory() {
     <Container>
       <h2>Order History</h2>
       <ScrollingList>
-        {data.slice(1).map((el) => {
+        {data.map((el) => {
           const [id, time, price] = el.split(',');
           return (
             <HistoryCard
