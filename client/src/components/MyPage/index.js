@@ -8,7 +8,7 @@ import DeliveryInfo from './DelivaryInfo';
 import Keywords from './Keywords';
 import OrderHistory from './OrderHistory';
 import LikedItems from './LikedItems';
-
+import ProductDetailModal from './productDetailModal';
 import { loadUser } from '../../actions/auth';
 
 export default function MyPage() {
@@ -28,6 +28,7 @@ export default function MyPage() {
         <Keywords />
         <OrderHistory />
         <LikedItems />
+        <ProductDetailModal />
       </Container>
     </>
   );

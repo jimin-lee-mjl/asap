@@ -19,7 +19,10 @@ const initialState = {
   likesList: [],
   cartProducts: [],
   cartList: [],
-  orderDetails: [],
+  orderDetails: {
+    item_info: [],
+    order_detail: [],
+  },
   modal: {
     key: 0,
     data: {},

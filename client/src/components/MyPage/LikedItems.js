@@ -1,12 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import ItemCard from './ItemCard';
+import { showModal } from '../../actions/productsActions';
 
 export default function LikedItems() {
   const history = useHistory();
   const asins = useSelector((state) => state.auth.user.like_items);
+
   return (
     <Container>
       <h2>Liked Items</h2>

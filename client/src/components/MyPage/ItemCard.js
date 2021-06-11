@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { showModal } from '../../actions/productsActions';
+import { useDispatch } from 'react-redux';
 
 export default function ItemCard({ productId }) {
   const imageUrl = `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=${productId}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250`;
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -10,6 +13,9 @@ export default function ItemCard({ productId }) {
         src={imageUrl}
         alt={productId}
         style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+        onClick={(e) => {
+          dispatch(showModal(productId));
+        }}
       />
     </Container>
   );

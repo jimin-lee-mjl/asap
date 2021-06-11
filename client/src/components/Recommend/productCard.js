@@ -87,12 +87,17 @@ export default function ProductCard({ categoryKey }) {
       >
         <Card
           hoverable
-          style={{ width: 180 }}
+          style={{ width: 190 }}
           cover={
             <img
               alt="No Image"
               src={image}
-              style={{ height: 200, padding: 10 }}
+              style={{
+                height: 200,
+                padding: 10,
+                width: '90%',
+                margin: '0 auto',
+              }}
             />
           }
           onClick={(e) => {
