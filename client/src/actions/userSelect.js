@@ -94,7 +94,6 @@ export const selectCategories = (payload) => {
 
 // GET ALL KEYWORD
 export const setKeywords = () => (dispatch, getstate) => {
-  // asap api
   axios
     .get(`${baseUrl}api/item/`)
     .then((res) => {
@@ -109,7 +108,6 @@ export const setKeywords = () => (dispatch, getstate) => {
     });
 
   // test
-
   // dispatch({
   //   type: UserSelectTypes.SET_KEYWORDS,
   //   payload: test_keyword.slice(0, 35),
