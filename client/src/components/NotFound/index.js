@@ -10,7 +10,7 @@ export default function NotFound() {
         height: '90vh',
       }}
     >
-      <h1>NotFound</h1>
+      <h1 style={{ color: '#ff6f00' }}>Not Found</h1>
     </div>
   );
 }

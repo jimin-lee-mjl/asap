@@ -94,26 +94,24 @@ export const selectCategories = (payload) => {
 
 // GET ALL KEYWORD
 export const setKeywords = () => (dispatch, getstate) => {
-  // asap api
-  // axios
-  //   .get(`${baseUrl}api/keyword/`)
-  //   .then((res) => {
-  //     console.log('setKeywords:', res.data);
-  //     dispatch({
-  //       type: UserSelectTypes.SET_KEYWORDS,
-  //       payload: res.data,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log('Err: ', err.response);
-  //   });
+  axios
+    .get(`${baseUrl}api/item/`)
+    .then((res) => {
+      console.log('setKeywords:', res.data.keywords);
+      dispatch({
+        type: UserSelectTypes.SET_KEYWORDS,
+        payload: res.data.keywords,
+      });
+    })
+    .catch((err) => {
+      console.log('Err: ', err.response);
+    });
 
   // test
-
-  dispatch({
-    type: UserSelectTypes.SET_KEYWORDS,
-    payload: test_keyword.slice(0, 35),
-  });
+  // dispatch({
+  //   type: UserSelectTypes.SET_KEYWORDS,
+  //   payload: test_keyword.slice(0, 35),
+  // });
 };
 
 // SELECT KEYWORD SAVED TO STORE

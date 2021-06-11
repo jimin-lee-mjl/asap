@@ -5,6 +5,7 @@ const initialState = {
   selectedCategories: [],
   keywords: [],
   selectedKeywords: [],
+  recommend: {},
 };
 
 export default function userSelect(state = initialState, action) {
