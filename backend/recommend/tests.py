@@ -35,3 +35,19 @@ class TestItemDetailsView(APITestCase):
         url = reverse('recommend:item_detail', kwargs={'item_id':self.item.asin})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TestGetRandomKeywords(APITestCase):
+    def setUp(self):
+        self.keyword1 = KeywordFactory.create()
+        self.keyword2 = KeywordFactory.create()
+        self.keyword3 = KeywordFactory.create()
+        self.keyword4 = KeywordFactory.create()
+        self.keyword5 = KeywordFactory.create()
+        self.keyword6 = KeywordFactory.create()
+        self.keyword7 = KeywordFactory.create()
+
+    def test_get_random_keywords(self):
+        url = reverse('recommend:random_keywords')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
