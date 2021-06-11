@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../Header';
-import axios from 'axios';
-import baseUrl from '../../url';
 import { changePassword } from '../../actions/auth';
 
 export default function Register() {
