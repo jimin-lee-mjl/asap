@@ -7,85 +7,24 @@ import ImageUrl from '../url';
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
-const recommendApiUrl = `${baseUrl}api/item/recommendation`;
 const productDetailApiUrl = `${baseUrl}api/item/`;
 
 export const setProducts = () => (dispatch, getstate) => {
-  const selectedKeywords = getstate().userSelect.selectedKeywords;
-  console.log('selectedKeywords:', selectedKeywords.join(','));
-  const selectedCategories = getstate().userSelect.selectedCategories;
-  console.log('selectedCategories:', selectedCategories.join(','));
+  const data = getstate().userSelect.recommend;
 
-  axios
-    .get(
-      `${recommendApiUrl}?keywords=${selectedKeywords}&categories=${selectedCategories}`,
-      tokenConfig(getstate),
-    )
-    .then((res) => {
-      console.log('Success!!:', res.data);
-
-      const categoryData = [];
-      Object.entries(res.data).map(([category, productList]) => {
-        categoryData.push(category);
-      });
-      console.log('categoryData:', categoryData);
-
-      dispatch({
-        type: ProductActionTypes.SET_PRODUCTS,
-        payload: { ...res.data },
-      });
-      dispatch({
-        type: ProductActionTypes.SET_CATEGORY,
-        payload: [...categoryData],
-      });
-    })
-    .catch((err) => {
-      console.log('Fail!!:', err.response);
-    });
-
-  // axios
-  //   .get('https://fakestoreapi.com/products')
-  //   .then((res) => {
-  //     const productData = getstate().setProductsReducer.products;
-
-  //     console.log(res.data);
-  //     res.data.map((data) => {
-  //       if (data.category == "women's clothing") {
-  //         productData.outer.push(data);
-  //       } else if (data.category == "men's clothing") {
-  //         productData.top.push(data);
-  //       } else if (data.category == 'jewelery') {
-  //         productData.bottom.push(data);
-  //       }
-  //     });
-
-  //     // res.data.map((data) => {
-  //     //   productData[data.category] = [...productData[data.category], data];
-  //     // });
-
-  //     console.log(productData);
-  //     const categoryData = [];
-  //     Object.entries(productData).map(([category, productList]) => {
-  //       console.log(category, productList);
-  //       if (!productList) {
-  //       } else if (productList.length !== 0) {
-  //         categoryData.push(category);
-  //       }
-  //     });
-
-  //     console.log('categoryData:', categoryData);
-  //     dispatch({
-  //       type: ProductActionTypes.SET_PRODUCTS,
-  //       payload: { ...productData },
-  //     });
-  //     dispatch({
-  //       type: ProductActionTypes.SET_CATEGORY,
-  //       payload: [...categoryData],
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log('Err: ', err.response);
-  //   });
+  const categoryData = [];
+  Object.entries(data).map(([category, productList]) => {
+    categoryData.push(category);
+  });
+  console.log('categoryData:', categoryData);
+  dispatch({
+    type: ProductActionTypes.SET_PRODUCTS,
+    payload: { ...data },
+  });
+  dispatch({
+    type: ProductActionTypes.SET_CATEGORY,
+    payload: [...categoryData],
+  });
 };
 
 export const selectProduct = (selectedProductId) => (dispatch, getstate) => {

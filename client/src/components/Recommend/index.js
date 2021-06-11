@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Card, Typography, Col, Row } from 'antd';
+import React from 'react';
 import ProductCardGroups from './productCardGroups';
 import ChoiceSummary from './choiceSummary';
 import Navigator from './navigator';
@@ -10,7 +9,6 @@ import HeaderComponent from '../Header';
 
 export default function Recommend() {
   const authToken = localStorage.getItem('token');
-  const { Title } = Typography;
 
   return (
     <>

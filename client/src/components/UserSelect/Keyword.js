@@ -1,13 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Checkbox, Button, Badge } from 'antd';
+import React, { useEffect } from 'react';
+import { Badge } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectKeywords, setKeywords } from '../../actions/userSelect';
-import { Redirect } from 'react-router';
-
-function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
-}
 
 export default function Keyword() {
   const keywords = useSelector((state) => state.userSelect.keywords);
@@ -19,7 +14,7 @@ export default function Keyword() {
   const handleClickKeyword = (e) => {
     e.stopPropagation();
     const clickedKeyword = e.currentTarget.getAttribute('value');
-    console.log(clickedKeyword);
+    // console.log(clickedKeyword);
     dispatch(selectKeywords(clickedKeyword));
   };
 
