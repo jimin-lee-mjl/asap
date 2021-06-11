@@ -437,6 +437,24 @@ export const showModal = (productAsin) => (dispatch, getstate) => {
       type: ProductActionTypes.RESET_MODAL,
       payload: resetModalState,
     });
+  } else if (String(productAsin).length < 3) {
+    // fake api
+    axios
+      .get(`https://fakestoreapi.com/products/${productAsin}`)
+      .then((res) => {
+        console.log(res.data);
+        const newModalState = {
+          key: productAsin,
+          data: res.data,
+        };
+        dispatch({
+          type: ProductActionTypes.SHOW_MODAL,
+          payload: newModalState,
+        });
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   } else {
     axios
       .get(`${productDetailApiUrl}${productAsin}`, tokenConfig(getstate))
