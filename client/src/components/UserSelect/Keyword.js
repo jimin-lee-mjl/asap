@@ -56,6 +56,15 @@ export default function Keyword() {
           <h3>Selected Word</h3>
           {renderSelectedKeywords}
         </SelectedKeywordDiv>
+        <br />
+        <button
+          onClick={() => {
+            dispatch(setKeywords());
+          }}
+        >
+          GET OTHER KEYWORDS
+        </button>
+        <br />
         <KeywordDiv>{renderKeywords}</KeywordDiv>
       </Container>
     </>
@@ -66,6 +75,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
