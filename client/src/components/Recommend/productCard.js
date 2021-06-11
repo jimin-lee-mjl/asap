@@ -35,7 +35,7 @@ export default function ProductCard({ categoryKey }) {
     const selectedProductId = e.currentTarget.getAttribute('asin');
     console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
-    message.success('상품이 선택되었습니다.', 0.5);
+    message.success('Check!', 0.5);
     console.log(selectedProductIdList);
   };
 
@@ -44,7 +44,7 @@ export default function ProductCard({ categoryKey }) {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -52,7 +52,7 @@ export default function ProductCard({ categoryKey }) {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   const likesOrNot = (asin) => {

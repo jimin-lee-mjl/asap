@@ -30,10 +30,15 @@ class TestRecommendItemView(APITestCase):
 class TestItemDetailsView(APITestCase):
     def setUp(self):
         self.item = ItemFactory.create()
+        self.keyword = KeywordFactory.create()
+        self.keyword2 = KeywordFactory.create()
+        self.item.keywords.add(self.keyword)
+        self.item.keywords.add(self.keyword2)
     
     def test_get_item_details(self):
         url = reverse('recommend:item_detail', kwargs={'item_id':self.item.asin})
         response = self.client.get(url)
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
