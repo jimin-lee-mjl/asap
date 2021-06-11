@@ -158,7 +158,6 @@ export default function OrderHistory() {
   console.log(orderDetails);
   if (orderDetails) {
     orderDetails.map((orderedItem) => {
-      console.log('orderedItem:', orderedItem);
       orderedItemsTableData.push({
         key: orderedItem.id,
         ImageURL: orderedItem.image,
@@ -205,7 +204,7 @@ export default function OrderHistory() {
             })}
           />
           <TableFooter>
-            <h1>Total ${}</h1>
+            <h1>Total $ 648.95</h1>
           </TableFooter>
         </OrderInfoContainer>
         <DeliveryInfoContainer>

@@ -13,6 +13,7 @@ import {
   undoCart,
 } from '../../actions/productsActions';
 import { Link } from 'react-router-dom';
+import ImageUrl from '../../url/imageUrl';
 
 export default function CartList() {
   const { Title } = Typography;
@@ -35,7 +36,7 @@ export default function CartList() {
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
     dispatch(addToCart([addCartProductId]));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickUndoCart = (e) => {
@@ -43,15 +44,14 @@ export default function CartList() {
     const undoCartProductId = e.currentTarget.getAttribute('asin');
     console.log(undoCartProductId);
     dispatch(undoCart([undoCartProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your cart', 0.5);
   };
-
   const handleClickCartSelected = (e) => {
     e.stopPropagation();
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToCart(checkedIdList));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickDelete = (e) => {
@@ -59,7 +59,7 @@ export default function CartList() {
     const deleteProductId = e.currentTarget.getAttribute('asin');
     console.log([deleteProductId]);
     dispatch(deleteLikes([deleteProductId]));
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
     // "Are you sure you want to delete?"alert 띄우기
   };
 
@@ -68,7 +68,7 @@ export default function CartList() {
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(deleteLikes(checkedIdList));
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   // const handleClickDelete = useCallback(async () => {
@@ -85,7 +85,7 @@ export default function CartList() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
@@ -145,14 +145,13 @@ export default function CartList() {
   ];
   const likesListTableData = [];
 
-  Object.entries(likesList).map((likes) => {
-    const likesProduct = likes[1];
-    console.log('likesProduct', likesProduct);
+  likesList.map((likes) => {
+    console.log('likes', likes);
     likesListTableData.push({
-      key: likesProduct.id,
-      ImageURL: likesProduct.image,
-      name: likesProduct.title,
-      price: likesProduct.price,
+      key: likes.asin,
+      ImageURL: ImageUrl(likes.asin),
+      name: likes.title,
+      price: likes.price,
     });
   });
 

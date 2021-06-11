@@ -20,6 +20,7 @@ import {
   undoCart,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
+import ImageUrl from '../../url/imageUrl';
 
 export default function ProductTable() {
   const history = useHistory();
@@ -46,7 +47,7 @@ export default function ProductTable() {
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
     dispatch(addToCart([addCartProductId]));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickUndoCart = (e) => {
@@ -54,15 +55,14 @@ export default function ProductTable() {
     const undoCartProductId = e.currentTarget.getAttribute('asin');
     console.log(undoCartProductId);
     dispatch(undoCart([undoCartProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your cart', 0.5);
   };
-
   const handleClickCartSelected = (e) => {
     e.stopPropagation();
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToCart(checkedIdList));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -70,7 +70,7 @@ export default function ProductTable() {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -78,7 +78,7 @@ export default function ProductTable() {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   const handleClickLikesSelected = (e) => {
@@ -86,7 +86,7 @@ export default function ProductTable() {
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToLikes(checkedIdList));
-    message.success('add to likes', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickOrder = useCallback(async () => {
@@ -100,7 +100,7 @@ export default function ProductTable() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
@@ -174,8 +174,8 @@ export default function ProductTable() {
   Object.entries(selectedProducts).map(([category, productList]) => {
     productList.map((product) => {
       data.push({
-        key: product.id,
-        ImageURL: product.image,
+        key: product.asin,
+        ImageURL: ImageUrl(product.asin),
         name: product.title,
         price: product.price,
       });
