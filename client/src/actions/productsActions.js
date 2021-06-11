@@ -13,7 +13,13 @@ export const setProducts = () => (dispatch, getstate) => {
   const recommend = getstate().userSelect.recommend;
   console.log('recommend', recommend);
 
-  const categoryData = Object.keys(recommend);
+  const categoryData = [];
+  Object.entries(recommend).map(([category, productList]) => {
+    if (productList.length !== 0) {
+      categoryData.push(category);
+    }
+  });
+
   console.log('categoryData:', categoryData);
   dispatch({
     type: ProductActionTypes.SET_PRODUCTS,
