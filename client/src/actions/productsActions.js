@@ -426,23 +426,12 @@ export const setOrderDetails = (orderId) => (dispatch, getstate) => {
     .get(`${orderApiUrl}${Number(orderId)}/`, tokenConfig(getstate))
     .then((res) => {
       console.log('setOrderDetails Success', res.data);
-    })
-    .catch((err) => {
-      console.log('setOrderDetails Fail', err.response);
-    });
-
-  // fake api
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
       dispatch({
         type: ProductActionTypes.SET_ORDER_DETAILS,
         payload: res.data,
       });
-      console.log(getstate());
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('setOrderDetails Fail', err.response);
     });
 };

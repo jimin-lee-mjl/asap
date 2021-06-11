@@ -130,11 +130,12 @@ export default function ProductDetailModal({ productInfo }) {
       );
     }
   };
+
   const renderKeywords = (keywordNumList) => {
     const keywordList = [];
     if (keywordNumList) {
       keywordNumList.map((keyword) => {
-        keywordList.push(<Tag color="green">{test_keyword[keyword]}</Tag>);
+        keywordList.push(<KeywordTag>{keyword}</KeywordTag>);
       });
     }
     return keywordList;
@@ -165,17 +166,26 @@ export default function ProductDetailModal({ productInfo }) {
           />
         </Col>
         <ProductDescriptionCol span={11} style={{ height: '100%' }}>
-          <Title level={2}>{modal.data.title}</Title>
-          <Title level={4}>PRICE</Title>
+          <ProductTitle>{modal.data.title}</ProductTitle>
+          <Title
+            level={4}
+            style={{ color: 'darkolivegreen', marginTop: '1rem' }}
+          >
+            PRICE
+          </Title>
           <p style={{ paddingLeft: '1rem', fontSize: '2rem' }}>
             $ {modal.data.price}
           </p>
-          <KeywordContainer>
-            <KeywordDiv>
-              <Title level={5}>키워드</Title>
-              <div>{renderKeywords(modal.data.keywords)}</div>
-            </KeywordDiv>
-          </KeywordContainer>
+          <KeywordCol>
+            <Title level={4} style={{ color: 'darkolivegreen' }}>
+              Keyword
+            </Title>
+            <KeywordContainer>
+              <KeywordDiv>
+                <div>{renderKeywords(modal.data.keywords)}</div>
+              </KeywordDiv>
+            </KeywordContainer>
+          </KeywordCol>
         </ProductDescriptionCol>
       </ProductDetailDiv>
     </DetailModal>
@@ -227,50 +237,58 @@ const DetailModal = styled(Modal)`
   }
 `;
 
+//productdetail
 const ProductDetailDiv = styled.div`
   display: flex;
   align-items: center;
-  height: 60%;
 `;
 
-const ProductDescriptionCol = styled(Col)``;
+const ProductDescriptionCol = styled(Col)`
+  height: 600px;
+`;
+
+const ProductTitle = styled.div`
+  font-weight: bold;
+  font-size: 2rem;
+
+  // 영역을 넘어가는 텍스트 처리
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  display: -webkit-box;
+
+  // ellipsis line
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  // webkit 엔진을 사용하지 않는 브라우저를 위한 속성.
+  // height = line-height * line = 1.2em * 3 = 3.6em
+  line-height: 1.2em;
+  height: 3.6em;
+
+  :hover {
+    overflow: visible;
+  }
+`;
+
+//keyword
+const KeywordCol = styled.div``;
 
 const KeywordContainer = styled.div`
-  margin-top: 50px;
-  border: solid 1px gainsboro;
+  border: solid 1px darkolivegreen;
   padding: 20px;
   margin-right: 10px;
+  border-radius: 1rem;
 `;
 
 const KeywordDiv = styled.div`
   margin-bottom: 15px;
 `;
 
-const PushpinButton = styled(Button)`
-  margin-left: 30px;
+const KeywordTag = styled(Tag)`
+  line-height: 2;
+  font-size: 1.5rem;
+  margin: 0.3rem;
+  background: beige;
+  border-radius: 0.5rem;
 `;
-
-// const Button = styled.button`
-//   background: #ff6f00;
-//   width: 8rem;
-//   height: 4rem;
-//   border: 0.1rem solid #ff6f00;
-//   border-radius: 0.5rem;
-//   font-size: 1.7rem;
-//   color: white;
-//   margin: 0 3vw;
-//   text-align: center;
-//   vertical-align: middle;
-//   display: table-cell;
-//   line-height: 2;
-//   margin: 5px 0;
-
-//   :hover {
-//     box-shadow: 2px 4px 8px #c4c4c4;
-//   }
-// `;
-
-// const OutLinedButton = styled(Button)`
-//   background: #fff;
-//   color: #ff6f00;
-// `;

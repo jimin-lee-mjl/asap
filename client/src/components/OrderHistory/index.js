@@ -21,8 +21,8 @@ import {
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductDetailModal from './productDetailModal';
-// import OrderInfo from './orderInfo';
 import HeaderComponent from '../Header';
+import ImageUrl from '../../url/imageUrl';
 
 export default function OrderHistory() {
   const authToken = localStorage.getItem('token');
@@ -51,7 +51,7 @@ export default function OrderHistory() {
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
     dispatch(addToCart([addCartProductId]));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickUndoCart = (e) => {
@@ -59,7 +59,7 @@ export default function OrderHistory() {
     const undoCartProductId = e.currentTarget.getAttribute('asin');
     console.log(undoCartProductId);
     dispatch(undoCart([undoCartProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your cart', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -67,7 +67,7 @@ export default function OrderHistory() {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -75,7 +75,7 @@ export default function OrderHistory() {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   const columns = [
@@ -84,7 +84,7 @@ export default function OrderHistory() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
@@ -156,11 +156,11 @@ export default function OrderHistory() {
   const orderedItemsTableData = [];
 
   console.log(orderDetails);
-  if (orderDetails) {
-    orderDetails.map((orderedItem) => {
+  if (orderDetails['item_info']) {
+    orderDetails['item_info'].map((orderedItem) => {
       orderedItemsTableData.push({
-        key: orderedItem.id,
-        ImageURL: orderedItem.image,
+        key: orderedItem.asin,
+        ImageURL: ImageUrl(orderedItem.asin),
         name: orderedItem.title,
         price: orderedItem.price,
       });
@@ -191,7 +191,11 @@ export default function OrderHistory() {
           <h1>Order Details</h1>
         </div>
         <OrderInfoContainer>
-          <div style={{ textAlign: 'left' }}>2021-06-01 </div>
+          <div style={{ textAlign: 'left' }}>
+            {orderDetails['order_detail'].ordered_at
+              ? orderDetails['order_detail'].ordered_at.slice(0, 10)
+              : ''}
+          </div>
           <OrderListTable
             columns={columns}
             dataSource={orderedItemsTableData}
@@ -204,7 +208,7 @@ export default function OrderHistory() {
             })}
           />
           <TableFooter>
-            <h1>Total $ 648.95</h1>
+            <h1>Total $ {orderDetails['order_detail'].total_price}</h1>
           </TableFooter>
         </OrderInfoContainer>
         <DeliveryInfoContainer>
@@ -217,10 +221,14 @@ export default function OrderHistory() {
               <p>Postal Code</p>
             </InfoTitleDiv>
             <InfoContentDiv>
-              <p>Kyunglim Khang</p>
-              <p>Kyunglim.Khang@gmail.com</p>
-              <p>157, Hwarang-ro, Seongbuk-gu, Seoul, Republic of Korea</p>
-              <p>02773</p>
+              <p>
+                {orderDetails['order_detail'].first_name}
+                &nbsp;
+                {orderDetails['order_detail'].last_name}
+              </p>
+              <p>{orderDetails['order_detail'].email}</p>
+              <p>{orderDetails['order_detail'].address}</p>
+              <p>{orderDetails['order_detail'].postal_code}</p>
             </InfoContentDiv>
           </DeliveryInfo>
         </DeliveryInfoContainer>
