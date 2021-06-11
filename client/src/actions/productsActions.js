@@ -10,16 +10,14 @@ const likesApiUrl = `${baseUrl}api/user/like/`;
 const productDetailApiUrl = `${baseUrl}api/item/`;
 
 export const setProducts = () => (dispatch, getstate) => {
-  const data = getstate().userSelect.recommend;
+  const recommend = getstate().userSelect.recommend;
+  console.log('recommend', recommend);
 
-  const categoryData = [];
-  Object.entries(data).forEach(([category, productList]) => {
-    categoryData.push(category);
-  });
+  const categoryData = Object.keys(recommend);
   console.log('categoryData:', categoryData);
   dispatch({
     type: ProductActionTypes.SET_PRODUCTS,
-    payload: { ...data },
+    payload: { ...recommend },
   });
   dispatch({
     type: ProductActionTypes.SET_CATEGORY,

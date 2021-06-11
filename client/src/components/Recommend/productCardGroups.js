@@ -8,12 +8,15 @@ import { setProducts, loadLikes } from '../../actions/productsActions';
 
 export default function ProductCardGroups() {
   const { Title } = Typography;
-
-  const products = useSelector((state) => state.setProductsReducer.products);
   const dispatch = useDispatch();
+  const products = useSelector((state) => state.setProductsReducer.products);
+  const recommend = useSelector((state) => state.userSelect.recommend);
 
   useEffect(() => {
     dispatch(setProducts());
+  }, [recommend]);
+
+  useEffect(() => {
     dispatch(loadLikes());
   }, []);
 
