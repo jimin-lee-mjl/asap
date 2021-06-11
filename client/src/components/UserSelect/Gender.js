@@ -18,7 +18,7 @@ export default function Gender() {
             dispatch(selectGender('men'));
           }}
         />
-        <Item for="men" style={{ backgroundImage: `url('/shopMen.png')` }}>
+        <Item htmlFor="men" style={{ backgroundImage: `url('/shopMen.png')` }}>
           <span>Men</span>
         </Item>
         <input
@@ -29,7 +29,10 @@ export default function Gender() {
             dispatch(selectGender('women'));
           }}
         />
-        <Item for="women" style={{ backgroundImage: `url('/shopWomens.jpg')` }}>
+        <Item
+          htmlFor="women"
+          style={{ backgroundImage: `url('/shopWomens.jpg')` }}
+        >
           <span>Women</span>
         </Item>
       </Container>
@@ -80,9 +83,6 @@ const Item = styled.label`
   span {
     -webkit-text-decoration: none;
     text-decoration: none;
-    /* background: rgba(255, 255, 255, 0.3); */
-    /* width: auto;
-    height: 3rem; */
     padding: 0.5rem;
     font-size: 3rem;
     font-weight: 900;
