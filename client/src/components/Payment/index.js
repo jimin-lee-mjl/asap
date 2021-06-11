@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import HeaderComponent from '../Header';
 import { PayPalButton } from 'react-paypal-button-v2';
@@ -8,8 +8,10 @@ import axios from 'axios';
 import baseUrl from '../../url';
 import DeliveryInfo from './DeliveryInfo';
 import OrderTable from './OrderTable';
+import { loadUser } from '../../actions/auth';
 
 export default function Payment() {
+  const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((state) => state.auth.user);
   const authToken = localStorage.getItem('token');
@@ -97,6 +99,7 @@ export default function Payment() {
       .then(() => {
         alert('order completed');
         history.push('/');
+        dispatch(loadUser());
       })
       .catch((err) => console.log(err.response));
   }

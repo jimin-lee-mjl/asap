@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../Header';
 import UserInfo from './UserInfo';
@@ -12,11 +12,12 @@ import LikedItems from './LikedItems';
 import { loadUser } from '../../actions/auth';
 
 export default function MyPage() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    loadUser();
-  }, []);
+    dispatch(loadUser());
+  }, [user]);
 
   return (
     <>
