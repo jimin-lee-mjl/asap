@@ -19,6 +19,8 @@ export default function userSelect(state = initialState, action) {
       return { ...state, selectedKeywords: action.payload };
     case UserSelectTypes.UNSELECT_KEYWORDS:
       return { ...state, selectedKeywords: action.payload };
+    case UserSelectTypes.SET_RECOMMEND:
+      return { ...state, recommend: action.payload };
     default:
       return state;
   }

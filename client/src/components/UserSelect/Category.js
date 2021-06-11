@@ -19,7 +19,6 @@ export default function Category() {
   ];
 
   function onChange(checkedValues) {
-    console.log('checked = ', checkedValues);
     dispatch(selectCategories(checkedValues));
   }
 

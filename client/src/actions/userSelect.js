@@ -1,10 +1,7 @@
 import { UserSelectTypes } from './types';
 import axios from 'axios';
-import { tokenConfig } from './auth';
 import baseUrl from '../url';
 
-const keywordApiUrl = `${baseUrl}api/keyword/`;
-const recommendApiBaseUrl = `${baseUrl}recommend/`;
 export const test_keyword = [
   'love',
   'small',
@@ -78,6 +75,8 @@ export const test_keyword = [
   'better',
   'beautiful',
 ];
+
+// SELECT GENDER SAVED TO STORE
 export const selectGender = (payload) => {
   return {
     type: UserSelectTypes.SELECT_GENDER,
@@ -85,6 +84,7 @@ export const selectGender = (payload) => {
   };
 };
 
+// SELECT CATEGORY SAVED TO STORE
 export const selectCategories = (payload) => {
   return {
     type: UserSelectTypes.SELECT_CATEGORIES,
@@ -92,10 +92,11 @@ export const selectCategories = (payload) => {
   };
 };
 
+// GET ALL KEYWORD
 export const setKeywords = () => (dispatch, getstate) => {
   // asap api
   // axios
-  //   .get(keywordApiUrl)
+  //   .get(`${baseUrl}api/keyword/`)
   //   .then((res) => {
   //     console.log('setKeywords:', res.data);
   //     dispatch({
@@ -115,9 +116,9 @@ export const setKeywords = () => (dispatch, getstate) => {
   });
 };
 
+// SELECT KEYWORD SAVED TO STORE
 export const selectKeywords = (selectedKeyword) => (dispatch, getstate) => {
   const curSelectedKeywords = getstate().userSelect.selectedKeywords;
-  console.log('curSelectedKeywords:', curSelectedKeywords);
 
   if (curSelectedKeywords) {
     if (curSelectedKeywords.includes(selectedKeyword)) {
@@ -141,14 +142,12 @@ export const selectKeywords = (selectedKeyword) => (dispatch, getstate) => {
       payload: [selectedKeyword],
     });
   }
-
-  console.log('nowState:', getstate().userSelect.selectedKeywords);
 };
 
-export const postUserSelection = () => (dispatch, getstate) => {
-  const keyword = getstate().userSelect.selectedKeywords;
-  const keywordParameter = keyword.join('&');
-  const recommendApiUrl = recommendApiBaseUrl + keywordParameter;
+// GET RECOMMEND PRODUCT
+export const recommendFilter = (category, keyword) => (dispatch) => {
+  const categoryParameter = category.join(',');
+  const keywordParameter = keyword.join(',');
 
   const config = {
     headers: {
@@ -156,46 +155,27 @@ export const postUserSelection = () => (dispatch, getstate) => {
     },
   };
 
-  // asap api
   axios
-    .post(recommendApiUrl, null, config)
+    .get(
+      baseUrl +
+        'api/item/recommendation' +
+        '?' +
+        'keywords=' +
+        keywordParameter +
+        '&' +
+        'categories=' +
+        categoryParameter,
+      null,
+      config,
+    )
     .then((res) => {
-      console.log('setKeywords:', res.data);
+      console.log('추천api요청결과', res.data);
       dispatch({
-        type: UserSelectTypes.SET_KEYWORDS,
+        type: UserSelectTypes.SET_RECOMMEND,
         payload: res.data,
       });
     })
     .catch((err) => {
-      console.log('Err: ', err.response);
+      console.log(err.response);
     });
-};
-
-export const categoryFilter = (category) => (dispatch) => {
-  const categoryParameter = category.join(',');
-
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  // axios
-  //   .get(
-  //     baseUrl +
-  //       'api/recommendation' +
-  //       '?' +
-  //       'keywords=' +
-  //       '&' +
-  //       'categories=' +
-  //       categoryParameter,
-  //     null,
-  //     config,
-  //   )
-  //   .then((res) => {
-  //     console.log('카테고리api요청결과', res);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.response);
-  //   });
 };
