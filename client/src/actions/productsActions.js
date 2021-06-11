@@ -2,7 +2,7 @@ import { ProductActionTypes } from './types';
 import axios from 'axios';
 import { tokenConfig } from './auth';
 import baseUrl from '../url';
-import ImageUrl from '../url';
+// import ImageUrl from '../url';
 
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
@@ -13,7 +13,7 @@ export const setProducts = () => (dispatch, getstate) => {
   const data = getstate().userSelect.recommend;
 
   const categoryData = [];
-  Object.entries(data).map(([category, productList]) => {
+  Object.entries(data).forEach(([category, productList]) => {
     categoryData.push(category);
   });
   console.log('categoryData:', categoryData);
@@ -43,7 +43,7 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
       payload: afterUnselectId,
     });
     console.log('curSelectedProducts:', curSelectedProducts);
-    Object.entries(curSelectedProducts).map(([category, productList]) => {
+    Object.entries(curSelectedProducts).forEach(([category, productList]) => {
       const newProductList = productList.filter(
         (product) => product.asin !== selectedProductId,
       );
@@ -68,7 +68,7 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
 
     console.log('curSelectedProducts:', curSelectedProducts);
 
-    Object.entries(recommendProducts).map(([category, productList]) => {
+    Object.entries(recommendProducts).forEach(([category, productList]) => {
       const selectProduct = productList.find(
         (product) => product.asin === selectedProductId,
       );
@@ -139,7 +139,7 @@ export const loadLikes = () => (dispatch, getstate) => {
       console.log(res.data);
       const loadedLikesProduct = res.data;
       const loadedLikes = [];
-      loadedLikesProduct.map((product) => {
+      loadedLikesProduct.forEach((product) => {
         loadedLikes.push(product.asin);
       });
 
@@ -285,7 +285,7 @@ export const loadCart = () => (dispatch, getstate) => {
       console.log(res.data);
       const loadedCartProduct = res.data;
       const loadedcart = [];
-      loadedCartProduct.map((product) => {
+      loadedCartProduct.forEach((product) => {
         loadedcart.push(product.asin);
       });
       dispatch({
