@@ -75,6 +75,7 @@ export default function Payment() {
       postal_code: delivery.post,
       is_saving_address: check,
     };
+    console.log(body);
     axios
       .post(baseUrl + 'api/order/', body, tokenConfig())
       .then((res) => {
@@ -91,9 +92,11 @@ export default function Payment() {
         if (authToken) {
           AddOrderHistory();
         }
+        return res;
+      })
+      .then(() => {
         alert('order completed');
         history.push('/');
-        return res;
       })
       .catch((err) => console.log(err.response));
   }
