@@ -18,7 +18,7 @@ django.setup()
 
 from recommend.models import Keyword  # 2. App이름.models
 
-CSV_PATH = './keyworddata.csv'  # 3. csv 파일 경로
+CSV_PATH = 'amazon_data/keyworddata.csv'  # 3. csv 파일 경로
 
 with open(CSV_PATH, newline='', encoding = 'utf-8') as csvfile:  # 4. newline =''
     data_reader = csv.DictReader(csvfile)
