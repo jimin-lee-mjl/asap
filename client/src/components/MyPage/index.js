@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
@@ -9,8 +9,14 @@ import Keywords from './Keywords';
 import OrderHistory from './OrderHistory';
 import LikedItems from './LikedItems';
 
+import { loadUser } from '../../actions/auth';
+
 export default function MyPage() {
   const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <>

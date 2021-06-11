@@ -1,37 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 
 export default function ItemCard({ productId }) {
-  const [item, setItem] = useState({});
-
-  const fetchProductDetail = async () => {
-    const response = await axios
-      .get(`https://fakestoreapi.com/products/${productId}`)
-      .catch((err) => console.log(err));
-    setItem(response.data);
-  };
-
-  useEffect(() => {
-    if (productId && productId !== '') {
-      fetchProductDetail();
-    }
-  }, [productId]);
+  const imageUrl = `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=${productId}&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=SL250`;
 
   return (
-    <>
-      {Object.keys(item).length === 0 ? (
-        <div>...Loading</div>
-      ) : (
-        <Container>
-          <img
-            src={item.image}
-            alt={item.title}
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
-        </Container>
-      )}
-    </>
+    <Container>
+      <img
+        src={imageUrl}
+        alt={productId}
+        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+      />
+    </Container>
   );
 }
 
