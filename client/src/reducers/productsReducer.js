@@ -1,21 +1,17 @@
 import { ProductActionTypes } from '../actions/types';
-// products: {
-//   outer: [],
-//   top: [],
-//   bottom: [],
-//   set: [],
-//   sports: [],
-//   etc: [],
-//   shoes: [],
-//   bag: [],
-//   accessories: [],
-// },
+
 const initialState = {
   products: {},
   selectedProducts: {
     outer: [],
     top: [],
     bottom: [],
+    set: [],
+    sports: [],
+    etc: [],
+    shoes: [],
+    bag: [],
+    accessories: [],
   },
   category: [],
   selectedProductId: [],
@@ -25,7 +21,7 @@ const initialState = {
   cartList: [],
   orderDetails: [],
   modal: {
-    key: '',
+    key: 0,
     data: {},
   },
   orderList: [],
