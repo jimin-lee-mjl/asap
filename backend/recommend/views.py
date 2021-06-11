@@ -24,20 +24,12 @@ def list_items_by_category(request):
         error_msg = 'Keyword or Category does not exist.'
         return Response({'error_msg': error_msg}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 키워드 필터링 
-    # items = []
     kws = []
     keywords = request.GET['keywords'].split(',')
     for kw in keywords:
         keyword = Keyword.objects.get(name=kw)
         kws.append(keyword)
 
-    # for kw in keywords:
-    #     keyword = Keyword.objects.get(name=kw)
-    #     items = Item.objects.filter(keywords__contains=keyword)
-    #     for it in items:
-    #         if it not in items:
-    #             items.append(it)
     items = Item.objects.filter(keywords__in=kws)
 
     # 카테고리 필터링 
@@ -49,10 +41,6 @@ def list_items_by_category(request):
             if it.category == cg and len(item_dict[cg]) < 9:
                 serializer = ItemListSerializer(it)
                 item_dict[cg].append(serializer.data)
-
-        # items = Item.objects.filter(category__exact=cg)[:8]
-        # serializer = ItemListSerializer(items, many=True)
-        # item_dict[cg] = serializer.data
 
     return Response(item_dict, status=status.HTTP_200_OK)
 
@@ -79,20 +67,17 @@ def show_item_details(request, item_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def list_items_by_category(request):
-#     if not 'keywords' in request.GET:
-#         error_msg = 'Keyword does not exist.'
-#         return Response({'error_msg': error_msg}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_random_keywords(request):
+    keyword = Keyword.objects.all()
+    randomkw = keyword.random(20)
 
-#     items = []
-#     keywords = request.GET['keywords'].split(',')
-#     for kw in keywords:
-#         keyword = Keyword.objects.get(name=kw)
-#         items = Item.objects.filter(keywords__contains=keyword)
-#         for it in items:
-#             if it not in items:
-#                 items.append(it)
+    keywords = []
+    for kw in randomkw:
+        keywords.append(kw.name)
 
-#     return items
+    data = dict()
+    data['keywords'] = keywords
+
+    return Response(data, status=status.HTTP_200_OK)
