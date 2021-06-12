@@ -24,7 +24,7 @@ export default function Category() {
 
   return (
     <>
-      <h1>Choose catagories!</h1>
+      <h1>Choose Categories!</h1>
       <div
         style={{
           width: '100%',
