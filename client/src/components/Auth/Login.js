@@ -31,15 +31,14 @@ export default function Login() {
       <Container>
         <Header type="guest" />
         <Wrapper>
+          <Logo
+            src="logo-circle.png"
+            alt="logo"
+            onClick={() => {
+              history.push('/');
+            }}
+          />
           <Form>
-            {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>Login</h1> */}
-            <Logo
-              src="logo-circle.png"
-              alt="logo"
-              onClick={() => {
-                history.push('/');
-              }}
-            />
             <FormControl>
               <label>ID</label>
               <input
