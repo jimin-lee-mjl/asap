@@ -56,7 +56,6 @@ def create_new_order(request):
     ---
     ## `/api/order/`
     ## 요청 패러미터
-       - user_id : 사용자의 id값 
        - items : 아이템 목록 (['asin', 'asin'] 형태)
        - total_price : 주문 총 가격
        - first_name : 사용자 이름

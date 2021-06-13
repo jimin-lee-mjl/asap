@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Menu, Dropdown } from 'antd';
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { logout } from '../../actions/auth';
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 export default function HeaderComponent() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const menu = (
     <Menu>
@@ -19,6 +20,7 @@ export default function HeaderComponent() {
           to="#"
           onClick={() => {
             dispatch(logout());
+            history.push('/');
           }}
         >
           Logout

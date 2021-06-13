@@ -1,29 +1,36 @@
-import React, { useState } from 'react';
-import { Card, Typography, Col, Row } from 'antd';
+import React from 'react';
 import ProductCardGroups from './productCardGroups';
 import ChoiceSummary from './choiceSummary';
 import Navigator from './navigator';
 import ProductDetailModal from './productDetailModal';
 import styled from 'styled-components';
 import 'antd/dist/antd.css';
+import HeaderComponent from '../Header';
 
 export default function Recommend() {
-  const { Title } = Typography;
+  const authToken = localStorage.getItem('token');
 
   return (
-    <Container>
-      <Header>
-        <p>
-          These are recommended items based on your information and keywords.
-        </p>
-      </Header>
-      <Body>
-        <ProductCardGroups />
-        <ProductDetailModal />
-        <ChoiceSummary />
-      </Body>
-      <Navigator />
-    </Container>
+    <>
+      {authToken ? (
+        <HeaderComponent type="logo" />
+      ) : (
+        <HeaderComponent type="logo guest" />
+      )}
+      <Container>
+        <Header>
+          {/* <p>
+            These are recommended items based on your information and keywords.
+          </p> */}
+        </Header>
+        <Body>
+          <ProductCardGroups />
+          <ProductDetailModal />
+          <ChoiceSummary />
+        </Body>
+        <Navigator />
+      </Container>
+    </>
   );
 }
 
@@ -34,7 +41,7 @@ const Container = styled.div`
   align-items: center;
   width: 60vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
 `;
 
 const Header = styled.div`
@@ -44,4 +51,5 @@ const Header = styled.div`
 
 const Body = styled.div`
   display: flex;
+  width: 100%;
 `;

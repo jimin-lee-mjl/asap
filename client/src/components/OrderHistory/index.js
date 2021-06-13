@@ -4,21 +4,29 @@ import { useParams } from 'react-router-dom';
 import {
   setOrderDetails,
   showModal,
-  likeProduct,
-  addToCart,
   addToLikes,
   undoLikes,
   loadLikes,
+  loadCart,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { useCallback, useEffect, useState } from 'react';
 import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductDetailModal from './productDetailModal';
-// import OrderInfo from './orderInfo';
+import HeaderComponent from '../Header';
+import ImageUrl from '../../url/imageUrl';
 
 export default function OrderHistory() {
+  const authToken = localStorage.getItem('token');
+
   const { Title } = Typography;
   const [checkedProduct, setCheckedProduct] = useState([]);
 
@@ -26,13 +34,15 @@ export default function OrderHistory() {
   const orderDetails = useSelector(
     (state) => state.setOrderDetailsReducer.orderDetails,
   );
-  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
+  const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setOrderDetails(orderId));
+    dispatch(loadCart());
     dispatch(loadLikes());
   }, []);
 
@@ -40,12 +50,16 @@ export default function OrderHistory() {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    try {
-      dispatch(addToCart(addCartProductId));
-      message.success('', 0.5);
-    } catch (e) {
-      message.success('Fail!!', 0.5);
-    }
+    dispatch(addToCart([addCartProductId]));
+    message.success('Successfully added to your cart', 0.5);
+  };
+
+  const handleClickUndoCart = (e) => {
+    e.stopPropagation();
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.info('Successfully removed from your cart', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -53,7 +67,7 @@ export default function OrderHistory() {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -61,7 +75,7 @@ export default function OrderHistory() {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   const columns = [
@@ -70,7 +84,7 @@ export default function OrderHistory() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
@@ -95,31 +109,44 @@ export default function OrderHistory() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickCart}
-          >
-            ADD TO CART
-          </Button>
-          {likeProducts.includes(record.key) ? (
-            <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+          {cartProducts.includes(record.key) ? (
+            <ShoppingCartOutlined
+              style={{ fontSize: '3.8rem', color: '#ff6f00' }}
               asin={record.key}
-              onClick={handleClickUndoLikes}
+              onClick={handleClickUndoCart}
             />
           ) : (
-            <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+            <ShoppingCartOutlined
+              style={{ fontSize: '3.8rem', color: 'darkgray' }}
               asin={record.key}
-              onClick={handleClickLikes}
+              onClick={handleClickCart}
             />
           )}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '0.6rem',
+            }}
+          >
+            {likeProducts.includes(record.key) ? (
+              <HeartFilled
+                style={{ color: '#ff6f00' }}
+                asin={record.key}
+                onClick={handleClickUndoLikes}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: 'darkgray' }}
+                asin={record.key}
+                onClick={handleClickLikes}
+              />
+            )}
+          </div>
         </div>
       ),
       width: '10%',
@@ -129,12 +156,11 @@ export default function OrderHistory() {
   const orderedItemsTableData = [];
 
   console.log(orderDetails);
-  if (orderDetails) {
-    orderDetails.map((orderedItem) => {
-      console.log('orderedItem:', orderedItem);
+  if (orderDetails['item_info']) {
+    orderDetails['item_info'].map((orderedItem) => {
       orderedItemsTableData.push({
-        key: orderedItem.id,
-        ImageURL: orderedItem.image,
+        key: orderedItem.asin,
+        ImageURL: ImageUrl(orderedItem.asin),
         name: orderedItem.title,
         price: orderedItem.price,
       });
@@ -154,60 +180,78 @@ export default function OrderHistory() {
   };
 
   return (
-    <Container>
-      <div style={{ alignSelf: 'start' }}>
-        <h1>Order Details</h1>
-      </div>
-      <div>
-        <div style={{ textAlign: 'left' }}>2021-06-01 </div>
-        <CartListTable
-          columns={columns}
-          dataSource={orderedItemsTableData}
-          scroll={{ y: 400 }}
-          onRow={(record, index) => ({
-            onClick: () => {
-              console.log(record, index, 'clicked!!');
-              dispatch(showModal(record.key));
-            },
-          })}
-        />
-        <TableFooter>
-          <h1>Total ${}</h1>
-        </TableFooter>
-      </div>
-      <DeliveryInfoContainer>
-        <h1>Delivery Info</h1>
-        <DeliveryInfo>
-          <InfoTitleDiv>
-            <p>Name</p>
-            <p>Email</p>
-            <p>Shipping Address</p>
-            <p>Postal Code</p>
-          </InfoTitleDiv>
-          <InfoContentDiv>
-            <p>Kyunglim Khang</p>
-            <p>Kyunglim.Khang@gmail.com</p>
-            <p>157, Hwarang-ro, Seongbuk-gu, Seoul, Republic of Korea</p>
-            <p>02773</p>
-          </InfoContentDiv>
-        </DeliveryInfo>
-      </DeliveryInfoContainer>
-      <ProductDetailModal />
-    </Container>
+    <>
+      {authToken ? (
+        <HeaderComponent type="logo" />
+      ) : (
+        <HeaderComponent type="logo guest" />
+      )}
+      <RootContainer>
+        <div style={{ alignSelf: 'start' }}>
+          <h1>Order Details</h1>
+        </div>
+        <OrderInfoContainer>
+          <div style={{ textAlign: 'left' }}>
+            {orderDetails['order_detail'].ordered_at
+              ? orderDetails['order_detail'].ordered_at.slice(0, 10)
+              : ''}
+          </div>
+          <OrderListTable
+            columns={columns}
+            dataSource={orderedItemsTableData}
+            scroll={{ y: 400 }}
+            onRow={(record, index) => ({
+              onClick: () => {
+                console.log(record, index, 'clicked!!');
+                dispatch(showModal(record.key));
+              },
+            })}
+          />
+          <TableFooter>
+            <h1>Total $ {orderDetails['order_detail'].total_price}</h1>
+          </TableFooter>
+        </OrderInfoContainer>
+        <DeliveryInfoContainer>
+          <h1>Delivery Info</h1>
+          <DeliveryInfo>
+            <InfoTitleDiv>
+              <p>Name</p>
+              <p>Email</p>
+              <p>Shipping Address</p>
+              <p>Postal Code</p>
+            </InfoTitleDiv>
+            <InfoContentDiv>
+              <p>
+                {orderDetails['order_detail'].first_name}
+                &nbsp;
+                {orderDetails['order_detail'].last_name}
+              </p>
+              <p>{orderDetails['order_detail'].email}</p>
+              <p>{orderDetails['order_detail'].address}</p>
+              <p>{orderDetails['order_detail'].postal_code}</p>
+            </InfoContentDiv>
+          </DeliveryInfo>
+        </DeliveryInfoContainer>
+        <ProductDetailModal />
+      </RootContainer>
+    </>
   );
 }
 
-const Container = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
 `;
 
-const CartListTable = styled(Table)`
+const OrderInfoContainer = styled.div`
+  width: 100%;
+`;
+const OrderListTable = styled(Table)`
   .ant-pagination {
     display: none;
   }
@@ -218,6 +262,13 @@ const CartListTable = styled(Table)`
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
+  }
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
   }
 
   .ant-table-thead tr th {
@@ -256,6 +307,8 @@ const DeliveryInfo = styled.div`
   padding-left: 10px;
   padding-right: 10px;
   align-items: center;
+  font-size: 1.5rem;
+  border-radius: 2rem;
 `;
 
 const InfoTitleDiv = styled.div`

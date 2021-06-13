@@ -2,56 +2,33 @@ import { ProductActionTypes } from './types';
 import axios from 'axios';
 import { tokenConfig } from './auth';
 import baseUrl from '../url';
+// import ImageUrl from '../url';
 
 const orderApiUrl = `${baseUrl}api/order/`;
 const cartApiUrl = `${baseUrl}api/user/cart/`;
 const likesApiUrl = `${baseUrl}api/user/like/`;
+const productDetailApiUrl = `${baseUrl}api/item/`;
 
 export const setProducts = () => (dispatch, getstate) => {
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      const productData = {
-        outer: [],
-        top: [],
-        bottom: [],
-      };
-      const categoryData = [];
+  const recommend = getstate().userSelect.recommend;
+  console.log('recommend', recommend);
 
-      console.log(res.data);
-      res.data.map((data) => {
-        if (data.category == "women's clothing") {
-          productData.outer.push(data);
-        } else if (data.category == "men's clothing") {
-          productData.top.push(data);
-        } else if (data.category == 'jewelery') {
-          productData.bottom.push(data);
-        }
-      });
+  const categoryData = [];
+  Object.entries(recommend).map(([category, productList]) => {
+    if (productList.length !== 0) {
+      categoryData.push(category);
+    }
+  });
 
-      console.log(productData);
-
-      Object.entries(productData).map(([category, productList]) => {
-        console.log(category, productList);
-        if (!productList) {
-        } else if (productList.length !== 0) {
-          categoryData.push(category);
-        }
-      });
-
-      console.log('categoryData:', categoryData);
-      dispatch({
-        type: ProductActionTypes.SET_PRODUCTS,
-        payload: productData,
-      });
-      dispatch({
-        type: ProductActionTypes.SET_CATEGORY,
-        payload: [...categoryData],
-      });
-    })
-    .catch((err) => {
-      console.log('Err: ', err.response);
-    });
+  console.log('categoryData:', categoryData);
+  dispatch({
+    type: ProductActionTypes.SET_PRODUCTS,
+    payload: { ...recommend },
+  });
+  dispatch({
+    type: ProductActionTypes.SET_CATEGORY,
+    payload: [...categoryData],
+  });
 };
 
 export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
@@ -70,9 +47,9 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
       payload: afterUnselectId,
     });
     console.log('curSelectedProducts:', curSelectedProducts);
-    Object.entries(curSelectedProducts).map(([category, productList]) => {
+    Object.entries(curSelectedProducts).forEach(([category, productList]) => {
       const newProductList = productList.filter(
-        (product) => product.id !== Number(selectedProductId),
+        (product) => product.asin !== selectedProductId,
       );
       curSelectedProducts[category] = newProductList;
     });
@@ -95,9 +72,9 @@ export const selectProduct = (selectedProductId) => (dispatch, getstate) => {
 
     console.log('curSelectedProducts:', curSelectedProducts);
 
-    Object.entries(recommendProducts).map(([category, productList]) => {
+    Object.entries(recommendProducts).forEach(([category, productList]) => {
       const selectProduct = productList.find(
-        (product) => product.id === Number(selectedProductId),
+        (product) => product.asin === selectedProductId,
       );
       if (selectProduct) {
         curSelectedProducts[category] = [
@@ -121,20 +98,10 @@ export const setLikes = () => (dispatch, getstate) => {
   axios
     .get(likesApiUrl, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
-
+      console.log('setLikes Success!!', res.data['like_items']);
       dispatch({
         type: ProductActionTypes.SET_LIKES,
-        payload: res.data,
+        payload: res.data['like_items'],
       });
     })
     .catch((err) => {
@@ -159,7 +126,7 @@ export const deleteLikes = (deleteLikesProductList) => (dispatch, getstate) => {
   const curLikesState = getstate().likesReducer.likesList;
   console.log('curLikesState:', curLikesState);
   const newLikesState = curLikesState.filter(
-    (product) => deleteLikesProductList.includes(product.id) === false,
+    (product) => deleteLikesProductList.includes(product.asin) === false,
   );
   console.log('newLikesState:', newLikesState);
 
@@ -174,34 +141,45 @@ export const loadLikes = () => (dispatch, getstate) => {
     .get(likesApiUrl, tokenConfig(getstate))
     .then((res) => {
       console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
       const loadedLikesProduct = res.data;
       const loadedLikes = [];
-      loadedLikesProduct.map((product) => {
-        loadedLikes.push(product.id);
+      loadedLikesProduct.forEach((product) => {
+        loadedLikes.push(product.asin);
       });
 
-      // dispatch({
-      //   type: ProductActionTypes.LOAD_LIKES,
-      //   payload: loadedLikes,
-      // });
       dispatch({
         type: ProductActionTypes.LOAD_LIKES,
-        payload: [1, 2, 3, 4],
+        payload: loadedLikes,
       });
       console.log('loadLikes!!:', getstate().likesReducer.likeProducts);
     })
     .catch((err) => {
       console.log(err.response);
     });
+
+  // axios
+  //   .get('https://fakestoreapi.com/products')
+  //   .then((res) => {
+  //     console.log(res.data);
+  //     const loadedLikesProduct = res.data;
+  //     const loadedLikes = [];
+  //     loadedLikesProduct.map((product) => {
+  //       loadedLikes.push(product.asin);
+  //     });
+
+  //     // dispatch({
+  //     //   type: ProductActionTypes.LOAD_LIKES,
+  //     //   payload: loadedLikes,
+  //     // });
+  //     dispatch({
+  //       type: ProductActionTypes.LOAD_LIKES,
+  //       payload: [1, 2, 3, 4],
+  //     });
+  //     console.log('loadLikes!!:', getstate().likesReducer.likeProducts);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err.response);
+  //   });
 };
 
 export const addToLikes = (likeProductList) => (dispatch, getstate) => {
@@ -209,7 +187,7 @@ export const addToLikes = (likeProductList) => (dispatch, getstate) => {
   console.log('curLikesState:', curLikesState);
 
   const addToLikesList = likeProductList.filter(
-    (product) => curLikesState.includes(Number(product)) === false,
+    (product) => curLikesState.includes(product) === false,
   );
 
   const body = JSON.stringify({
@@ -225,7 +203,7 @@ export const addToLikes = (likeProductList) => (dispatch, getstate) => {
       console.log(err.response);
     });
 
-  const newLikesState = [...curLikesState, ...addToLikesList.map(Number)];
+  const newLikesState = [...curLikesState, ...addToLikesList];
   console.log('newLikesState:', newLikesState);
 
   dispatch({
@@ -239,19 +217,19 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
     asin: undoLikesProductList,
   });
 
-  // axios
-  //   .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
-  //   .then((res) => {
-  //     console.log(res.data);
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.response);
-  //   });
+  axios
+    .delete(likesApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log('undoLikes:', err.response);
+    });
 
   const curLikesState = getstate().likesReducer.likeProducts;
   console.log('curLikesState:', curLikesState);
   const newLikesState = curLikesState.filter(
-    (product) => undoLikesProductList.includes(String(product)) === false,
+    (product) => undoLikesProductList.includes(product) === false,
   );
   console.log('newLikesState:', newLikesState);
 
@@ -261,18 +239,19 @@ export const undoLikes = (undoLikesProductList) => (dispatch, getstate) => {
   });
 };
 
-export const addToCart = (addCartProductList) => (dispatch, getstate) => {
-  const body = JSON.stringify({
-    asin: addCartProductList,
-  });
-
+// cart
+export const setCart = () => (dispatch, getstate) => {
   axios
-    .post(cartApiUrl, body, tokenConfig(getstate))
+    .get(cartApiUrl, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
+      console.log('setCart Success!!', res.data['cart_items']);
+      dispatch({
+        type: ProductActionTypes.SET_CART,
+        payload: res.data['cart_items'],
+      });
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('setCart Fail!!', err.response);
     });
 };
 
@@ -293,12 +272,90 @@ export const deleteCart = (deleteCartProductList) => (dispatch, getstate) => {
   const curCartState = getstate().cartReducer.cartList;
   console.log('curCartState:', curCartState);
   const newCartState = curCartState.filter(
-    (product) => deleteCartProductList.includes(product.id) === false,
+    (product) => deleteCartProductList.includes(product.asin) === false,
   );
   console.log('newCartState:', newCartState);
 
   dispatch({
     type: ProductActionTypes.DELETE_CART,
+    payload: newCartState,
+  });
+};
+
+export const loadCart = () => (dispatch, getstate) => {
+  axios
+    .get(cartApiUrl, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+      const loadedCartProduct = res.data;
+      const loadedcart = [];
+      loadedCartProduct.forEach((product) => {
+        loadedcart.push(product.asin);
+      });
+      dispatch({
+        type: ProductActionTypes.LOAD_CART,
+        payload: loadedcart,
+      });
+    })
+    .catch((err) => {
+      console.log('loadCart:', err.response);
+    });
+};
+
+export const addToCart = (cartProductList) => (dispatch, getstate) => {
+  const curCartState = getstate().cartReducer.cartProducts;
+  console.log('curCartState:', curCartState);
+
+  const addToCartList = cartProductList.filter(
+    (product) => curCartState.includes(product) === false,
+  );
+
+  console.log('addToCartList:', addToCartList);
+  const body = JSON.stringify({
+    asin: cartProductList,
+  });
+
+  axios
+    .post(cartApiUrl, body, tokenConfig(getstate))
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+
+  const newCartState = [...curCartState, ...addToCartList];
+  console.log('newCartState:', newCartState);
+
+  dispatch({
+    type: ProductActionTypes.ADD_TO_CART,
+    payload: newCartState,
+  });
+};
+
+export const undoCart = (removeCartProductList) => (dispatch, getstate) => {
+  const body = JSON.stringify({
+    asin: removeCartProductList,
+  });
+
+  axios
+    .delete(cartApiUrl, { data: body }, tokenConfig(getstate))
+    .then((res) => {
+      console.log('undoCart:', res.data);
+    })
+    .catch((err) => {
+      console.log('undoCart:', err.response);
+    });
+
+  const curCartState = getstate().cartReducer.cartProducts;
+  console.log('curCartState:', curCartState);
+  const newCartState = curCartState.filter(
+    (product) => removeCartProductList.includes(product) === false,
+  );
+  console.log('newCartState:', newCartState);
+
+  dispatch({
+    type: ProductActionTypes.UNDO_CART,
     payload: newCartState,
   });
 };
@@ -311,23 +368,26 @@ export const orderRequest =
     });
   };
 
-export const showModal = (productId) => (dispatch, getstate) => {
-  if (productId === 0) {
+export const showModal = (productAsin) => (dispatch, getstate) => {
+  console.log(getstate().showModalReducer.modal);
+  if (productAsin === 0) {
+    console.log('reset modal!');
     const resetModalState = {
-      key: '',
+      key: 0,
       data: {},
     };
     dispatch({
       type: ProductActionTypes.RESET_MODAL,
       payload: resetModalState,
     });
-  } else {
+  } else if (String(productAsin).length < 3) {
+    // fake api
     axios
-      .get(`https://fakestoreapi.com/products/${productId}`)
+      .get(`https://fakestoreapi.com/products/${productAsin}`)
       .then((res) => {
         console.log(res.data);
         const newModalState = {
-          key: productId,
+          key: productAsin,
           data: res.data,
         };
         dispatch({
@@ -338,34 +398,26 @@ export const showModal = (productId) => (dispatch, getstate) => {
       .catch((err) => {
         console.log(err.response);
       });
-  }
-};
-
-// cart
-export const setCart = () => (dispatch, getstate) => {
-  axios
-    .get(cartApiUrl, tokenConfig(getstate))
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
-
-      dispatch({
-        type: ProductActionTypes.SET_CART,
-        payload: res.data,
+  } else {
+    axios
+      .get(`${productDetailApiUrl}${productAsin}`, tokenConfig(getstate))
+      .then((res) => {
+        console.log('showModal Success', res.data);
+        const newModalState = {
+          key: productAsin,
+          data: res.data,
+        };
+        console.log('newModalState:', newModalState);
+        dispatch({
+          type: ProductActionTypes.SHOW_MODAL,
+          payload: newModalState,
+        });
+      })
+      .catch((err) => {
+        console.log('showModal Fail', err.response);
       });
-      console.log(getstate());
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
+  }
+  console.log(getstate().showModalReducer.modal);
 };
 
 //orderhistory
@@ -373,24 +425,13 @@ export const setOrderDetails = (orderId) => (dispatch, getstate) => {
   axios
     .get(`${orderApiUrl}${Number(orderId)}/`, tokenConfig(getstate))
     .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-
-  // fake api
-  axios
-    .get('https://fakestoreapi.com/products')
-    .then((res) => {
-      console.log(res.data);
+      console.log('setOrderDetails Success', res.data);
       dispatch({
         type: ProductActionTypes.SET_ORDER_DETAILS,
         payload: res.data,
       });
-      console.log(getstate());
     })
     .catch((err) => {
-      console.log(err.response);
+      console.log('setOrderDetails Fail', err.response);
     });
 };

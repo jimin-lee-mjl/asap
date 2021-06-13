@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { userinfo } from '../../actions/mypage';
 
 export default function OrderHistory() {
   const history = useHistory();
-  // const data = useSelector((state) => state.mypage.order_history);
-  const data = [];
-  // redux store에서 useSelector로 받아오기
+  const data = useSelector((state) => state.auth.user.order_history);
 
   return (
     <Container>
       <h2>Order History</h2>
       <ScrollingList>
-        {data.slice(1).map((el) => {
+        {data.map((el) => {
           const [id, time, price] = el.split(',');
           return (
             <HistoryCard

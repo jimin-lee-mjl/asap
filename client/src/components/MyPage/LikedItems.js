@@ -1,9 +1,14 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import ItemCard from './ItemCard';
+import { showModal } from '../../actions/productsActions';
 
 export default function LikedItems() {
-  const asins = [2, 3, 4, 15, 17, 18, 2, 3, 4, 15, 17, 18];
+  const history = useHistory();
+  const asins = useSelector((state) => state.auth.user.like_items);
+
   return (
     <Container>
       <h2>Liked Items</h2>
@@ -12,7 +17,13 @@ export default function LikedItems() {
           return <ItemCard productId={n}></ItemCard>;
         })}
       </ScrollingList>
-      <Button>Add to Cart</Button>
+      <Button
+        onClick={() => {
+          history.push('/likes');
+        }}
+      >
+        Add to Cart
+      </Button>
     </Container>
   );
 }

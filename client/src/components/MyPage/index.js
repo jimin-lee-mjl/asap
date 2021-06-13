@@ -1,49 +1,34 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { userinfo } from '../../actions/mypage';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Header from '../Header';
-
 import UserInfo from './UserInfo';
 import DeliveryInfo from './DelivaryInfo';
 import Keywords from './Keywords';
 import OrderHistory from './OrderHistory';
 import LikedItems from './LikedItems';
+import ProductDetailModal from './productDetailModal';
+import { loadUser } from '../../actions/auth';
 
-import baseUrl from '../../url';
-
-export default function Mypage() {
+export default function MyPage() {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    console.log('at mypage token', token);
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    };
-    axios
-      .get(baseUrl + '/api/user/', config)
-      .then((res) => {
-        console.log('GET USER INFO', res.data);
-        dispatch(userinfo(res.data));
-      })
-      .catch((err) => console.log(err.response));
-  }, []);
+    dispatch(loadUser());
+  }, [user]);
 
   return (
     <>
       <Header type="logo" />
       <Container>
-        <UserInfo />
-        <DeliveryInfo />
+        <UserInfo user={user} />
+        <DeliveryInfo user={user} />
         <Keywords />
         <OrderHistory />
         <LikedItems />
+        <ProductDetailModal />
       </Container>
     </>
   );

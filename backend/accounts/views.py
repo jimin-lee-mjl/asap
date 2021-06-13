@@ -8,7 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .responses import SuccessResponse
 
 
-class AccountDeleteView(APIView):
+class AccountView(APIView):
     permission_classes = [IsAuthenticated]
 
     account_delete_response = {

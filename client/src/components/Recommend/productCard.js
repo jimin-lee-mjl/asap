@@ -16,6 +16,7 @@ import {
   addToLikes,
   undoLikes,
 } from '../../actions/productsActions';
+import ImageUrl from '../../url/imageUrl';
 
 export default function ProductCard({ categoryKey }) {
   const products = useSelector((state) => state.setProductsReducer.products);
@@ -34,7 +35,7 @@ export default function ProductCard({ categoryKey }) {
     const selectedProductId = e.currentTarget.getAttribute('asin');
     console.log(selectedProductId);
     dispatch(selectProduct(selectedProductId));
-    message.success('상품이 선택되었습니다.', 0.5);
+    message.success('Check!', 0.5);
     console.log(selectedProductIdList);
   };
 
@@ -43,7 +44,7 @@ export default function ProductCard({ categoryKey }) {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -51,14 +52,14 @@ export default function ProductCard({ categoryKey }) {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
-  const likesOrNot = (id) => {
-    if (likeProducts.includes(id)) {
+  const likesOrNot = (asin) => {
+    if (likeProducts.includes(asin)) {
       return (
         <HeartFilled
-          asin={id}
+          asin={asin}
           style={{ fontSize: '30px', color: '#ff6f00' }}
           onClick={handleClickUndoLikes}
         />
@@ -66,8 +67,8 @@ export default function ProductCard({ categoryKey }) {
     } else {
       return (
         <HeartOutlined
-          asin={id}
-          style={{ fontSize: '30px', color: '#ff6f00' }}
+          asin={asin}
+          style={{ fontSize: '30px', color: 'gray' }}
           onClick={handleClickLikes}
         />
       );
@@ -75,22 +76,32 @@ export default function ProductCard({ categoryKey }) {
   };
 
   const renderProductCard = products[categoryKey].map((product) => {
-    const { id, title, image, price, category } = product;
+    const { asin, price, title } = product;
+    const image = ImageUrl(asin);
     return (
       <CardContainer
-        key={id}
+        key={asin}
         $colorbyselect={
-          selectedProductIdList.includes(String(id)) ? '#ff6f00' : '#f0f0f0'
+          selectedProductIdList.includes(asin) ? '#ff6f00' : '#f0f0f0'
         }
       >
         <Card
           hoverable
-          style={{ width: 240 }}
+          style={{ width: 190 }}
           cover={
-            <img alt={title} src={image} style={{ height: 300, padding: 10 }} />
+            <img
+              alt="No Image"
+              src={image}
+              style={{
+                height: 200,
+                padding: 10,
+                width: '90%',
+                margin: '0 auto',
+              }}
+            />
           }
           onClick={(e) => {
-            dispatch(showModal(id));
+            dispatch(showModal(asin));
           }}
         >
           <CardBody>
@@ -100,11 +111,16 @@ export default function ProductCard({ categoryKey }) {
             </CardContent>
             <CardIcons>
               <CheckCircleOutlined
-                asin={id}
-                style={{ marginRight: 40 }}
+                asin={asin}
+                style={{
+                  marginRight: 40,
+                  color: selectedProductIdList.includes(asin)
+                    ? '#ff6f00'
+                    : 'gray',
+                }}
                 onClick={handleClickCheck}
               />
-              {likesOrNot(id)}
+              {likesOrNot(asin)}
             </CardIcons>
           </CardBody>
         </Card>
@@ -116,18 +132,19 @@ export default function ProductCard({ categoryKey }) {
 }
 
 const CardContainer = styled.div`
-  margin: 10px;
+  margin: 0.5rem;
   .ant-card {
-    height: 520px;
-    border: 5px solid;
+    height: 400px;
+    border: 0.4rem solid;
     border-color: ${(props) => props.$colorbyselect};
+    border-radius: 2rem;
   }
   .ant-card-body {
-    height: 210px;
+    height: 200px;
     padding: 10px;
   }
   .ant-card-cover {
-    border-bottom: 5px solid #f0f0f0;
+    border-bottom: 0.3rem solid #f0f0f0;
   }
 `;
 
@@ -137,7 +154,6 @@ const CardIcons = styled.div`
 `;
 
 const CardBody = styled.div`
-  margin: 10px;
   height: 100%;
 `;
 

@@ -1,26 +1,30 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { selectCategories } from '../../actions/userSelect';
 import { Checkbox } from 'antd';
 import styled from 'styled-components';
 
-function onChange(checkedValues) {
-  console.log('checked = ', checkedValues);
-}
-
 export default function Category() {
+  const dispatch = useDispatch();
   const categories = [
-    'Outer',
-    'Top',
-    'Bottom',
-    'Set',
-    'Sports Wear',
-    'Underwear/Homewear',
-    'Shoes',
-    'Bag',
-    'Accessories',
+    { label: 'Outer', value: 'outer' },
+    { label: 'Top', value: 'top' },
+    { label: 'Bottom', value: 'bottom' },
+    { label: 'Set', value: 'set' },
+    { label: 'Sports Wear', value: 'sport' },
+    { label: 'Underwear/Homewear', value: 'etc' },
+    { label: 'Shoes', value: 'shoes' },
+    { label: 'Bag', value: 'bag' },
+    { label: 'Accessories', value: 'accessories' },
   ];
+
+  function onChange(checkedValues) {
+    dispatch(selectCategories(checkedValues));
+  }
+
   return (
     <>
-      <h1>Choose catagories!</h1>
+      <h1>Choose Categories!</h1>
       <div
         style={{
           width: '100%',

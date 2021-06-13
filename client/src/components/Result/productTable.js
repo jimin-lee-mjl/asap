@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { Table, Typography, message } from 'antd';
+import {
+  HeartOutlined,
+  HeartFilled,
+  ShoppingCartOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,12 +12,15 @@ import {
   selectProduct,
   likeProduct,
   showModal,
-  addToCart,
   orderRequest,
   addToLikes,
   undoLikes,
+  loadCart,
+  addToCart,
+  undoCart,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
+import ImageUrl from '../../url/imageUrl';
 
 export default function ProductTable() {
   const history = useHistory();
@@ -28,22 +35,34 @@ export default function ProductTable() {
   );
 
   const modal = useSelector((state) => state.showModalReducer.modal);
+  const cartProducts = useSelector((state) => state.cartReducer.cartProducts);
   const likeProducts = useSelector((state) => state.likesReducer.likeProducts);
+
+  useEffect(() => {
+    dispatch(loadCart());
+  }, []);
 
   const handleClickCart = (e) => {
     e.stopPropagation();
     const addCartProductId = e.currentTarget.getAttribute('asin');
     console.log(addCartProductId);
-    dispatch(addToCart(addCartProductId));
-    message.success('add to cart', 0.5);
+    dispatch(addToCart([addCartProductId]));
+    message.success('Successfully added to your cart', 0.5);
   };
 
+  const handleClickUndoCart = (e) => {
+    e.stopPropagation();
+    const undoCartProductId = e.currentTarget.getAttribute('asin');
+    console.log(undoCartProductId);
+    dispatch(undoCart([undoCartProductId]));
+    message.info('Successfully removed from your cart', 0.5);
+  };
   const handleClickCartSelected = (e) => {
     e.stopPropagation();
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToCart(checkedIdList));
-    message.success('add to cart', 0.5);
+    message.success('Successfully added to your cart', 0.5);
   };
 
   const handleClickLikes = (e) => {
@@ -51,7 +70,7 @@ export default function ProductTable() {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -59,7 +78,7 @@ export default function ProductTable() {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.info('Successfully removed from your likes', 0.5);
   };
 
   const handleClickLikesSelected = (e) => {
@@ -67,7 +86,7 @@ export default function ProductTable() {
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToLikes(checkedIdList));
-    message.success('add to likes', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickOrder = useCallback(async () => {
@@ -81,17 +100,17 @@ export default function ProductTable() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 100,
+      width: '20%',
     },
     {
       title: 'Description',
       dataIndex: 'name',
-      width: 250,
+      width: 300,
     },
     {
       title: 'Price',
@@ -106,45 +125,57 @@ export default function ProductTable() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
-          <Button
-            asin={record.key}
-            size="small"
-            style={{ fontSize: 'x-small', marginBottom: '10px' }}
-            onClick={handleClickCart}
-          >
-            ADD TO CART
-          </Button>
-          {likeProducts.includes(record.key) ? (
-            <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+          {cartProducts.includes(record.key) ? (
+            <ShoppingCartOutlined
+              style={{ fontSize: '3.8rem', color: '#ff6f00' }}
               asin={record.key}
-              onClick={handleClickUndoLikes}
+              onClick={handleClickUndoCart}
             />
           ) : (
-            <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+            <ShoppingCartOutlined
+              style={{ fontSize: '3.8rem', color: 'darkgray' }}
               asin={record.key}
-              onClick={handleClickLikes}
+              onClick={handleClickCart}
             />
           )}
+          <div
+            style={{
+              fontSize: '3rem',
+              paddingLeft: '0.6rem',
+            }}
+          >
+            {likeProducts.includes(record.key) ? (
+              <HeartFilled
+                style={{ color: '#ff6f00' }}
+                asin={record.key}
+                onClick={handleClickUndoLikes}
+              />
+            ) : (
+              <HeartOutlined
+                style={{ color: 'darkgray' }}
+                asin={record.key}
+                onClick={handleClickLikes}
+              />
+            )}
+          </div>
         </div>
       ),
-      width: '10%',
+      width: '11%',
     },
   ];
 
   const data = [];
 
   Object.entries(selectedProducts).map(([category, productList]) => {
-    console.log('selectedProductsList', productList);
     productList.map((product) => {
       data.push({
-        key: product.id,
-        ImageURL: product.image,
+        key: product.asin,
+        ImageURL: ImageUrl(product.asin),
         name: product.title,
         price: product.price,
       });
@@ -179,12 +210,11 @@ export default function ProductTable() {
   }, [checkedProduct, totalPrice]);
 
   return (
-    <div>
+    <Container>
       <ProductListTable
         rowSelection={rowSelection}
         columns={columns}
         dataSource={data}
-        scroll={{ y: 720 }}
         onRow={(record, index) => ({
           onClick: () => {
             dispatch(showModal(record.key));
@@ -201,19 +231,16 @@ export default function ProductTable() {
         </div>
         <ButtonGroup>
           <Link to="/recommend" style={{ float: 'left' }}>
-            <Button type="primary" size="large">
-              Previous
-            </Button>
+            <OutLinedButton>Previous</OutLinedButton>
           </Link>
-          <Button size="large" onClick={handleClickLikesSelected}>
+          <OutLinedButton onClick={handleClickLikesSelected}>
             ADD TO LIKES
-          </Button>
-          <Button size="large" onClick={handleClickCartSelected}>
-            ADD TO CART
-          </Button>
+          </OutLinedButton>
+          <OutLinedButton onClick={handleClickCartSelected}>
+            <ShoppingCartOutlined style={{ fontSize: '2rem' }} />
+            &nbsp;&nbsp; ADD TO CART
+          </OutLinedButton>
           <Button
-            type="primary"
-            size="large"
             onClick={() => {
               handleClickOrder();
               history.push('/payment');
@@ -223,9 +250,13 @@ export default function ProductTable() {
           </Button>
         </ButtonGroup>
       </TableFooter>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 const ProductListTable = styled(Table)`
   .ant-pagination {
@@ -235,6 +266,15 @@ const ProductListTable = styled(Table)`
     border-left: solid 1px #dfe4ea;
     border-bottom: solid 0.1px #dfe4ea;
   }
+
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
@@ -252,14 +292,62 @@ const ProductListTable = styled(Table)`
   .ant-table-tbody td {
     font-size: 20px;
   }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: #f1f2f6;
+  }
+
+  //checkbox css
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #ff6f00;
+  }
+  .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .ant-checkbox:hover .ant-checkbox-inner,
+  .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #ff6f00;
+  }
 `;
 
 const TableFooter = styled.div`
   text-align: right;
-  margin: 20px;
+  bottom: 1px;
+  position: sticky;
+  background: white;
+  padding: 10px;
+  border-top: solid 0.15rem #ff6f00;
 `;
+
 const ButtonGroup = styled.div`
   button {
     margin-left: 5px;
   }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  height: 4rem;
+  border: 0.1rem solid #ff6f00;
+  border-radius: 0.5rem;
+  font-size: 1.7rem;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  margin: 5px 0;
+  padding-inline: 2rem;
+
+  :hover {
+    box-shadow: 2px 4px 8px #c4c4c4;
+  }
+`;
+
+const OutLinedButton = styled(Button)`
+  background: #fff;
+  color: #ff6f00;
 `;

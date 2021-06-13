@@ -49,13 +49,17 @@ export default function ChoiceSummary() {
     <ChoiceSummaryContainer>
       <Card
         title="Price Info"
-        style={{ width: 200 }}
         headStyle={{
-          fontSize: 30,
+          fontSize: '1.7rem',
           fontWeight: 'bold',
-          borderBottom: '5px solid #f0f0f0',
+          borderBottom: '0.1rem solid #ff6f00',
         }}
-        style={{ border: '5px solid #f0f0f0', position: 'fixed' }}
+        style={{
+          width: '15rem',
+          position: 'fixed',
+          borderRadius: '2rem',
+          background: '#f0f0f0',
+        }}
       >
         <ChoiceSummaryDiv>{choiceSummary()}</ChoiceSummaryDiv>
       </Card>
@@ -65,12 +69,12 @@ export default function ChoiceSummary() {
 
 const ChoiceSummaryContainer = styled.div`
   display: inline-block;
-  margin-right: 200px;
+  // margin-right: 200px;
   margin-top: 10px;
 `;
 
 const ChoiceSummaryDiv = styled.div`
-  font-size: 20px;
+  font-size: 1.5rem;
 `;
 const ChosenCategory = styled.p`
   font-weight: bold;
@@ -80,4 +84,5 @@ const TotalSummary = styled.div`
   font-weight: bold;
   border: solid 1px #ff6f00;
   padding-top: 10px;
+  border-radius: 1rem;
 `;

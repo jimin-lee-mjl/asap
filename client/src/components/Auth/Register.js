@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import { register } from '../../actions/auth';
 import styled from 'styled-components';
 import Header from '../Header';
@@ -13,6 +13,8 @@ export default function Register() {
   const [password1, setPassword] = useState('');
   const [password2, setConfirmPasword] = useState('');
   const [email, setEmail] = useState('');
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const onIdHandler = (e) => {
     setId(e.currentTarget.value);
@@ -33,59 +35,62 @@ export default function Register() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     dispatch(register({ id, email, password1, password2 }));
-    history.push('/login');
   };
 
-  return (
-    <Container>
-      <Header type="guest" />
-      <Wrapper>
-        <Form onSubmit={onSubmitHandler}>
-          <Logo
-            src="logo-circle.png"
-            alt="logo"
-            onClick={() => {
-              history.push('/');
-            }}
-          />
-
-          <FormControl>
-            <label>ID</label>
-            <input type="text" value={id} onChange={onIdHandler} />
-          </FormControl>
-
-          <FormControl>
-            <label>Email</label>
-            <input type="email" value={email} onChange={onEmailHandler} />
-          </FormControl>
-
-          <FormControl>
-            <label>Password</label>
-            <input
-              type="password"
-              value={password1}
-              onChange={onPasswordHanlder}
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  } else {
+    return (
+      <Container>
+        <Header type="guest" />
+        <Wrapper>
+          <Form onSubmit={onSubmitHandler}>
+            <Logo
+              src="logo-circle.png"
+              alt="logo"
+              onClick={() => {
+                history.push('/');
+              }}
             />
-          </FormControl>
 
-          <FormControl>
-            <label>Confirm Pasword</label>
-            <input
-              type="password"
-              value={password2}
-              onChange={onConfirmPasswordHandler}
-            />
-          </FormControl>
+            <FormControl>
+              <label>ID</label>
+              <input type="text" value={id} onChange={onIdHandler} />
+            </FormControl>
 
-          <Button onClick={onSubmitHandler}>Create Account</Button>
-        </Form>
+            <FormControl>
+              <label>Email</label>
+              <input type="email" value={email} onChange={onEmailHandler} />
+            </FormControl>
 
-        <Link to="/login" style={{ color: '#fb8c00' }}>
-          Go to Login
-        </Link>
-      </Wrapper>
-    </Container>
-  );
+            <FormControl>
+              <label>Password</label>
+              <input
+                type="password"
+                value={password1}
+                onChange={onPasswordHanlder}
+              />
+            </FormControl>
+
+            <FormControl>
+              <label>Confirm Pasword</label>
+              <input
+                type="password"
+                value={password2}
+                onChange={onConfirmPasswordHandler}
+              />
+            </FormControl>
+
+            <Button onClick={onSubmitHandler}>Create Account</Button>
+          </Form>
+
+          <Link to="/login" style={{ color: '#fb8c00' }}>
+            Go to Login
+          </Link>
+        </Wrapper>
+      </Container>
+    );
+  }
 }
 
 const Container = styled.div`

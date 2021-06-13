@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Typography, message } from 'antd';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { Table, Typography, message } from 'antd';
+import { HeartOutlined, HeartFilled, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +14,7 @@ import {
   loadLikes,
 } from '../../actions/productsActions';
 import { useHistory, Link } from 'react-router-dom';
+import ImageUrl from '../../url/imageUrl';
 
 export default function CartList() {
   const history = useHistory();
@@ -37,7 +38,7 @@ export default function CartList() {
     const likeProductId = e.currentTarget.getAttribute('asin');
     console.log(likeProductId);
     dispatch(addToLikes([likeProductId]));
-    message.success('찜 목록에 저장되었습니다', 0.5);
+    message.success('Successfully added to your likes', 0.5);
   };
 
   const handleClickUndoLikes = (e) => {
@@ -45,7 +46,7 @@ export default function CartList() {
     const undoLikesProductId = e.currentTarget.getAttribute('asin');
     console.log(undoLikesProductId);
     dispatch(undoLikes([undoLikesProductId]));
-    message.success('찜이 해제되었습니다', 0.5);
+    message.success('Successfully removed from your likes', 0.5);
   };
 
   const handleClickLikesSelected = (e) => {
@@ -53,15 +54,15 @@ export default function CartList() {
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(addToLikes(checkedIdList));
-    message.success('add to likes', 0.5);
+    message.success('Successfully added from your likes', 0.5);
   };
 
   const handleClickDelete = (e) => {
     e.stopPropagation();
     const deleteProductId = e.currentTarget.getAttribute('asin');
     console.log(deleteProductId);
-    dispatch(deleteCart(deleteProductId));
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    dispatch(deleteCart([deleteProductId]));
+    message.success('Successfully removed from your cart ', 0.5);
     // "Are you sure you want to delete?"alert 띄우기
   };
 
@@ -70,7 +71,7 @@ export default function CartList() {
     const checkedIdList = checkedProduct.map((product) => product.key);
     console.log(checkedIdList);
     dispatch(deleteCart(checkedIdList));
-    message.success('선택한 상품이 장바구니에서 삭제되었습니다. ', 0.5);
+    message.success('Successfully removed from your cart ', 0.5);
   };
 
   const handleClickOrder = useCallback(async () => {
@@ -84,17 +85,17 @@ export default function CartList() {
       dataIndex: 'ImageURL',
       render: (theImageURL) => (
         <img
-          alt={theImageURL}
+          alt={'No Image'}
           src={theImageURL}
           style={{ width: 150, height: 150 }}
         />
       ),
-      width: 100,
+      width: '20%',
     },
     {
       title: 'Description',
       dataIndex: 'name',
-      width: 250,
+      width: 300,
     },
     {
       title: 'Price',
@@ -110,46 +111,47 @@ export default function CartList() {
           style={{
             fontSize: 'xx-small',
             paddingRight: '10px',
-            display: 'inline-block',
+            display: 'flex',
+            flexDirection: 'column',
             textAlign: 'center',
           }}
         >
           {likeProducts.includes(record.key) ? (
             <HeartFilled
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+              style={{ fontSize: '3rem', color: '#ff6f00' }}
               asin={record.key}
               onClick={handleClickUndoLikes}
             />
           ) : (
             <HeartOutlined
-              style={{ fontSize: '30px', color: '#ff6f00' }}
+              style={{ fontSize: '3rem', color: 'darkgray' }}
               asin={record.key}
               onClick={handleClickLikes}
             />
           )}
-          <Button
+          <DeleteOutlined
             asin={record.key}
-            size="small"
-            style={{ fontSize: 'xx-small' }}
+            style={{
+              marginTop: '1rem',
+              fontSize: '3rem',
+              color: 'darkgray',
+            }}
             onClick={handleClickDelete}
-          >
-            DELETE
-          </Button>
+          />
         </div>
       ),
-      width: '10%',
+      width: '11%',
     },
   ];
 
   const CartListTableData = [];
 
-  Object.entries(cartList).map((cart) => {
-    const cartProduct = cart[1];
+  cartList.map((cart) => {
     CartListTableData.push({
-      key: cartProduct.id,
-      ImageURL: cartProduct.image,
-      name: cartProduct.title,
-      price: cartProduct.price,
+      key: cart.asin,
+      ImageURL: ImageUrl(cart.asin),
+      name: cart.title,
+      price: cart.price,
     });
   });
 
@@ -181,17 +183,12 @@ export default function CartList() {
   }, [checkedProduct, totalPrice]);
 
   return (
-    <div>
+    <Container>
       <CartListTable
         rowSelection={rowSelection}
         columns={columns}
         dataSource={CartListTableData}
-        scroll={{ y: 720 }}
-        onRow={(
-          record,
-
-          index,
-        ) => ({
+        onRow={(record, index) => ({
           onClick: () => {
             console.log(record, index, 'clicked!!');
             dispatch(showModal(record.key));
@@ -208,16 +205,17 @@ export default function CartList() {
         </div>
         <ButtonGroup>
           <div style={{ float: 'left' }}>
-            <Button size="large" onClick={handleClickDeleteSelected}>
-              DELETE SELECTED
-            </Button>
+            <OutLinedButton onClick={handleClickDeleteSelected}>
+              <DeleteOutlined
+                style={{ color: 'darkgray', fontSize: '1.8rem' }}
+              />
+              &nbsp;&nbsp; DELETE SELECTED
+            </OutLinedButton>
           </div>
-          <Button size="large" onClick={handleClickLikesSelected}>
+          <OutLinedButton onClick={handleClickLikesSelected}>
             ADD TO LIKES
-          </Button>
+          </OutLinedButton>
           <Button
-            type="primary"
-            size="large"
             onClick={() => {
               handleClickOrder();
               history.push('/payment');
@@ -227,10 +225,13 @@ export default function CartList() {
           </Button>
         </ButtonGroup>
       </TableFooter>
-    </div>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+`;
 const CartListTable = styled(Table)`
   .ant-pagination {
     display: none;
@@ -239,6 +240,15 @@ const CartListTable = styled(Table)`
     border-left: solid 1px #dfe4ea;
     border-bottom: solid 0.1px #dfe4ea;
   }
+
+  //thead css
+  .ant-table-container table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 1rem;
+  }
+  .ant-table-container table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 1rem;
+  }
+
   thead .ant-table-cell {
     font-size: 20px;
     font-weight: bold;
@@ -256,14 +266,62 @@ const CartListTable = styled(Table)`
   .ant-table-tbody td {
     font-size: 20px;
   }
+
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: #f1f2f6;
+  }
+
+  //checkbox css
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #ff6f00;
+    border-color: #ff6f00;
+  }
+
+  .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+    background-color: #ff6f00;
+  }
+  .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+  .ant-checkbox:hover .ant-checkbox-inner,
+  .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #ff6f00;
+  }
 `;
 
 const TableFooter = styled.div`
   text-align: right;
-  margin: 20px;
+  bottom: 1px;
+  position: sticky;
+  background: white;
+  padding: 10px;
+  border-top: solid 0.15rem #ff6f00;
 `;
+
 const ButtonGroup = styled.div`
   button {
     margin-left: 5px;
   }
+`;
+
+const Button = styled.button`
+  background: #ff6f00;
+  height: 4rem;
+  border: 0.1rem solid #ff6f00;
+  border-radius: 0.5rem;
+  font-size: 1.7rem;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  line-height: 2;
+  margin: 5px 0;
+  padding-inline: 2rem;
+
+  :hover {
+    box-shadow: 2px 4px 8px #c4c4c4;
+  }
+`;
+
+const OutLinedButton = styled(Button)`
+  background: #fff;
+  color: #ff6f00;
 `;

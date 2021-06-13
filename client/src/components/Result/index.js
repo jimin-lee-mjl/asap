@@ -2,22 +2,35 @@ import React from 'react';
 import ProductTable from './productTable';
 import styled from 'styled-components';
 import ProductDetailModal from './productDetailModal';
+import HeaderComponent from '../Header';
 
 export default function Result() {
+  const authToken = localStorage.getItem('token');
   return (
-    <ResultContainer>
-      <ProductTable />
-      <ProductDetailModal />
-    </ResultContainer>
+    <>
+      {authToken ? (
+        <HeaderComponent type="logo" />
+      ) : (
+        <HeaderComponent type="logo guest" />
+      )}
+
+      <RootContainer>
+        <div style={{ width: '100%', textAlign: 'left' }}>
+          <h1>Result</h1>
+        </div>
+        <ProductTable />
+        <ProductDetailModal />
+      </RootContainer>
+    </>
   );
 }
 
-const ResultContainer = styled.div`
+const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
   margin: auto;
-  margin-top: 100px;
+  margin-top: 13rem;
 `;

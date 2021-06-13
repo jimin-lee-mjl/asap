@@ -4,9 +4,6 @@ import { login } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Header from '../Header';
-import axios from 'axios';
-import { userinfo } from '../../actions/mypage';
-import baseUrl from '../../url';
 import { useSelector } from 'react-redux';
 
 export default function Login() {
@@ -15,28 +12,9 @@ export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const getUser = () => {
-    const token = localStorage.getItem('token');
-    console.log('at mypage token', token);
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      },
-    };
-    axios
-      .get(baseUrl + '/api/user/', config)
-      .then((res) => {
-        console.log('GET USER INFO', res.data);
-        dispatch(userinfo(res.data));
-      })
-      .catch((err) => console.log(err.response));
-  };
-
   const handleClick = () => {
     try {
       dispatch(login(id, password));
-      getUser();
     } catch (e) {
       alert('Failed to login');
       setId('');
@@ -53,15 +31,14 @@ export default function Login() {
       <Container>
         <Header type="guest" />
         <Wrapper>
+          <Logo
+            src="logo-circle.png"
+            alt="logo"
+            onClick={() => {
+              history.push('/');
+            }}
+          />
           <Form>
-            {/* <h1 style={{ textAlign: 'center', margin: '0 0 2rem' }}>Login</h1> */}
-            <Logo
-              src="logo-circle.png"
-              alt="logo"
-              onClick={() => {
-                history.push('/');
-              }}
-            />
             <FormControl>
               <label>ID</label>
               <input

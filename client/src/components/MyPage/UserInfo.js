@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-export default function UserInfo() {
+export default function UserInfo({ user }) {
   const history = useHistory();
-
-  const user = useSelector((state) => state.mypage);
 
   return (
     <Container>
@@ -14,7 +11,7 @@ export default function UserInfo() {
       <form style={{ width: '70%' }}>
         <FormControl>
           <label>Id</label>
-          <input type="text" value={user.id}></input>
+          <input type="text" value={user.username}></input>
         </FormControl>
         <FormControl>
           <label>Email</label>

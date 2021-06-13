@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from paypalcheckoutsdk.orders import OrdersCreateRequest
 from paypalcheckoutsdk.orders import OrdersCaptureRequest
@@ -9,6 +10,7 @@ from .serializers import PriceSerializer
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def create_order(request):
     '''
     결제를 위한 주문 내역을 생성하는 API
@@ -59,12 +61,13 @@ def create_order(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def capture_order(request, order_id):
     '''
     주문 내역에 따라 결제를 실행하는 API
 
     ---
-    ## `/api/payment/<int:order_id>`
+    ## `/api/payment/<str:order_id>`
     ## 요청 패러미터 
        - order_id : 주문 내역 생성 api의 응답으로 받은 주문 내역 아이디
     ## 요청 형식
